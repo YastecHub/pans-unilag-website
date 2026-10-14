@@ -629,8 +629,15 @@ All accounts belong to the official PANS account, never a personal one.
 ### Repository and branch rules
 
 - Repo: `YastecHub/pans-unilag-website`. Move it to a PANS-owned GitHub organisation before handover.
-- **Protect `main`** (Settings → Branches): require a pull request, one approval, the `ci` status check, and an up-to-date branch; block force pushes.
+- **Protect `main`** (Settings → Branches): require a pull request, one approval, the `ci` status check (available after CI has run once), and an up-to-date branch; block force pushes.
 - Issue forms (feature, bug, content) and the PR template live in `.github/`. Blank issues are disabled.
+- **CI** (`.github/workflows/ci.yml`, job `ci`) runs on every pull request and every push to `main`: `npm ci`, lint, format check, typecheck, tests and build, on Node from `.nvmrc`. To catch failures before pushing, run:
+
+  ```bash
+  npm run lint && npm run format:check && npm run typecheck && npm run test && npm run build
+  ```
+
+  If only formatting fails, `npm run format` fixes it.
 
 ### Labels and milestones
 
