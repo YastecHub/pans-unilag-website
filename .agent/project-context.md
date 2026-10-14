@@ -5,9 +5,9 @@ Fill this from confirmed requirements and inspected code. Leave unknown items as
 | Field | Value |
 | --- | --- |
 | Solution purpose and users | Official website of PANS UNILAG (Pharmaceutical Association of Nigeria Students, University of Lagos; motto "Service to Humanity"). Name follows the constitution. Primary users: UNILAG pharmacy students (PANSites). Secondary: executives (via admin dashboard), alumni, prospective students, wider pharmacy community. See README.md and the PRD |
-| Repository/workspace layout | One repo, npm workspaces: `client/` (React SPA: `src/app`, `src/features/<feature>/{api,components,pages}`, `src/components/{layout,ui}`) and `server/` (Express API: `src/app.ts`, `src/server.ts`, `src/config`, `src/middleware`, `src/modules/<feature>/{http,application,domain,infrastructure}`). Not yet scaffolded. See README.md > Project structure |
+| Repository/workspace layout | One repo, npm workspaces: `client/` (React SPA: `src/app`, `src/features/<feature>/{api,components,pages}`, `src/components/{layout,ui}`) and `server/` (Express API: `src/app.ts`, `src/server.ts`, `src/config`, `src/middleware`, `src/modules/<feature>/{http,application,domain,infrastructure}`). Scaffolded in issue #1. See README.md > Project structure |
 | Runtime and package manager | Node.js 22 LTS (Vite needs 20.19+ or 22.12+); npm with workspaces |
-| Framework versions and router | MERN: React + Vite + React Router (client); Express (server). Versions to be confirmed from package.json after scaffold |
+| Framework versions and router | React 19 + Vite 8 (client; React Router to be added in #6); Express 5 (server); TypeScript ~6.0; ESLint 10 + typescript-eslint; Vitest 5 |
 | JavaScript/TypeScript and module system | TypeScript, strict mode, in both client and server; ESM |
 | Database, ORM and transaction support | MongoDB Atlas (free M0 proposed: 512 MB, no automatic backups) with Mongoose. Single-document writes; no multi-document transactions needed in v1 |
 | Authentication and tenant model | Visitors: no accounts, all public content. Admins only: email + password (argon2/bcrypt), JWT session in httpOnly Secure SameSite cookie, roles `admin` and `editor`, no public sign-up. Student accounts deferred to phase 2 |
@@ -16,7 +16,7 @@ Fill this from confirmed requirements and inspected code. Leave unknown items as
 | Critical invariants and state transitions | Events move to Past after `endsAt`; opportunities hidden after `deadline`; announcements hidden after `expiresAt`. Feedback/alumni submissions and admin records are never returned by public endpoints. CGPA calculator stores no user data |
 | Currency/rounding and timezone rules | Timezone Africa/Lagos (WAT, UTC+1) for display and date rules; store UTC. CGPA shown to 2 decimal places on the UNILAG 5-point scale |
 | Design system and accessibility target | Brand tokens from the Brand Guidelines (see README > Brand) as CSS variables, Tailwind proposed; Poppins + Inter; light/dark themes; WCAG 2.1 AA; Lighthouse mobile >= 90 |
-| Existing install/dev/build/lint/typecheck/test commands | Unknown until scaffold. Planned: npm install, npm run dev (both apps), npm run seed -w server, npm run lint, npm run test, npm run build. Vitest, Supertest, Playwright |
+| Existing install/dev/build/lint/typecheck/test commands | From the repo root: `npm install`, `npm run dev` (API :4000 via tsx watch + Vite :5173 with /api proxy), `npm run build`, `npm run lint` (root eslint.config.js), `npm run typecheck`, `npm run test` (Vitest), `npm run format` / `format:check` (Prettier, code only). Per workspace: `-w client` / `-w server`. Seed script arrives with issue #8 |
 | Testing policy and required CI gates | Follow applicable project/user instructions; use proportionate verification |
 | Authorized environments and deployment scope | Local work unless otherwise authorized |
 
