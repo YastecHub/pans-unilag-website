@@ -7,7 +7,7 @@ A fast, accessible, mobile-first home for the association's identity, leadership
 > **Stack:** MERN (MongoDB, Express, React, Node.js) in TypeScript, with Cloudinary for images. Agreed by the whole team on 14 Oct 2026.
 > **Launch:** **Friday 16 October 2026** (the PRD's original date was 31 October).
 > **Session:** 2026/2027 administration. President: Abigail Moejoh.
-> **Status:** Pre-development. Content sources received on 14 Oct and summarised below.
+> **Status:** In development. Client and server are scaffolded (issue #1); feature work follows the [GitHub issues](https://github.com/YastecHub/pans-unilag-website/issues).
 
 ---
 
@@ -530,29 +530,32 @@ Admin (signed-in only): `POST /api/auth/login`, `POST /api/auth/logout`, `GET /a
 
 Node.js **22 LTS**, npm, Git, a MongoDB connection string (personal free Atlas cluster or local MongoDB for development), and Cloudinary credentials from the web lead.
 
-### One-time scaffold (web lead)
+### Setup
 
 ```bash
-npm init -y        # add "workspaces": ["client", "server"] to package.json
-npm create vite@latest client -- --template react-ts
-mkdir server && cd server && npm init -y && cd ..
-npm install -w server express mongoose zod cors helmet cookie-parser express-rate-limit jsonwebtoken argon2 cloudinary
-npm install -w server -D typescript tsx @types/node @types/express @types/cors @types/cookie-parser @types/jsonwebtoken
-npm install -w client react-router @tanstack/react-query @cloudinary/react @cloudinary/url-gen
+git clone https://github.com/YastecHub/pans-unilag-website.git
+cd pans-unilag-website
+npm install                            # installs the root, client and server workspaces
+cp server/.env.example server/.env     # Windows: copy server\.env.example server\.env
+cp client/.env.example client/.env     # Windows: copy client\.env.example client\.env
+npm run dev                            # client http://localhost:5173, API http://localhost:4000
 ```
 
-Then add `server/tsconfig.json`, root scripts that run both apps, and `.env.example` files. Check each package's documentation for current versions.
+In development the client forwards `/api/*` requests to the API, so open **http://localhost:5173** and everything works from one address. Check the API directly at http://localhost:4000/api/health. Never commit `.env` files.
 
-### Everyday development
+### Scripts (run from the repository root)
 
-```bash
-npm install
-cp server/.env.example server/.env    # never commit .env
-cp client/.env.example client/.env
-npm run seed -w server                # loads server/seed/*.json, including placeholders
-npm run dev                           # client :5173, API :4000
-npm run lint && npm run test && npm run build
-```
+| Command | What it does |
+| --- | --- |
+| `npm run dev` | Starts the API (`tsx watch`) and the client (Vite) together |
+| `npm run build` | Production build of both workspaces (`client/dist`, `server/dist`) |
+| `npm run lint` | ESLint across the whole repo (one shared config: `eslint.config.js`) |
+| `npm run typecheck` | TypeScript checks in both workspaces |
+| `npm run test` | Vitest in both workspaces |
+| `npm run format` / `npm run format:check` | Prettier for code files |
+| `npm run <script> -w client` or `-w server` | Run a script in one workspace only |
+
+The seed command (`npm run seed -w server`) arrives with issue #8.
 
 ## Environment variables
 
