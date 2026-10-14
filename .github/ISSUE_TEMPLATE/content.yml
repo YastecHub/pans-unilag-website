@@ -1,0 +1,50 @@
+name: Content
+description: Supply or request website content (bios, photos, write-ups, dates, links, documents)
+title: "content: "
+labels: ["type: content", "area: content"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        For writers, committees and executives: no coding needed. A developer will add this to the site and link the PR here.
+        **Never include personal phone numbers or personal email addresses for publication.**
+  - type: dropdown
+    id: page
+    attributes:
+      label: Which page is this for?
+      options:
+        - Home
+        - About (who we are, membership, history, impact)
+        - Leadership (executive council, senate, committees, patrons)
+        - Governance / constitution
+        - Events
+        - Gallery
+        - Opportunities
+        - Publications
+        - Academics (resources, CGPA)
+        - Connect (feedback, alumni, contact, privacy)
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: content
+    attributes:
+      label: Content
+      description: Paste the text, or describe what you are supplying. Attach files or share a Drive link the team can open.
+    validations:
+      required: true
+  - type: input
+    id: approved
+    attributes:
+      label: Approved by
+      description: Who approved this for publication (e.g. Editor-in-Chief, President, committee lead)?
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: Facts, names and dates are verified
+        - label: People in photos have agreed to them being published
+        - label: No personal phone numbers or personal emails are included

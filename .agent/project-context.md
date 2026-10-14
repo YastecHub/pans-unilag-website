@@ -4,7 +4,7 @@ Fill this from confirmed requirements and inspected code. Leave unknown items as
 
 | Field | Value |
 | --- | --- |
-| Solution purpose and users | Official website of PANS UNILAG (Pharmaceutical Association of Nigerian Students, University of Lagos). Primary users: UNILAG pharmacy students (PANSites). Secondary: executives (via admin dashboard), alumni, prospective students, wider pharmacy community. See README.md and the PRD |
+| Solution purpose and users | Official website of PANS UNILAG (Pharmaceutical Association of Nigeria Students, University of Lagos; motto "Service to Humanity"). Name follows the constitution. Primary users: UNILAG pharmacy students (PANSites). Secondary: executives (via admin dashboard), alumni, prospective students, wider pharmacy community. See README.md and the PRD |
 | Repository/workspace layout | One repo, npm workspaces: `client/` (React SPA: `src/app`, `src/features/<feature>/{api,components,pages}`, `src/components/{layout,ui}`) and `server/` (Express API: `src/app.ts`, `src/server.ts`, `src/config`, `src/middleware`, `src/modules/<feature>/{http,application,domain,infrastructure}`). Not yet scaffolded. See README.md > Project structure |
 | Runtime and package manager | Node.js 22 LTS (Vite needs 20.19+ or 22.12+); npm with workspaces |
 | Framework versions and router | MERN: React + Vite + React Router (client); Express (server). Versions to be confirmed from package.json after scaffold |
@@ -14,8 +14,8 @@ Fill this from confirmed requirements and inspected code. Leave unknown items as
 | Jobs, queues and external providers | Cloudinary (server `cloudinary` SDK signs uploads; client `@cloudinary/react` + `@cloudinary/url-gen` renders). No queues. Weekly manual `mongodump` backups |
 | Deployment target and runtime constraints | Proposed: client static on Vercel/Netlify/Cloudflare Pages; API on Render (free tier sleeps after 15 min idle, ~1 min cold start; Starter ~$7/month stays on); DB on MongoDB Atlas. Must load well on Nigerian mobile data |
 | Critical invariants and state transitions | Events move to Past after `endsAt`; opportunities hidden after `deadline`; announcements hidden after `expiresAt`. Feedback/alumni submissions and admin records are never returned by public endpoints. CGPA calculator stores no user data |
-| Currency/rounding and timezone rules | Timezone Africa/Lagos (WAT, UTC+1) for display and date rules; store UTC. CGPA rounding rule Unknown: to be confirmed with the Faculty |
-| Design system and accessibility target | Tailwind CSS with design tokens as CSS variables (proposed); light/dark themes; WCAG 2.1 AA; Lighthouse mobile >= 90 |
+| Currency/rounding and timezone rules | Timezone Africa/Lagos (WAT, UTC+1) for display and date rules; store UTC. CGPA shown to 2 decimal places on the UNILAG 5-point scale |
+| Design system and accessibility target | Brand tokens from the Brand Guidelines (see README > Brand) as CSS variables, Tailwind proposed; Poppins + Inter; light/dark themes; WCAG 2.1 AA; Lighthouse mobile >= 90 |
 | Existing install/dev/build/lint/typecheck/test commands | Unknown until scaffold. Planned: npm install, npm run dev (both apps), npm run seed -w server, npm run lint, npm run test, npm run build. Vitest, Supertest, Playwright |
 | Testing policy and required CI gates | Follow applicable project/user instructions; use proportionate verification |
 | Authorized environments and deployment scope | Local work unless otherwise authorized |
@@ -24,13 +24,21 @@ Fill this from confirmed requirements and inspected code. Leave unknown items as
 
 Record terms that have a specific meaning here, including lifecycle states and ownership boundaries.
 
-- **PANS**: Pharmaceutical Association of Nigerian Students. **PANSite**: a member (UNILAG pharmacy student).
-- **EIC**: Editor-in-Chief; coordinates the editorial process (currently Anu).
-- **Recipharm**: PANS UNILAG publication, published in editions.
-- **IPSF, ADMAP, Flagship**: PANS committees/initiatives.
-- **Pharmalympics, Pharmathon**: PANS flagship events.
-- **Session**: an executive term, written `2026/2027`.
-- **Content freeze**: the point after which no new launch content is accepted.
+- **PANS UNILAG**: Pharmaceutical Association of Nigeria Students, University of Lagos (constitution spelling: "Nigeria", not "Nigerian"). Motto: Service to Humanity.
+- **PANSite**: a member; every duly registered student of the Faculty of Pharmacy.
+- **Congress / General Assembly**: all registered members; the highest organ.
+- **EC (Executive Council)**: the 14 elected executive offices; one session in office.
+- **Senate**: legislative arm; 22 Senators; principal officers Senate President, Deputy Senate President, Senate Leader, Chief Whip.
+- **Interim Council**: governs if the EC is dissolved, until a new EC is sworn in.
+- **Session**: an academic year of office, written `2026/2027` (or `26/27`).
+- **Level**: student year, written `200L`-`500L`.
+- **Secretary General** (not "General Secretary"): receives complaints and suggestions; all correspondence goes through this office.
+- **EIC**: Editor-in-Chief; chairs the Editorial Board, which publishes **Recipharm** annually.
+- **Committees 2026/27**: ADMAP, Content, Media, Design, PPHT (Public Health Team), SDG, Research Club, CPD & CBC, Academics, Alumni Network, IPSF. Officer titles vary: Lead/Assistant; Chairman/Secretary; LEO (Local Exchange Officer)/LLO (Local Liaison Officer).
+- **Standing committees (constitution)**: Electoral, Audit, Editorial Board, Social, Academic, Welfare, Sports, Fundraising.
+- **Health Week 2026: Redefine+** and **Pharmalympics 2026**: event series with day-by-day events and albums.
+- **Placeholder**: a content item with `isPlaceholder: true`, shown as visibly "coming soon"; never invented content.
+- **Content freeze**: point after which no new launch content is accepted.
 
 ## Decisions
 
@@ -41,3 +49,8 @@ Record significant decisions with the reason, alternatives and date. Link to exi
 - 2026-10-12: CGPA calculator added to v1 scope (PRD had excluded it); client-side only, grade scale editable, Faculty to confirm scale.
 - 2026-10-12: Member accounts and restricted content deferred to phase 2.
 - 2026-10-14: Whole team agreed to switch to MERN (MongoDB, Express, React, Node.js). TypeScript and Cloudinary kept. Admin dashboard with admin-only auth replaces the headless CMS. Reason: team agreement. Alternative was Next.js + headless CMS.
+- 2026-10-14: Name follows the constitution ("Nigeria Students"). Sources of truth ranked: constitution > President's 2026/27 announcement > committee write-ups > brand guidelines > PRD.
+- 2026-10-14: Committees page shows the 11 committees appointed for 2026/27; constitutional standing committees are described on the Governance page; "Flagship" dropped.
+- 2026-10-14: Missing content ships as clearly marked placeholders (`isPlaceholder`), listed for admins; never invented.
+- 2026-10-14: CGPA uses the UNILAG standard 5-point scale (A 70-100=5, B 60-69=4, C 50-59=3, D 45-49=2, E 40-44=1, F 0-39=0), confirmed by the Faculty; 2 decimal places.
+- 2026-10-14: Brand: primary #0e6434, #07913c, #003463; secondary #ffffff, #e1e8db; accent #ffbd04; Poppins (headings/menus/buttons) and Inter (body). #07913c and #ffbd04 must not carry normal-size text on white.

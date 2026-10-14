@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Project README
+    url: https://github.com/YastecHub/pans-unilag-website#readme
+    about: Scope, brand, structure and decisions for the PANS UNILAG website.
+  - name: Contributing guide
+    url: https://github.com/YastecHub/pans-unilag-website/blob/main/CONTRIBUTING.md
+    about: How to claim an issue and raise a pull request.

@@ -1,136 +1,362 @@
 # PANS UNILAG Website
 
-The official website of the **Pharmaceutical Association of Nigerian Students (PANS), University of Lagos chapter**: a fast, accessible, mobile-first home for the association's news, events, opportunities, publications, history and student services, with an admin dashboard so executives can keep it up to date without a developer.
+The official website of the **Pharmaceutical Association of Nigeria Students, University of Lagos (PANS UNILAG)**. Motto: ***Service to Humanity***.
 
-> **Stack:** MERN (MongoDB, Express, React, Node.js) with TypeScript, plus Cloudinary for images. Agreed by the whole team on 14 October 2026; replaces the earlier Next.js plan.
-> **Status:** Pre-development. The repository exists; the client and server apps have not been scaffolded yet.
-> **Launch target:** **Friday 16 October 2026**, brought forward from the PRD's original 31 October 2026.
-> **Requirements:** *PANS UNILAG Website: Product Requirements Document (PRD) Summary*, plus the team's *Recommendations & Build Plan* doc.
+A fast, accessible, mobile-first home for the association's identity, leadership, governance, events, opportunities, publications and student services, with an admin dashboard so executives can keep it up to date without a developer.
 
----
-
-## Table of contents
-
-1. [Project goal](#project-goal)
-2. [Audience](#audience)
-3. [Launch scope (v1)](#launch-scope-v1)
-4. [Out of scope for v1](#out-of-scope-for-v1)
-5. [Tech stack](#tech-stack)
-6. [System overview](#system-overview)
-7. [Project structure](#project-structure)
-8. [Architecture rules](#architecture-rules)
-9. [API reference (planned)](#api-reference-planned)
-10. [Data model](#data-model)
-11. [Getting started](#getting-started)
-12. [Environment variables](#environment-variables)
-13. [Images and Cloudinary](#images-and-cloudinary)
-14. [CGPA calculator](#cgpa-calculator)
-15. [Security, privacy and data protection](#security-privacy-and-data-protection)
-16. [Performance, SEO and accessibility](#performance-seo-and-accessibility)
-17. [Deployment](#deployment)
-18. [Team workflow](#team-workflow)
-19. [Timeline](#timeline)
-20. [Definition of done](#definition-of-done)
-21. [Open decisions](#open-decisions)
-22. [Using the AI agent prompts (`.agent/`)](#using-the-ai-agent-prompts-agent)
-23. [Maintenance and handover](#maintenance-and-handover)
+> **Stack:** MERN (MongoDB, Express, React, Node.js) in TypeScript, with Cloudinary for images. Agreed by the whole team on 14 Oct 2026.
+> **Launch:** **Friday 16 October 2026** (the PRD's original date was 31 October).
+> **Session:** 2026/2027 administration. President: Abigail Moejoh.
+> **Status:** Pre-development. Content sources received on 14 Oct and summarised below.
 
 ---
 
-## Project goal
+## Contents
 
-Build and launch a functional, accessible, mobile-friendly PANS UNILAG website that:
+1. [Sources of truth](#sources-of-truth)
+2. [Identity and naming](#identity-and-naming)
+3. [Brand and design system](#brand-and-design-system)
+4. [Site map and pages](#site-map-and-pages)
+5. [Content: what we have and what is a placeholder](#content-what-we-have-and-what-is-a-placeholder)
+6. [Placeholder rules](#placeholder-rules)
+7. [Leadership and committees (2026/2027)](#leadership-and-committees-20262027)
+8. [Governance content from the constitution](#governance-content-from-the-constitution)
+9. [Events and gallery](#events-and-gallery)
+10. [CGPA calculator](#cgpa-calculator)
+11. [Who owns which content](#who-owns-which-content)
+12. [Tech stack](#tech-stack)
+13. [System overview](#system-overview)
+14. [Project structure](#project-structure)
+15. [Architecture rules](#architecture-rules)
+16. [Data model](#data-model)
+17. [API reference (planned)](#api-reference-planned)
+18. [Getting started](#getting-started)
+19. [Environment variables](#environment-variables)
+20. [Images and Cloudinary](#images-and-cloudinary)
+21. [Security, privacy and data protection](#security-privacy-and-data-protection)
+22. [Performance, SEO and accessibility](#performance-seo-and-accessibility)
+23. [Deployment](#deployment)
+24. [Contributing and project management](#contributing-and-project-management)
+25. [Timeline](#timeline)
+26. [Definition of done](#definition-of-done)
+27. [Decisions log](#decisions-log)
+28. [Using the AI agent prompts (`.agent/`)](#using-the-ai-agent-prompts-agent)
+29. [Maintenance and handover](#maintenance-and-handover)
 
-- is genuinely useful to PANSites (pharmacy students at UNILAG);
-- communicates the association's work and preserves its history;
-- can be updated by authorised administrators through an admin dashboard, **without a developer**; and
-- can be handed over cleanly to future PANS administrations.
+---
 
-## Audience
+## Sources of truth
 
-| Audience | What they come for |
+When sources disagree, the higher row wins.
+
+| Rank | Source | What it governs |
+| --- | --- | --- |
+| 1 | **PANS UNILAG Constitution** (reviewed and adopted 9 July 2026), as summarised in *PANS UNILAG Website: Content to Include* | Name, motto, objectives, membership, governance, offices, elections, committees' constitutional roles, finance, members' rights, contact address |
+| 2 | **President's announcement of committee leads, 2026/2027** | Which committees exist this session and who leads them |
+| 3 | **PANS Committees write-ups** | Committee descriptions, activities, achievements and plans |
+| 4 | **Brand Guidelines (PANS UNILAG Website)** | Logo, colours, fonts, type scale |
+| 5 | **PRD** and the team's *Recommendations & Build Plan* doc | Features, priorities, launch scope |
+
+Photo sources (Google Drive folders for Pharmalympics 2026 and PANS Health Week 2026) are listed in the team's content inventory sheet. Their links are not kept in this repository.
+
+## Identity and naming
+
+| Item | Use exactly |
 | --- | --- |
-| **PANSites (primary)** | Announcements, events, opportunities, academic tools, publications, feedback |
-| PANS executives and committee members | Publishing updates, events, opportunities and gallery albums through the admin dashboard |
-| Pharmacy alumni | Staying connected, mentoring, supporting initiatives |
-| Prospective students and the wider pharmacy community | Who PANS UNILAG is, what it has achieved, how to engage |
+| Full name | **Pharmaceutical Association of Nigeria Students, University of Lagos** |
+| Short name | **PANS UNILAG** (in running text the constitution also uses "the Association") |
+| Motto | **Service to Humanity** |
+| Members | **PANSites**: all duly registered students of the Faculty of Pharmacy |
+| Official language | English |
+| Postal address | c/o The Dean's Office, Faculty of Pharmacy, College of Medicine Campus, University of Lagos, P.M.B. 12003, Lagos |
+| Location | Faculty of Pharmacy, Lagos University Teaching Hospital, off Ishaga Road, Idi-Araba, Lagos |
+| Correspondence | Directed to the **Secretary General**, through the postal address above |
 
-## Launch scope (v1)
+> **Name rule:** the constitution says "Nigeria Students". The brand deck's logo lockup and the PRD say "Nigerian Students"; **the constitution wins**. The Design Committee should update the lockup artwork to "Nigeria".
 
-Everything below ships on launch day **if its content is approved by the content freeze on Wednesday 14 October (evening)**. Code for an item whose content is late still ships; the content follows the week after.
+## Brand and design system
 
-### Public site
+From the Brand Guidelines deck, with accessibility rules added after contrast checks against WCAG 2.1 AA.
 
-| # | Area | Feature | PRD priority | Notes |
-| --- | --- | --- | --- | --- |
-| 1 | Home | Landing page | P1 | Pinned announcements, next 3 events, open opportunities, quick links |
-| 2 | About | Who we are, history and milestones, impact | P1 | Only **verified** milestones (e.g. first Pharmalympics, first Pharmathon) |
-| 3 | People | Current executives, committees, past executives | P1 | IPSF, ADMAP, Flagship and other committees; role emails only, never personal phone numbers |
-| 4 | Events | Upcoming events, event detail, month calendar view, "add to calendar" | P1 | Past events archive themselves after their end date |
-| 5 | Opportunities | Single hub with type filter and detail pages | P1 | Sorted by closing date; hidden automatically after the deadline |
-| 6 | Publications | Recipharm editions, PANS newspaper, Substack | P1 | Approved PDFs or official links only |
-| 7 | Connect | Feedback and suggestions form (anonymous option), contact | P1 | Page states who reads submissions and how fast they respond |
-| 8 | Legal | Privacy notice | New | Required because forms collect personal data |
-| 9 | Academics | **CGPA calculator** | New (added by the team) | Runs in the browser; grade scale editable by admins. See [CGPA calculator](#cgpa-calculator) |
-| 10 | Academics | Academic resources (starter set) | P3 → v1 | Vetted links by level and semester; **no copyrighted textbook uploads** |
-| 11 | Documents | Constitution and approved documents | P2 → v1 | Approved PDF only |
-| 12 | Gallery | Gallery and event archive | P2 → v1 | Albums grouped by event and year; photo consent required |
-| 13 | Connect | Alumni connection form | P2 → v1 | Minimal fields, consent checkbox |
-| 14 | Site-wide | Light/dark mode | P2 → v1 | Follows system setting, plus a manual toggle |
-| 15 | Site-wide | Search and filters | P3 → v1 | MongoDB text search endpoint; filters on Opportunities and Events |
-| 16 | Site-wide | 404 page, social link previews, privacy-friendly analytics | New | See [SEO](#performance-seo-and-accessibility) for the link-preview caveat |
-| 17 | Site-wide | Install to phone / offline reading (PWA) | New | **Stretch goal**: the first item to drop if time runs short |
+### Colours
 
-### Admin dashboard (`/admin`)
+| Token | Hex | Role | Usage rules |
+| --- | --- | --- | --- |
+| `--color-primary` | `#0e6434` | Dark green, primary | Buttons, links, active nav, headings on light backgrounds. White text on it: **7.3:1** ✅ |
+| `--color-primary-bright` | `#07913c` | Bright green, primary | Large headings, icons, illustrations, borders. **Not** for body text or white-text buttons (4.1:1, fails for normal text) |
+| `--color-navy` | `#003463` | Navy, primary | Footer, hero overlays, secondary buttons. White text: **12.6:1** ✅ |
+| `--color-surface` | `#ffffff` | White, secondary | Page background |
+| `--color-surface-alt` | `#e1e8db` | Pale green-grey, secondary | Alternate section backgrounds, cards, placeholders. Dark green text on it: **5.8:1** ✅ |
+| `--color-accent` | `#ffbd04` | Yellow, accent | Highlights, badges, focus rings, "New" labels. Only on navy (7.5:1) or dark green (4.3:1, large text only), or **behind black/dark text** (12.5:1). **Never as text on white** (1.7:1) |
+| `--color-text` | `#1f2a24` | Body text (derived) | 14.8:1 on white |
+| `--color-text-muted` | `#4a5a50` | Secondary text (derived) | 7.3:1 on white, 5.8:1 on `#e1e8db` |
 
-| Priority for Friday | Capability |
-| --- | --- |
-| **Must** | Secure sign-in for named admins; create, edit, archive and delete **announcements, events and opportunities** |
-| **Must** | View feedback and alumni submissions (admins only) |
-| Should | Manage executives, committees, publications, documents, resources, grading scale and site settings |
-| Should | Upload images to Cloudinary from the dashboard (signed uploads) |
-| Could | Gallery album builder with drag-to-reorder |
+**Dark mode** (derived, all checked):
 
-Anything not editable in the dashboard by Friday is loaded with a **seed script** from the content inventory and moved into the dashboard the following week.
+| Token | Hex | Contrast |
+| --- | --- | --- |
+| Background | `#0b1a12` | n/a |
+| Surface / cards | `#132a1d` | n/a |
+| Text | `#e1e8db` | 14.3:1 on background |
+| Muted text | `#b8c4b2` | 9.9:1 on background |
+| Links | `#5cc98a` | 8.7:1 on background |
+| Accent | `#ffbd04` | 10.7:1 on background |
+| Buttons | `#0e6434` with white text and a `#5cc98a` border | 7.3:1 text; the border keeps the button visible on the dark background |
 
-### Site map
+### Typography
+
+| Use | Font | Weights |
+| --- | --- | --- |
+| Headings, menus, buttons | **Poppins** | 600 (bold), 500 (semibold) |
+| Paragraphs, descriptions | **Inter** | 400 (regular), 500 |
+
+| Level | Desktop (brand spec) | Mobile (≤ 640 px) | Use |
+| --- | --- | --- | --- |
+| H1 | 56–64 px | 36 px | Page titles |
+| H2 | 40–48 px | 28 px | Section headings |
+| H3 | 24–30 px | 20–22 px | Subheadings |
+| Body | 16–18 px | 16 px | Text |
+| Small | 12–14 px | 13–14 px | Metadata, dates, labels |
+
+Implement with `clamp()` so sizes scale smoothly. Load only the weights above, with `font-display: swap`, to keep pages light on data.
+
+### Logo
+
+- Circular badge: mortar and pestle, "PANS UNILAG", "Faculty of Pharmacy", "Service to Humanity".
+- Approved uses: the badge alone on white or pale grey; the badge with the full name lockup in **green** or **black** text, on white or pale grey.
+- Do not recolour, stretch or place the badge on busy photos without a solid backing.
+- ⚠️ The only file we have is **200 × 200 px**. Use it for the header and favicon for now. **A vector (SVG) or ≥ 1000 px version is needed** for hero sections, link previews and print.
+
+## Site map and pages
+
+Eight menu items. On phones they collapse into a menu button; on desktop, items with sub-pages open dropdowns.
 
 ```
 Home
-├── About ─────────── Who we are · History & milestones · Impact
-├── People ────────── Current executives · Committees · Past executives
-├── Events ────────── Upcoming · Event detail · Past events & gallery
-├── Opportunities ─── Listings by deadline · Filter by type · Detail
-├── Publications ──── Recipharm · Newspaper & Substack · Constitution & documents
-├── Academics ─────── CGPA calculator · Resources by level · External links
-└── Connect ───────── Feedback & suggestions · Contact · Privacy notice · Alumni
-Header (every page): search · light/dark toggle
-Footer (every page): contact email · social links · privacy notice
-/admin (not linked publicly): sign-in · content management · submissions
+├── About ──────────── Who we are (name, motto, preamble, objectives)
+│                      Membership & rights
+│                      History & milestones            [placeholder]
+│                      Impact                          [placeholder]
+├── Leadership ─────── Executive Council 2026/27       [names/photos: placeholders except President]
+│                      Senate 2026/27                  [placeholder list; roles from constitution]
+│                      Committees (11)                 [leads known; 4 descriptions placeholder]
+│                      Patrons                         [placeholder]
+├── Governance ─────── How PANS is governed (Congress, EC, Senate, Interim Council, representation)
+│                      Elections
+│                      Finance & accountability
+│                      Meetings & procedures
+│                      Constitution                    [PDF download: placeholder until file arrives]
+├── Events ─────────── Upcoming                        [empty state until events are added]
+│                      Past events (Health Week 2026, Pharmalympics 2026)
+│                      Gallery
+├── Opportunities ──── Hub (run by CPD & CBC)          [empty state until listings are added]
+├── Publications ───── Recipharm (annual magazine)     [placeholder editions]
+│                      Newspaper · Substack            [placeholder links]
+├── Academics ──────── CGPA calculator                 [ready: UNILAG scale]
+│                      Resources                       [placeholder]
+│                      Student support (Welfare & Academic support)
+└── Connect ────────── Feedback & suggestions (to the Secretary General)
+                       Alumni network (Alumni Network Committee)
+                       Contact · Privacy notice
+Header: search · light/dark toggle         Footer: name, motto, address, socials [placeholder], privacy
+/admin (not linked publicly): sign-in · content · placeholders to fill · submissions
 ```
 
-## Out of scope for v1
+### Home page sections (in order)
 
-- **Student/member accounts and restricted content.** Only named admins sign in. Student logins and restricted resources are planned for phase 2.
-- A complete cross-institutional academic library (see PRD section 4).
-- Hosting copyrighted textbooks or internal lecture slides without the owners' written approval.
+1. Hero: full name, motto "Service to Humanity", one-line purpose, buttons to *About* and *Events*
+2. Announcements (pinned first; hidden after expiry)
+3. Upcoming events (next 3), or a friendly empty state
+4. Open opportunities (closing soonest), or a friendly empty state
+5. Our committees (cards linking to each committee)
+6. Highlights from the gallery (Health Week 2026, Pharmalympics 2026)
+7. Tools: CGPA calculator and feedback form
+8. Footer
+
+## Content: what we have and what is a placeholder
+
+| Page / item | Status | Source or what is missing |
+| --- | --- | --- |
+| Name, motto, preamble, objectives | ✅ Ready | Constitution Art. 2, 3, Preamble |
+| About the constitution (supremacy, non-discrimination, adoption) | ✅ Ready | Art. 1, 26 |
+| Membership, honorary members, patrons' roles, extra-year students | ✅ Ready | Art. 4, 15 |
+| Members' rights, officer accountability, discipline | ✅ Ready | Art. 15, 21, 24 |
+| Governance: Congress, EC, Senate, Interim Council, representation | ✅ Ready | Art. 5, 7, 11, 12, 13, 14, 22, 25 |
+| Executive offices and their duties (14 offices) | ✅ Ready | Art. 6, 8 |
+| Senate composition, duties, principal officers | ✅ Ready | Art. 5, 16, 17, 18 |
+| Elections, eligibility, Electoral Committee, swearing-in | ✅ Ready | Art. 9, 19, 24 |
+| Constitutional standing committees | ✅ Ready | Art. 19 |
+| Student support (Welfare and Academic) | ✅ Ready | Art. 8, 19 |
+| Finance and accountability | ✅ Ready | Art. 10, 15, 20 |
+| Meetings and procedures | ✅ Ready | Art. 22, 23 |
+| Constitution amendment process | ✅ Ready | Art. 26 |
+| Contact address | ✅ Ready | Art. 2 |
+| Committees 2026/27: names and leads (11) | ✅ Ready | President's announcement |
+| Committee descriptions: ADMAP, PPHT, SDG, Research Club, CPD & CBC, Alumni Network, IPSF | ✅ Ready | Committees write-ups |
+| Committee descriptions: Content, Media, Design, Academics | 🟨 Placeholder | Write-ups needed |
+| President | 🟨 Partial | Name known (Abigail Moejoh); photo and bio needed |
+| Other 13 executive officers | 🟨 Placeholder | Names, levels, photos, bios needed |
+| Senate members and principal officers | 🟨 Placeholder | List needed |
+| Patrons (Dean of the Faculty + four others) | 🟨 Placeholder | Names needed |
+| History & milestones (first Pharmalympics, first Pharmathon, etc.) | 🟨 Placeholder | Verified dates and facts needed |
+| Impact (numbers, outcomes) | 🟨 Placeholder | Figures needed |
+| Full constitution PDF | 🟨 Placeholder | File needed (summary pages ship regardless) |
+| Upcoming events | 🟨 Empty state | Event details needed |
+| Past events: Health Week 2026, Pharmalympics 2026 | 🟨 Partial | Photos ready; descriptions and dates needed |
+| Opportunities | 🟨 Empty state | Listings from CPD & CBC |
+| Recipharm, newspaper, Substack | 🟨 Placeholder | Editions and links needed |
+| Academic resources | 🟨 Placeholder | Vetted links from Academics Committee |
+| CGPA calculator | ✅ Ready | UNILAG standard scale, confirmed by the Faculty |
+| Official email and social handles | 🟨 Placeholder | Needed. Never use personal emails or phone numbers |
+| High-resolution logo | 🟨 Placeholder | SVG or ≥ 1000 px needed |
+
+## Placeholder rules
+
+Missing content must be **visible as missing**, so nobody mistakes a placeholder for real information, and so admins can find and fill it.
+
+1. **Never invent content.** No fake names, dates, numbers or "Lorem ipsum". A placeholder states what will appear there: *"Photo and bio coming soon"*, *"Recipharm 2026 edition coming soon"*, *"Date to be announced"*.
+2. **Structure is real, details are pending.** For example, all 14 executive offices are shown with their constitutional duties; each officer card shows "Name to be announced" until filled.
+3. **One look for every placeholder:** a `Placeholder` component with a dashed border in `#4a5a50`, a `#e1e8db` background, an icon and the text "Coming soon". Image placeholders use a neutral silhouette (people) or the PANS badge on pale grey (events and publications) with the label "Photo coming soon".
+4. **Data flag:** every content document has `isPlaceholder: boolean` and `placeholderNote: string`. The seed script creates placeholders; saving real content in the dashboard clears the flag.
+5. **Admin to-do list:** the dashboard has a **Placeholders** screen listing every item still marked `isPlaceholder`, grouped by page, so the team can work through them.
+6. **Empty lists are not placeholders.** Upcoming events and opportunities show a friendly empty state ("No upcoming events yet. Check back soon.") rather than fake entries.
+7. **Search ignores placeholders**, and link previews never use placeholder images.
+
+## Leadership and committees (2026/2027)
+
+### Executive Council: the 14 offices (Art. 6, 8)
+
+| Office | Holder 2026/27 | Key duties (summary) | Eligibility at election (Art. 9) |
+| --- | --- | --- | --- |
+| President | **Abigail Moejoh** | Heads the EC; casting vote; co-ordinates activities; signatory; National Vice President of PANS | 3+ sessions in the Faculty (500L during tenure) |
+| Vice President | *Placeholder* | Assists and acts for the President | 2+ sessions (400L/500L) |
+| Secretary General | *Placeholder* | Meetings, correspondence, records, reports; secretariat; **receives complaints and suggestions** | 3+ sessions (500L) |
+| Assistant Secretary General | *Placeholder* | Minutes in the SG's absence; property stock-taking | 200L at election (300L in tenure) |
+| Treasurer | *Placeholder* | Receives and banks cash within four days; ledger; signatory | 2+ sessions (400L/500L) |
+| Financial Secretary | *Placeholder* | Budgets, project finance, monthly reports; chairs Fundraising | 2+ sessions (400L/500L) |
+| Public Relations Officer | *Placeholder* | Public liaison, media releases, publicity, notice board | 2+ sessions (400L/500L) |
+| Assistant PRO | *Placeholder* | Assists and acts for the PRO | 200L at election (300L in tenure) |
+| Editor-in-Chief | *Placeholder* (PRD names "Anu"; confirm full name) | Chairs the Editorial Board; Recipharm | 3+ sessions (500L) |
+| Social Secretary | *Placeholder* | Social functions incl. PANS Dinner, Freshers Party | 2+ sessions (400L/500L) |
+| Assistant Social Secretary | *Placeholder* | Assists and acts | 200L at election (300L in tenure) |
+| Sports Secretary | *Placeholder* | Sporting activities; at least one annual sporting event | 2+ sessions (400L/500L) |
+| Assistant Sports Secretary | *Placeholder* | Assists and acts | 200L at election (300L in tenure) |
+| Welfare Secretary | *Placeholder* | Academic, social and psychological welfare; chairs Academic and Welfare Committees | 3+ sessions (500L) |
+
+### Senate (Art. 5, 16–18)
+
+22 Senators (6 each from 200L–400L, 4 from 500L). Principal officers: **Senate President, Deputy Senate President, Senate Leader, Chief Whip**. Names are placeholders until the list is provided.
+
+### Committees shown on the site
+
+**Decision (14 Oct):** the Committees page shows the **11 committees appointed for 2026/2027** in the President's announcement. The constitution's **standing committees** (Electoral, Audit, Editorial Board, Social, Academic, Welfare, Sports, Fundraising) are described on the *Governance* page as part of how PANS works, without members. The PRD's "Flagship" committee is dropped because it is in neither source.
+
+| # | Committee | Officers 2026/27 | Description |
+| --- | --- | --- | --- |
+| 1 | Anti-Drug Misuse and Abuse Program (**ADMAP**) | Lead: Dada Aishat (500L) · Assistant: Akintomide Oluwatomilola Maizah (300L) | ✅ Write-up |
+| 2 | **Content** Committee | Lead: Obe Ipinuoluwa Deborah (500L) · Assistant: Ayanwola Favour (300L) | 🟨 Placeholder |
+| 3 | **Media** Committee | Lead: Adekunle Oluwatimileyin (300L) · Assistant: Sobayo Eniola Olamide (300L) | 🟨 Placeholder |
+| 4 | **Design** Committee | Lead: Odey Martins Wohu-owo (400L) · Assistant: Inyang Joel Ifiok (300L) | 🟨 Placeholder |
+| 5 | PANS **Public Health Team** (PPHT) | Lead: Kosiso Okonkwo (500L) · Assistant: Uzoka Ugochukwu Samuel (400L) | ✅ Write-up |
+| 6 | Sustainable Development Goals (**SDG**) Committee | Lead: Anjolaoluwa Oguntade (500L) · Assistant: Anekwe Chioma Jennifer (400L) | ✅ Write-up; motto "From Awareness to Action, From Service to Impact" |
+| 7 | PANS **Research Club** | Lead: Abdulqoyyum Olayinka Shittu (500L) · Assistant: Arifalo Rufus (400L) | ✅ Write-up |
+| 8 | Career and Professional Development & Capacity Building Committee (**CPD & CBC**) | Lead: Oladimeji Halimah Oladunmomi (400L) · Assistant: Daramola Babalola (300L) | ✅ Write-up; **owns the Opportunities Hub** |
+| 9 | **Academics** Committee | Lead: John Oguntoyinbo (500L) · Assistant: Emmanuel Naomi (400L) | 🟨 Placeholder |
+| 10 | PANS **Alumni Network** Committee | Chairman: Echezonah Momah · Secretary: Solola Amos | ✅ Write-up (titled "Alumni and Network Committee" in the write-ups) |
+| 11 | International Pharmaceutical Students' Federation (**IPSF**) UNILAG | Local Exchange Officer (LEO): Kehinde Dora (500L) · Local Liaison Officer (LLO): Obatomisin Grace Obafemi (300L) | ✅ Write-up |
+
+Committee pages show: name, short name, description, activities, achievements, plans, officers, and photos (placeholder until provided). Officer titles vary (Lead/Assistant, Chairman/Secretary, LEO/LLO), so officers are stored as a list of `{ title, name, level }`.
+
+## Governance content from the constitution
+
+The *Content to Include* PDF is the copy source for these pages; each section cites its article (e.g. "Art. 19") so readers can check the constitution. Key facts the UI must get right:
+
+- **Three levels of government:** Executive Council (one session), Senate (22 members, tenure runs with the EC), General Assembly/**Congress** (all registered members; the highest organ).
+- **Congress quorum:** one quarter of registered members. **Senate quorum:** one third.
+- **Elections:** secret ballot; whole process within two weeks; candidate list published at least three days before; complaints within 48 hours; unopposed candidates need two thirds of votes; vacancies filled by by-election within 21 days.
+- **Finance:** budget to the Senate within two weeks of swearing-in; no spending without a Senate-approved budget; Treasurer banks within four days; Audit Committee audits three times a semester.
+- **Amendment:** two thirds of total Senate membership at a special sitting, ratified by two thirds at a Special General Assembly.
+- **Editorial Board:** EIC plus nine others; publishes **Recipharm annually**.
+- **Patrons:** the Dean of the Faculty of Pharmacy and four others.
+
+## Events and gallery
+
+### Past events with photos ready
+
+| Series | Items (each becomes an event and an album) | Notes |
+| --- | --- | --- |
+| **PANS Health Week 2026: Redefine+** | Day 1 Trade Fair & Cooking Competition · Day 2 Trade Fair · Day 3 Medical Outreach 2026 · Day 4 FOP Preshow · Day 5 **Pharmathon** · Day 6 Quiz & Debate · Day 7 IPSF Counselling Competition · Day 8 Symposium · Day 9 ADMAP Rally | Fix Drive folder typos before import ("DAY 9Q"; two "Trade Fair … Day 1" folders). Dates to be confirmed |
+| **Pharmalympics 2026** | Day 1 Opening Ceremony & Court Games · Day 2 Athletics & Swimming · Day 3 Football (1) · Day 4 Football (2) · Day 5 Court Games (Lawn Tennis & Volleyball) · Day 6 Football (3) · Day 7 Indoor Games · Day 8 Court Games Finals · Day 9 Football Finale | 100+ photos on Day 1 alone. Dates to be confirmed |
+
+### Gallery rules
+
+- Curate **20–40 photos per album**, resized to ≤ 2500 px on the long edge before upload; link to the full Drive folder for the rest (link stored in the album, not in this repo).
+- Copy the chosen photos out of the personal Drive accounts into PANS-owned storage before upload.
+- Albums belong to an event, and events can belong to a **series** (e.g. Pharmalympics 2026 → Day 1 … Day 9).
+- Every photo needs alt text; captions are optional. Remove any photo on request.
+
+## CGPA calculator
+
+Uses the **standard University of Lagos 5-point grading scale, confirmed by the Faculty**.
+
+| Score (%) | Grade | Grade point |
+| --- | --- | --- |
+| 70–100 | A | 5 |
+| 60–69 | B | 4 |
+| 50–59 | C | 3 |
+| 45–49 | D | 2 |
+| 40–44 | E | 1 |
+| 0–39 | F | 0 |
+
+| CGPA | Class of degree |
+| --- | --- |
+| 4.50–5.00 | First Class |
+| 3.50–4.49 | Second Class Upper |
+| 2.40–3.49 | Second Class Lower |
+| 1.50–2.39 | Third Class |
+| 1.00–1.49 | Pass |
+
+Behaviour:
+
+- **GPA** = Σ(course units × grade point) ÷ Σ(course units) for a semester; **CGPA** uses all semesters entered. Shown to **2 decimal places**.
+- Students enter course code (optional), units and either a score or a grade. Scores map to grades using the table above.
+- Runs **entirely in the browser**; nothing is stored or sent. The scale is fetched from `/api/grading-scale` so admins can update it without code.
+- Footnote: *"Calculated with the UNILAG 5-point scale. Your official result is the one issued by the University."*
+- Unit tests cover: boundaries (39/40, 44/45, 49/50, 59/60, 69/70), zero total units, empty input, failed courses, rounding at x.xx5, and class-of-degree boundaries (4.49/4.50, 3.49/3.50, 2.39/2.40, 1.49/1.50).
+
+## Who owns which content
+
+| Content | Owner after launch |
+| --- | --- |
+| Overall copy and editorial approval | **Editor-in-Chief** with the **Content Committee** |
+| Photos, gallery albums | **Media Committee** |
+| Visual assets, logo artwork, banners | **Design Committee** |
+| Opportunities Hub | **CPD & CBC** (the committee's own plan includes an Opportunities Hub) |
+| Alumni form submissions | **Alumni Network Committee** (Chairman and Secretary) |
+| Feedback and suggestions | **Secretary General** (constitutional duty, Art. 8); welfare issues to the **Welfare Secretary** |
+| CGPA scale and academic resources | **Academics Committee** |
+| Events and announcements | **PRO** and the organising committee |
+| Recipharm and publications | **Editor-in-Chief** / Editorial Board |
+| Executive and Senate lists each session | **Secretary General** |
+| Website, accounts, backups | Web lead plus two named admins |
 
 ## Tech stack
 
 | Layer | Choice | Status |
 | --- | --- | --- |
-| Database | **MongoDB** on MongoDB Atlas, modelled with **Mongoose** | **Decided** |
-| API | **Express** on **Node.js**, written in TypeScript | **Decided** |
-| Frontend | **React** + TypeScript, built with **Vite**, routing with **React Router** | **Decided** (Vite and React Router proposed) |
-| Images and media | **Cloudinary**: `cloudinary` SDK on the server, `@cloudinary/react` + `@cloudinary/url-gen` on the client | **Decided** |
-| Validation | **Zod** schemas at every API entry point | Proposed |
-| Styling | Tailwind CSS with design tokens as CSS variables | Proposed |
-| Server data on the client | TanStack Query (caching, loading and error states) | Proposed |
-| Auth (admins only) | Email + password, hashed with argon2 or bcrypt; session JWT in an `httpOnly`, `Secure`, `SameSite` cookie | Proposed |
-| Testing | Vitest (client and server logic), Supertest (API), Playwright (smoke tests) | Proposed |
-| Hosting | Client: Vercel, Netlify or Cloudflare Pages (static). API: Render. Database: MongoDB Atlas | Proposed, see [Deployment](#deployment) |
-| Node.js | **22 LTS** recommended (current Vite needs Node 20.19+ or 22.12+) | Required |
-| Repository | One repo, **npm workspaces**: `client/` and `server/` | Proposed |
+| Database | **MongoDB** on MongoDB Atlas, modelled with **Mongoose** | Decided |
+| API | **Express** on **Node.js**, TypeScript | Decided |
+| Frontend | **React** + TypeScript, **Vite**, **React Router** | Decided (Vite and React Router proposed) |
+| Images | **Cloudinary**: `cloudinary` SDK on the server; `@cloudinary/react` + `@cloudinary/url-gen` on the client | Decided |
+| Validation | **Zod** at every API entry point | Proposed |
+| Styling | Tailwind CSS with the brand tokens above as CSS variables | Proposed |
+| Server state on the client | TanStack Query | Proposed |
+| Admin auth | Email + password (argon2), session JWT in an `httpOnly`, `Secure`, `SameSite=Lax` cookie | Proposed |
+| Markdown rendering | For constitution-derived page sections (sanitised) | Proposed |
+| Testing | Vitest, Supertest, Playwright | Proposed |
+| Hosting | Client: static host. API: Render. DB: Atlas | Proposed |
+| Node.js | **22 LTS** (Vite needs 20.19+ or 22.12+) | Required |
+| Repository | npm workspaces: `client/`, `server/` | Proposed |
 
 ## System overview
 
@@ -146,173 +372,168 @@ Footer (every page): contact email · social links · privacy notice
                          Cloudinary (image storage + delivery CDN)
 ```
 
-The browser never sees database credentials or the Cloudinary API secret. Admin image uploads go **directly from the browser to Cloudinary** using a short-lived signature issued by the API.
-
 ## Project structure
 
-The layout follows [`.agent/architect.md`](.agent/architect.md): for a Node.js API, `src/modules/<feature>/{http,application,domain,infrastructure}` with app assembly separate from server startup; for a React SPA, `src/features/<feature>/{components,hooks,api}` with shared UI primitives and router assembly. Create folders when a feature needs them; do not commit empty layers.
+Follows [`.agent/architect.md`](.agent/architect.md): Node API as `src/modules/<feature>/{http,application,domain,infrastructure}`; React SPA as `src/features/<feature>/{api,components,pages}`.
 
 ```
 pans-unilag-website/
-├── .agent/                          # AI-assistant role prompts (currently git-ignored)
 ├── client/                          # React + Vite + TypeScript SPA
-│   ├── public/                      # favicon, manifest, robots.txt, default Open Graph image
-│   ├── src/
-│   │   ├── app/                     # App assembly only
-│   │   │   ├── router.tsx           # Route table (public routes + lazy-loaded /admin)
-│   │   │   ├── providers.tsx        # QueryClient, theme, auth context
-│   │   │   └── layouts/             # PublicLayout (header/footer), AdminLayout
-│   │   ├── features/                # One folder per business feature
-│   │   │   ├── home/
-│   │   │   ├── about/
-│   │   │   ├── people/
-│   │   │   ├── events/
-│   │   │   │   ├── api/             # Typed fetchers + query hooks (useEvents, useEvent)
-│   │   │   │   ├── components/      # EventCard, EventList, CalendarMonth, AddToCalendar
-│   │   │   │   └── pages/           # EventsPage, EventDetailPage (wired in router.tsx)
-│   │   │   ├── opportunities/
-│   │   │   ├── publications/
-│   │   │   ├── gallery/
-│   │   │   ├── academics/
-│   │   │   │   └── cgpa/            # Calculator UI + pure maths in model/ (unit tested)
-│   │   │   ├── connect/             # Feedback, alumni, contact
-│   │   │   ├── search/
-│   │   │   └── admin/               # Dashboard screens, sign-in, resource editors
-│   │   ├── components/
-│   │   │   ├── layout/              # Header, Footer, Navigation, SkipLink
-│   │   │   └── ui/                  # Domain-neutral primitives: Button, Card, Badge, ThemeToggle
-│   │   ├── lib/                     # http client, cloudinary helpers, dates (Africa/Lagos), env
-│   │   └── styles/                  # globals.css, design tokens
-│   └── index.html
+│   ├── public/                      # favicon (from the badge), manifest, robots.txt, og-default.png
+│   └── src/
+│       ├── app/                     # router.tsx, providers.tsx, layouts/ (Public, Admin)
+│       ├── features/
+│       │   ├── home/
+│       │   ├── about/               # who we are, membership & rights, history, impact
+│       │   ├── leadership/          # executive council, senate, committees, patrons
+│       │   ├── governance/          # governance, elections, finance, meetings, constitution
+│       │   ├── events/              # upcoming, past, series, detail
+│       │   ├── gallery/
+│       │   ├── opportunities/
+│       │   ├── publications/
+│       │   ├── academics/
+│       │   │   ├── cgpa/            # calculator UI + model/ (pure maths, unit tested)
+│       │   │   └── resources/
+│       │   ├── connect/             # feedback, alumni, contact, privacy
+│       │   ├── search/
+│       │   └── admin/               # sign-in, editors, placeholders list, submissions
+│       ├── components/
+│       │   ├── layout/              # Header, Footer, Navigation, SkipLink
+│       │   └── ui/                  # Button, Card, Badge, ThemeToggle, Placeholder, EmptyState
+│       ├── lib/                     # http, cloudinary, dates (Africa/Lagos), env
+│       └── styles/                  # tokens.css (brand + dark mode), globals.css
 ├── server/                          # Express + TypeScript API
 │   ├── src/
-│   │   ├── app.ts                   # Builds the Express app: middleware, routes, error handler
-│   │   ├── server.ts                # Starts the HTTP server and connects to MongoDB
-│   │   ├── config/                  # env.ts (validated with Zod), db.ts, cloudinary.ts
+│   │   ├── app.ts                   # builds the app (middleware, routes, errors)
+│   │   ├── server.ts                # connects to MongoDB and listens
+│   │   ├── config/                  # env.ts (Zod-validated), db.ts, cloudinary.ts
 │   │   ├── middleware/              # requireAdmin, validate, rateLimit, errorHandler, notFound
-│   │   └── modules/                 # One folder per business feature
-│   │       ├── events/
-│   │       │   ├── http/            # events.routes.ts, events.controller.ts, events.schemas.ts
-│   │       │   ├── application/     # events.service.ts (use cases)
-│   │       │   ├── domain/          # event.rules.ts (pure: isUpcoming, archive rules)
-│   │       │   └── infrastructure/  # event.model.ts (Mongoose)
+│   │   └── modules/
+│   │       ├── pages/               # constitution-derived page sections
+│   │       ├── executives/
+│   │       ├── senate/
+│   │       ├── committees/
+│   │       ├── patrons/
+│   │       ├── milestones/
+│   │       ├── events/              # includes series (Health Week, Pharmalympics)
+│   │       ├── albums/
 │   │       ├── announcements/
 │   │       ├── opportunities/
-│   │       ├── people/              # executives + committees
-│   │       ├── milestones/
 │   │       ├── publications/
-│   │       ├── gallery/
-│   │       ├── documents/
+│   │       ├── documents/           # constitution PDF etc.
 │   │       ├── resources/
-│   │       ├── grading/             # grading scale for the CGPA calculator
+│   │       ├── grading/             # UNILAG scale + degree classes
 │   │       ├── submissions/         # feedback + alumni
+│   │       ├── settings/            # contact, socials, quick links
+│   │       ├── placeholders/        # aggregated to-do list for admins
 │   │       ├── search/
-│   │       ├── settings/
 │   │       ├── media/               # Cloudinary upload signatures
-│   │       └── auth/                # admin users, sign-in, sessions
-│   ├── scripts/
-│   │   ├── seed.ts                  # Loads launch content from seed/*.json
-│   │   └── create-admin.ts          # Creates an admin account from the command line
-│   ├── seed/                        # JSON exported from the content inventory
-│   └── tests/                       # Supertest API tests
-├── tests/e2e/                       # Playwright smoke tests (public journeys + admin sign-in)
-├── package.json                     # npm workspaces root: scripts that run client + server
-├── .gitattributes
-├── .gitignore
-└── README.md
+│   │       └── auth/
+│   ├── scripts/                     # seed.ts, create-admin.ts, backup notes
+│   ├── seed/                        # JSON built from the sources (see below)
+│   └── tests/
+├── docs/                            # admin guide (before handover)
+├── .github/
+│   ├── ISSUE_TEMPLATE/              # feature, bug and content issue forms
+│   └── pull_request_template.md
+├── tests/e2e/                       # Playwright smoke tests
+├── package.json                     # npm workspaces root
+├── CONTRIBUTING.md                  # how to claim issues and raise PRs
+├── .gitattributes · .gitignore · README.md
 ```
 
-Client and server do **not** import from each other. The client describes API responses with its own TypeScript types in each feature's `api/` folder.
+### Seed files (`server/seed/`)
+
+| File | Built from | Placeholders inside |
+| --- | --- | --- |
+| `pages.json` | Content to Include PDF (sections 1–14) | None |
+| `executives.json` | 14 offices from the constitution | 13 officers (President filled) |
+| `senate.json` | Principal offices + 22 seats | All names |
+| `committees.json` | President's announcement + write-ups | 4 descriptions, all photos |
+| `patrons.json` | Constitution Art. 4 | All names |
+| `milestones.json` | To be supplied | All |
+| `events.json` | Health Week 2026 (9), Pharmalympics 2026 (9) | Dates and descriptions |
+| `albums.json` | Drive folders (curated) | None once photos are uploaded |
+| `publications.json` | To be supplied | Recipharm, newspaper, Substack |
+| `grading.json` | UNILAG scale + classes | None |
+| `settings.json` | Constitution contact address | Email, social handles |
 
 ## Architecture rules
 
-These come from the `.agent` role prompts and apply to every pull request.
-
-1. **Thin HTTP layer.** Express routes and controllers parse the request, validate it with Zod, call a service and shape the response. Business rules live in `application/` and `domain/`; Mongoose stays in `infrastructure/`.
-2. **Validate every input on the server**, including admin requests. Reject unknown fields. A hidden button in the UI is not authorisation.
-3. **Return only intended fields.** Never send password hashes, internal notes or submitters' details to public endpoints.
-4. **Secrets stay on the server.** `MONGODB_URI`, `JWT_SECRET` and `CLOUDINARY_API_SECRET` exist only in server environment variables. Anything prefixed `VITE_` is public, because it ends up in the browser bundle.
-5. **Pure logic is testable.** Date rules (archiving), deadlines and CGPA maths are pure functions with unit tests.
-6. **Every screen handles all states:** loading, empty ("No open opportunities right now"), error and not-found, not only the happy path.
-7. **The admin area is code-split.** `/admin` is lazy-loaded so public visitors never download dashboard code.
-8. **No new libraries without a reason.** Agree additions in a pull request.
-
-## API reference (planned)
-
-All responses are JSON. Lists support `?page=` and `?limit=` (max 50). Dates are ISO 8601; the site displays them in **Africa/Lagos** time.
-
-### Public
-
-| Method | Path | Purpose |
-| --- | --- | --- |
-| GET | `/api/health` | Health check for hosting and uptime monitoring |
-| GET | `/api/settings` | Contact email, social links, quick links, home banner |
-| GET | `/api/announcements` | Active (not expired) announcements, pinned first |
-| GET | `/api/events?status=upcoming\|past&month=YYYY-MM` | Events list or calendar month |
-| GET | `/api/events/:slug` | One event |
-| GET | `/api/opportunities?type=` | Open opportunities, closing soonest first |
-| GET | `/api/opportunities/:slug` | One opportunity |
-| GET | `/api/executives?session=2026/2027` | Executives for a session (defaults to current) |
-| GET | `/api/committees` | Committees |
-| GET | `/api/milestones` | History timeline |
-| GET | `/api/publications?series=` | Publications |
-| GET | `/api/gallery`, `/api/gallery/:slug` | Albums and one album |
-| GET | `/api/documents` | Latest approved documents |
-| GET | `/api/resources?level=&semester=` | Academic resource links |
-| GET | `/api/grading-scale` | Grade scale for the CGPA calculator |
-| GET | `/api/search?q=` | Search across events, opportunities, publications and resources |
-| POST | `/api/feedback` | Submit feedback (rate-limited, anonymous allowed) |
-| POST | `/api/alumni` | Submit alumni details (rate-limited, consent required) |
-
-### Admin (signed-in admins only)
-
-| Method | Path | Purpose |
-| --- | --- | --- |
-| POST | `/api/auth/login`, `/api/auth/logout` | Sign in and out (login is rate-limited) |
-| GET | `/api/auth/me` | Current admin |
-| GET, POST | `/api/admin/:resource` | List and create (`announcements`, `events`, `opportunities`, `executives`, …) |
-| GET, PATCH, DELETE | `/api/admin/:resource/:id` | Read, update, archive or delete one item |
-| GET | `/api/admin/submissions/feedback`, `/api/admin/submissions/alumni` | View submissions |
-| POST | `/api/admin/media/signature` | Short-lived Cloudinary upload signature |
+1. **Thin HTTP layer.** Routes validate with Zod, call a service, shape the response. Business rules live in `application/` and `domain/`; Mongoose stays in `infrastructure/`.
+2. **Validate every input on the server**, including admin requests; reject unknown fields.
+3. **Return only intended fields.** Never expose password hashes, submissions or internal notes publicly.
+4. **Secrets stay on the server.** Anything prefixed `VITE_` is public.
+5. **Pure logic is unit-tested:** CGPA maths, archive rules, deadline rules.
+6. **Every screen handles all states:** loading, empty, error, not-found, and placeholder.
+7. **`/admin` is code-split** so public visitors never download it.
+8. **Use the brand tokens**, never raw hex values in components.
+9. **No new libraries without a reason** agreed in a pull request.
 
 ## Data model
 
-MongoDB collections (one Mongoose model each). Every item that goes out of date has a date field, so the API stops returning it automatically (PRD section 5: "outdated opportunities or event notices should be archived").
+All collections share `isPlaceholder` (boolean), `placeholderNote` (string), `createdAt` and `updatedAt`. Dates are stored in UTC and shown in **Africa/Lagos** time.
 
-| Collection | Key fields | Automatic behaviour / indexes |
+| Collection | Key fields | Notes / indexes |
 | --- | --- | --- |
-| `announcements` | title, body, publishAt, expiresAt, pinned | Hidden after `expiresAt`; index on `expiresAt` |
-| `events` | title, slug (unique), startsAt, endsAt, venue, description, coverImage, registrationUrl, committee | Upcoming vs past by `endsAt`; text index for search |
-| `opportunities` | title, slug (unique), type, eligibility, deadline, applyUrl, lastCheckedAt | Hidden after `deadline`; flagged if not checked in 30 days |
-| `executives` | name, role, session, photo, bio (≤ 60 words), roleEmail, order | Earlier sessions build Past Executives |
-| `committees` | name, purpose, lead, activities, contact | None |
-| `milestones` | year, title, description, verifiedBy | Sorted by year |
-| `publications` | title, series (`recipharm`, `newspaper`, `substack`), edition, date, cover, fileUrl or link | Grouped by series and year |
-| `albums` | title, slug, eventRef, date, cover, photos[] (publicId, caption, alt), consentConfirmed | Grouped by year |
-| `documents` | title, version, approvedOn, approvedBy, fileUrl | Latest approved version shown |
-| `resources` | title, level, semester, course, url, verifiedBy | Grouped by level and semester |
-| `gradingscales` | grade, minScore, maxScore, gradePoint, active | Feeds the CGPA calculator |
-| `settings` | contactEmail, socialLinks, quickLinks, homeBanner | Single document |
-| `feedback` | category, message, contactEmail (optional), createdAt, status | **Admin-only.** Deleted after 12 months |
-| `alumni` | name, graduationYear, email, phone (optional), interests[], consentAt | **Admin-only.** Kept until the person opts out |
-| `admins` | name, email (unique), passwordHash, role (`admin`, `editor`), lastLoginAt | Never returned by any public endpoint |
+| `pages` | slug (unique), title, sections[{ heading, bodyMarkdown, articleRefs[] }], order | About, Membership, Governance, Elections, Finance, Meetings, Student support |
+| `executives` | office (one of the 14), name, level, session, photo, bio (≤ 60 words), roleEmail, order | Earlier sessions build Past Executives |
+| `senate` | position (Senate President, Deputy Senate President, Senate Leader, Chief Whip, Senator), name, level, session | |
+| `committees` | name, shortName, slug (unique), description, activities[], achievements[], plans[], motto, officers[{ title, name, level }], session, order | 11 for 2026/27 |
+| `patrons` | name, title, isDean, order | |
+| `milestones` | year, title, description, verifiedBy | `verifiedBy` required unless placeholder |
+| `events` | title, slug (unique), series, dayNumber, startsAt, endsAt, venue, description, coverImage, registrationUrl, committeeRef | Upcoming vs past by `endsAt`; text index |
+| `albums` | title, slug, eventRef, series, date, cover, photos[{ publicId, alt, caption }], sourceFolderUrl, consentConfirmed | Grouped by series and year |
+| `announcements` | title, body, publishAt, expiresAt, pinned | Hidden after `expiresAt` |
+| `opportunities` | title, slug, type, eligibility, deadline, applyUrl, lastCheckedAt | Hidden after `deadline` |
+| `publications` | title, series (`recipharm`, `newspaper`, `substack`), edition, date, cover, fileUrl or link | |
+| `documents` | title, version, approvedOn, approvedBy, fileUrl | Constitution adopted 9 July 2026 |
+| `resources` | title, level, semester, course, url, verifiedBy | |
+| `gradingscales` | grades[{ letter, min, max, point }], classes[{ name, min, max }], active, source | One active scale |
+| `settings` | contactEmail, socialLinks, quickLinks, homeBanner, postalAddress, location | Single document |
+| `feedback` | category (`suggestion`, `complaint`, `welfare`, `other`), message, contactEmail?, status, createdAt | Admin-only; deleted after 12 months |
+| `alumni` | name, graduationYear, email, phone?, interests[], consentAt | Admin-only; kept until opt-out |
+| `admins` | name, email (unique), passwordHash, role (`admin`, `editor`), lastLoginAt | Never public |
 
-Images are stored in Cloudinary; MongoDB stores only the Cloudinary `publicId`, alt text and caption. **Alt text is required** on every image, and `verifiedBy` on every milestone and resource.
+## API reference (planned)
+
+Public (read-only unless noted):
+
+| Method | Path | Purpose |
+| --- | --- | --- |
+| GET | `/api/health` | Health check |
+| GET | `/api/settings` | Contact, socials, quick links, banner |
+| GET | `/api/pages/:slug` | Constitution-derived page content |
+| GET | `/api/executives?session=` | Executive Council (current session by default) |
+| GET | `/api/senate?session=` | Senate |
+| GET | `/api/committees`, `/api/committees/:slug` | Committees |
+| GET | `/api/patrons` | Patrons |
+| GET | `/api/milestones` | History timeline |
+| GET | `/api/events?status=upcoming\|past&series=&month=` | Events |
+| GET | `/api/events/:slug` | One event |
+| GET | `/api/albums`, `/api/albums/:slug` | Gallery |
+| GET | `/api/announcements` | Active announcements |
+| GET | `/api/opportunities?type=`, `/api/opportunities/:slug` | Opportunities |
+| GET | `/api/publications?series=` | Publications |
+| GET | `/api/documents` | Constitution and approved documents |
+| GET | `/api/resources?level=&semester=` | Academic resources |
+| GET | `/api/grading-scale` | CGPA scale and degree classes |
+| GET | `/api/search?q=` | Search (excludes placeholders) |
+| POST | `/api/feedback` | Feedback (rate-limited, anonymous allowed) |
+| POST | `/api/alumni` | Alumni details (rate-limited, consent required) |
+
+Admin (signed-in only): `POST /api/auth/login`, `POST /api/auth/logout`, `GET /api/auth/me`; `GET/POST /api/admin/:resource`; `GET/PATCH/DELETE /api/admin/:resource/:id`; `GET /api/admin/placeholders`; `GET /api/admin/submissions/{feedback,alumni}`; `POST /api/admin/media/signature`.
 
 ## Getting started
 
 ### Prerequisites
 
-- Node.js **22 LTS** and npm
-- Git
-- A MongoDB connection string (a personal free Atlas cluster for development, or local MongoDB)
-- Cloudinary credentials (ask the web lead; use a separate development folder)
+Node.js **22 LTS**, npm, Git, a MongoDB connection string (personal free Atlas cluster or local MongoDB for development), and Cloudinary credentials from the web lead.
 
-### One-time scaffold (web lead only)
+### One-time scaffold (web lead)
 
 ```bash
-# at the repository root
-npm init -y                                   # then add "workspaces": ["client", "server"] to package.json
+npm init -y        # add "workspaces": ["client", "server"] to package.json
 npm create vite@latest client -- --template react-ts
 mkdir server && cd server && npm init -y && cd ..
 npm install -w server express mongoose zod cors helmet cookie-parser express-rate-limit jsonwebtoken argon2 cloudinary
@@ -320,188 +541,179 @@ npm install -w server -D typescript tsx @types/node @types/express @types/cors @
 npm install -w client react-router @tanstack/react-query @cloudinary/react @cloudinary/url-gen
 ```
 
-Then add `server/tsconfig.json`, root scripts that run both apps together (for example with `concurrently`), and `.env.example` files for both apps. Check each package's current documentation for exact versions and setup.
+Then add `server/tsconfig.json`, root scripts that run both apps, and `.env.example` files. Check each package's documentation for current versions.
 
-### Everyday development (once scaffolded)
+### Everyday development
 
 ```bash
-npm install                      # installs both workspaces
-cp server/.env.example server/.env    # fill in values; never commit .env
+npm install
+cp server/.env.example server/.env    # never commit .env
 cp client/.env.example client/.env
-npm run seed -w server           # load launch content into your database
-npm run dev                      # client on http://localhost:5173, API on http://localhost:4000
-npm run lint                     # lint both workspaces
-npm run test                     # unit and API tests
-npm run build                    # production builds: run before opening a PR
+npm run seed -w server                # loads server/seed/*.json, including placeholders
+npm run dev                           # client :5173, API :4000
+npm run lint && npm run test && npm run build
 ```
 
 ## Environment variables
 
-### `server/.env`
+**`server/.env`:** `NODE_ENV`, `PORT`, `MONGODB_URI` (secret), `CLIENT_ORIGIN`, `JWT_SECRET` (secret), `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` (secret).
 
-| Variable | Purpose | Secret? |
-| --- | --- | --- |
-| `NODE_ENV` | `development` or `production` | No |
-| `PORT` | API port (default 4000) | No |
-| `MONGODB_URI` | Atlas connection string | **Yes** |
-| `CLIENT_ORIGIN` | Allowed CORS origin(s), e.g. the production site URL | No |
-| `JWT_SECRET` | Signs admin session tokens (long random value) | **Yes** |
-| `CLOUDINARY_CLOUD_NAME` | Cloudinary account | No |
-| `CLOUDINARY_API_KEY` | Cloudinary API key | Keep private |
-| `CLOUDINARY_API_SECRET` | Signs uploads | **Yes** |
-
-### `client/.env`
-
-| Variable | Purpose | Secret? |
-| --- | --- | --- |
-| `VITE_API_URL` | Base URL of the API | No (public) |
-| `VITE_CLOUDINARY_CLOUD_NAME` | Builds image URLs | No (public) |
-| `VITE_SITE_URL` | Canonical URL for links and previews | No (public) |
-
-Production values live in the hosting providers' environment settings. **Never commit `.env` files.**
+**`client/.env`** (all public): `VITE_API_URL`, `VITE_CLOUDINARY_CLOUD_NAME`, `VITE_SITE_URL`.
 
 ## Images and Cloudinary
 
-- Render every Cloudinary image with `AdvancedImage` from `@cloudinary/react`, using automatic format and quality (`f_auto`, `q_auto`) and a width suited to where it appears. Always set `alt`, `width`, `height` and `loading="lazy"` below the fold.
-- Organise uploads by folder:
+- Render with `AdvancedImage` (`@cloudinary/react`), automatic format and quality, sized for where the image appears; `alt`, `width`, `height` always; lazy-load below the fold.
+- Folders:
 
 ```
 pans-unilag/
-├── executives/<session>/        # e.g. executives/2026-2027/
-├── committees/
-├── events/<yyyy>/<event-slug>/
-├── gallery/<yyyy>/<album-slug>/
-├── publications/<series>/
-└── site/                        # logos, banners, Open Graph images
+├── brand/                                   # badge, lockups, og-default
+├── executives/2026-2027/
+├── senate/2026-2027/
+├── committees/<committee-slug>/
+├── events/health-week-2026/<day-slug>/
+├── events/pharmalympics-2026/<day-slug>/
+└── publications/<series>/
 ```
 
-- Admin uploads are **signed**: the dashboard asks `POST /api/admin/media/signature`, then uploads straight to Cloudinary. Never create an unsigned upload preset.
-- Upload originals no larger than about 2500 px on the long edge. Only upload photos with consent, and remove any photo on request.
-
-## CGPA calculator
-
-- Runs entirely in the browser. **Nothing the student enters is stored or sent anywhere.** It only fetches the grade scale from `/api/grading-scale`.
-- Students add courses (code optional, units, score or grade); the calculator shows the semester GPA and running CGPA.
-- Admins edit the grade scale in the dashboard, so corrections need no code change.
-- **The Pharm.D grade points and pass marks must be confirmed by the Faculty (via the Academic Secretary) before launch.** Until then, the page shows: *"Unofficial estimate. Your official result is the one issued by the University."*
-- The maths lives in `client/src/features/academics/cgpa/model` as pure functions with unit tests covering rounding, zero-unit courses, empty input and failed courses.
+- Uploads from the dashboard are **signed** via `/api/admin/media/signature`. No unsigned presets.
 
 ## Security, privacy and data protection
 
-Owning a backend and database means PANS now stores personal data and runs a sign-in system. These are launch requirements, not extras:
-
-- **Admin sign-in:** passwords hashed with argon2 (or bcrypt); session token in an `httpOnly`, `Secure`, `SameSite=Lax` cookie; login rate-limited; no public sign-up (admins are created with `scripts/create-admin.ts`); at least two admins at all times.
-- **API hardening:** `helmet` security headers, a CORS allowlist (`CLIENT_ORIGIN` only), Zod validation that rejects unknown fields, rate limits on `/api/feedback`, `/api/alumni` and `/api/auth/login`, and a request size limit.
-- **No injection:** never pass raw request objects into Mongoose queries; validate and pick fields explicitly.
-- **Forms:** feedback can be anonymous (no name or email required). Alumni submissions require a consent checkbox. Only admins can read submissions, and the privacy notice states who reads them, why, how long they are kept and how to request deletion.
-- **Backups:** the free Atlas tier has **no automatic backups**. Run `mongodump` at least weekly and before every major change, and store the dumps somewhere only the web lead and one executive can reach.
-- **Nigeria Data Protection Act 2023:** the site now holds personal data in its own database. Confirm with the Faculty or UNILAG's data protection office whether PANS needs its own NDPC registration. This README is not legal advice.
-- Use the `.agent/red-team.md` prompt for a security review of the auth and submissions modules before launch.
+- **Admin sign-in:** argon2 hashes; `httpOnly`/`Secure`/`SameSite` cookie; rate-limited login; no public sign-up (`scripts/create-admin.ts`); at least two admins.
+- **API hardening:** `helmet`, CORS allowlist, Zod validation rejecting unknown fields, rate limits on forms and login, request size limits; never pass raw request objects into Mongoose queries.
+- **Personal data:** never publish personal phone numbers or personal emails (including those on letterheads). Use role emails or the Secretary General's official channel.
+- **Forms:** feedback can be anonymous; alumni needs consent; only admins read submissions; the privacy notice states who reads them, retention and deletion requests.
+- **Backups:** Atlas's free tier has no automatic backups. Run `mongodump` weekly and before major changes; test a restore before launch.
+- **Nigeria Data Protection Act 2023:** confirm with the Faculty or UNILAG's data protection office whether PANS needs NDPC registration. Not legal advice.
+- Run a security review with `.agent/red-team.md` on the auth and submissions modules before launch.
 
 ## Performance, SEO and accessibility
 
 | Target | Threshold |
 | --- | --- |
-| Home page weight (first load, mobile) | **< 1 MB** including JavaScript |
-| Initial JavaScript for public pages | Keep small; `/admin` is code-split |
-| Lighthouse (mobile): Performance, Accessibility, Best Practices, SEO | **≥ 90** each |
-| Accessibility | **WCAG 2.1 AA**: 4.5:1 text contrast, keyboard navigation, visible focus, alt text, no text inside images |
-| Fonts | One web font at most, or system fonts |
-| Real-device check | Mid-range Android phone on a throttled 3G/4G connection before sign-off |
+| Home page weight (mobile, first load) | < 1 MB including JavaScript |
+| Lighthouse mobile (Performance, Accessibility, Best Practices, SEO) | ≥ 90 each |
+| Accessibility | WCAG 2.1 AA; brand contrast rules above; keyboard navigation; visible focus (yellow `#ffbd04` ring on dark, dark green on light); alt text; no text inside images |
+| Fonts | Poppins 500/600 and Inter 400/500 only |
+| Real-device check | Mid-range Android on throttled 3G/4G |
 
-**Link previews and search engines:** a React single-page app builds pages in the browser. WhatsApp, X and many crawlers do **not** run JavaScript, so a shared link to a specific event would show only the site-wide preview. For v1, set good site-wide Open Graph tags in `client/index.html`. After launch, have Express inject per-page titles and preview images for event and opportunity URLs, or pre-render those pages.
+**Link previews:** a React SPA renders in the browser, and WhatsApp and most crawlers don't run JavaScript. For v1, set site-wide Open Graph tags (name, motto, badge on pale green) in `client/index.html`. After launch, add per-page previews for events and opportunities via Express or pre-rendering.
 
 ## Deployment
 
-| Part | Proposed host | Notes |
+| Part | Host | Notes |
 | --- | --- | --- |
-| Client (static build) | Vercel, Netlify or Cloudflare Pages | Free tiers suit a static site; add an SPA fallback rewrite to `index.html` |
-| API | Render | **Free instances sleep after 15 minutes without traffic and take about a minute to wake**, so the first visitor after a quiet spell would wait. The always-on Starter instance costs about $7/month. See [Open decisions](#open-decisions) |
-| Database | MongoDB Atlas free cluster (M0) | 512 MB storage, no automatic backups, pauses after 30 days with no connections |
-| Images | Cloudinary | Free plan; confirm usage limits on the pricing page |
+| Client | Vercel, Netlify or Cloudflare Pages | SPA fallback rewrite to `index.html` |
+| API | Render | Free instances sleep after 15 min idle (~1 min to wake); Starter (~$7/month) stays on |
+| Database | MongoDB Atlas M0 | 512 MB, no automatic backups |
+| Images | Cloudinary | Free plan; curate albums to stay within limits |
 
-All accounts are owned by the **official PANS account**, never a personal one.
+All accounts belong to the official PANS account, never a personal one.
 
-## Team workflow
+## Contributing and project management
 
-### Git
+**Read [CONTRIBUTING.md](CONTRIBUTING.md) before picking up work.** It covers claiming issues, branch names, commits, pull requests, reviews and the Definition of Done. The short version:
 
-- The repository is on GitHub at `YastecHub/pans-unilag-website`. Move it to an organisation owned by the official PANS account before handover.
-- `main` is protected: changes land only through pull requests with at least **one approving review** and passing checks.
-- Branch names: `feat/<area>-<short-description>`, `fix/...`, `docs/...`, `chore/...` (for example `feat/server-events-api`, `feat/client-events-page`).
-- Commit messages follow [Conventional Commits](https://www.conventionalcommits.org): `feat(server): add opportunities endpoints`.
-- Each pull request: one feature or fix, a short description, screenshots at mobile and desktop width for UI changes, and lint, tests and build passing locally.
+1. Pick an unassigned issue in the **Launch: Fri 16 Oct 2026** milestone, starting with `priority: P0`. Check its *Depends on* list.
+2. Comment "I'm taking this" and assign yourself (two open issues max).
+3. Branch from the latest `main`: `<type>/<issue-number>-<short-description>`, e.g. `feat/15-events-api`.
+4. Commit with Conventional Commits: `feat(server): add events endpoints`.
+5. Open a **draft PR within 3 hours**, titled `feat(server): add events endpoints (#15)`, with `Closes #15` in the description.
+6. Mark it ready when lint, typecheck, tests and build pass and the acceptance criteria are met; add mobile and desktop screenshots for UI.
+7. One approval and green CI, then the author **squash-merges** and deletes the branch.
 
-### Roles
+### Repository and branch rules
 
-| Role | Responsibility | Person |
+- Repo: `YastecHub/pans-unilag-website`. Move it to a PANS-owned GitHub organisation before handover.
+- **Protect `main`** (Settings → Branches): require a pull request, one approval, the `ci` status check, and an up-to-date branch; block force pushes.
+- Issue forms (feature, bug, content) and the PR template live in `.github/`. Blank issues are disabled.
+
+### Labels and milestones
+
+| Group | Labels |
+| --- | --- |
+| Type | `type: feature`, `type: bug`, `type: content`, `type: design`, `type: chore`, `type: docs`, `type: test` |
+| Area | `area: client`, `area: server`, `area: admin`, `area: infra`, `area: content` |
+| Priority | `priority: P0` (launch blocker), `priority: P1` (should ship Friday), `priority: P2` (after launch) |
+| Size | `size: S` (~2 h), `size: M` (half a day), `size: L` (a day or more) |
+| Status | `status: blocked`, `status: needs-info`, `good first issue`, `help wanted` |
+
+Milestones: **Launch: Fri 16 Oct 2026** and **Post-launch**.
+
+### Backlog
+
+All work is tracked as **46 GitHub issues** in build order: [github.com/YastecHub/pans-unilag-website/issues](https://github.com/YastecHub/pans-unilag-website/issues). Each issue has tasks, acceptance criteria, dependencies, labels and a milestone, and ends with a "How to work on this issue" section linking to the [Contributing guide](CONTRIBUTING.md) with its branch name and PR title. New issues use the forms in `.github/ISSUE_TEMPLATE/` (feature, bug, content).
+
+### Build order (critical path)
+
+Work flows top to bottom; items in the same row can run in parallel.
+
+| Phase | Issues | Who |
 | --- | --- | --- |
-| Web lead | Architecture, reviews, deployments, accounts | TBD |
-| Backend developers | Express modules, Mongoose models, auth, seed scripts | TBD |
-| Frontend developers | Public pages, CGPA calculator, admin dashboard | TBD |
-| Design | Visual identity, tokens, key screens, mobile-first layouts | TBD |
-| Editor-in-Chief | Editorial process, content inventory, copy approval | Anu (EIC) |
-| Writers and researchers | Verified content, history, profiles, opportunities | TBD |
-| Approvers | History, profiles, publications, health content sign-off | TBD |
+| 1. Foundation | #1 scaffold → #2 CI, #3 API skeleton, #4 design tokens | Web lead + 1 dev |
+| 2. Building blocks | #5 screen designs, #6 app shell, #7 UI primitives, #8 seed script | Frontend, backend, Design Committee |
+| 3. Content | #9 pages seed, #10 leadership seed, #11 committees seed, #12 events/grading/settings seed, #13 gallery photos, #14 missing content | Content and Media committees + 1 dev |
+| 4. API | #15 pages, #16 leadership, #17 events, #18 content, #19 grading/settings, #20 submissions, #22 admin auth → #23 admin CRUD, #24 uploads, #21 search | Backend |
+| 5. Pages | #25 home, #26 about, #27 leadership, #28 governance, #29 events, #33 CGPA, #35 connect, then #30 gallery, #31 opportunities, #32 publications, #34 academics, #36 search, #40 SEO | Frontend |
+| 6. Admin | #37 admin shell → #38 editors | Frontend + backend |
+| 7. Launch | #41 deploy → #42 security and backups, #43 QA | Web lead + everyone |
+| After launch | #39 more editors, #44 admin guide, #45 link previews, #46 offline/PWA | Team |
 
-Content is tracked in one shared inventory sheet (page, owner, status, approver). It is exported to `server/seed/*.json` for the seed script.
+#33 (CGPA) only needs #7, so it can start early. Seed files (#9–#12) can be written as soon as the JSON shape is agreed in #8.
 
 ## Timeline
 
-The stack changed on Wednesday, so the remaining two days are tight. Build in this order and cut from the bottom of each list if needed.
-
-| Day | Backend | Frontend | Content and approvals |
+| Day | Backend | Frontend | Content |
 | --- | --- | --- | --- |
-| **Wed 14 Oct** | Scaffold workspaces; Mongoose models; public read endpoints; seed script | Scaffold Vite app; layout, navigation, theme; Home, Events, Opportunities pages | **Content freeze (evening)**; grading scale confirmed |
-| **Thu 15 Oct** | Admin auth; admin CRUD for announcements, events, opportunities; submissions; upload signatures; security pass | Remaining public pages; CGPA calculator; admin sign-in and editors; forms | Content seeded and entered; **executive review and approval** |
-| **Fri 16 Oct** | Deploy API and database; backups; smoke tests | Deploy client; Lighthouse and accessibility checks | **Launch announcement** |
-| Week after | Remaining admin editors; per-page link previews | Gallery builder; PWA if dropped | Late content added through the dashboard |
+| **Wed 14 Oct** | Scaffold; models; seed files (pages, executives, committees, grading, events); public read endpoints | Scaffold; tokens and fonts; layout and navigation; Home, About, Leadership, Governance pages; Placeholder component | **Content freeze (evening)**; missing items become placeholders |
+| **Thu 15 Oct** | Admin auth and CRUD (announcements, events, opportunities, placeholders); submissions; upload signatures; security pass | Events, gallery, opportunities, publications, academics (CGPA), connect; admin sign-in and editors | Photos curated and uploaded; **executive review and approval** |
+| **Fri 16 Oct** | Deploy API and DB; backup; smoke tests | Deploy client; Lighthouse and accessibility checks | **Launch** |
+| Week after | Remaining admin editors; per-page previews | Polish; PWA if time | Fill placeholders through the dashboard |
 
 ## Definition of done
 
-From PRD section 9. The site is ready to launch when:
+- [ ] All launch pages render correctly on mobile and desktop, with real content or clearly marked placeholders.
+- [ ] No invented content anywhere; the admin Placeholders list is reviewed.
+- [ ] Navigation, links and forms tested.
+- [ ] Content reviewed for accuracy, spelling, permissions; name and motto exactly as in the constitution.
+- [ ] CGPA calculator passes its boundary tests.
+- [ ] Named administrators and an admin guide exist.
+- [ ] Admin auth, validation, rate limits, CORS in place; secrets only in server env vars.
+- [ ] A backup has been taken and restored once.
+- [ ] Performance and accessibility targets met.
+- [ ] Executive team approval.
+- [ ] Every `priority: P0` issue in the launch milestone is closed.
 
-- [ ] All agreed launch pages are complete and display correctly on mobile and desktop.
-- [ ] Navigation, buttons, external links and forms have been tested.
-- [ ] Content has been reviewed for accuracy, spelling, permissions and appropriate access.
-- [ ] The website has a named administrator and a documented update process (admin dashboard guide).
-- [ ] Admin sign-in, validation, rate limits and CORS are in place; secrets are only in server environment variables.
-- [ ] A database backup has been taken and restored once as a test.
-- [ ] Performance and accessibility targets above are met.
-- [ ] The executive team has reviewed and approved the launch version.
+## Decisions log
 
-## Open decisions
-
-| Decision | Recommended default | Decide by |
-| --- | --- | --- |
-| API hosting budget | Render Starter (about $7/month) so the API never sleeps; otherwise accept a slow first load after quiet periods | Wed 14 Oct |
-| Client host | Vercel, Netlify or Cloudflare Pages (any static host) | Wed 14 Oct |
-| Domain | A `.com.ng` or `.org.ng` name registered for 2+ years with auto-renew | Wed 14 Oct |
-| Forms on Friday | Store in MongoDB via the API; if admin screens slip, embed Tally or Google Forms for launch | Wed 14 Oct |
-| Admins at launch | At least two named admins (e.g. General Secretary and PRO) plus the web lead | Thu 15 Oct |
-| Feedback reviewer and response time | General Secretary plus one other executive; reply within 7 days | Thu 15 Oct |
-| CGPA grading scale | Confirmed by the Faculty via the Academic Secretary | Wed 14 Oct |
+| Date | Decision |
+| --- | --- |
+| 12 Oct | Launch moved to Fri 16 Oct; CGPA calculator added; member accounts deferred to phase 2 |
+| 14 Oct | Stack changed to MERN (TypeScript, Cloudinary kept); admin dashboard replaces a headless CMS |
+| 14 Oct | Name follows the constitution: "Pharmaceutical Association of **Nigeria** Students" |
+| 14 Oct | Committees page = the 11 committees appointed for 2026/27; constitutional standing committees described on Governance; "Flagship" dropped |
+| 14 Oct | Missing content ships as clearly marked placeholders, never invented content |
+| 14 Oct | CGPA uses the UNILAG standard 5-point scale, confirmed by the Faculty |
+| 14 Oct | Work is tracked as 46 GitHub issues; contributions follow CONTRIBUTING.md with squash-merged PRs |
 
 ## Using the AI agent prompts (`.agent/`)
 
-The `.agent/` folder contains reusable role prompts (orchestrator, architect, engineer, database specialist, react engineer, red team, accessibility reviewer, test engineer and more). They are plain Markdown instructions, not running agents. Tell your coding assistant explicitly which ones to apply, for example:
+Plain Markdown role prompts (architect, engineer, database specialist, react engineer, red team, accessibility reviewer, test engineer, …). Tell your assistant which to apply, for example:
 
-> Read and apply `.agent/engineer.md`, `.agent/database-specialist.md` and `.agent/project-context.md`. Implement the events module in `server/src/modules/events` as described in the README.
+> Read and apply `.agent/engineer.md`, `.agent/database-specialist.md` and `.agent/project-context.md`. Implement `server/src/modules/committees` as described in the README.
 
-Notes:
-
-- **`.agent/` is currently listed in `.gitignore`, so teammates who clone the repo will not get it.** Remove that line if the whole team should share the prompts.
-- The prompts refer to `agent/…` paths; in this repository the folder is **`.agent/`**.
-- Keep confirmed facts in [`.agent/project-context.md`](.agent/project-context.md) so every role starts from the same context.
-- Useful roles for this stack: `engineer`, `database-specialist`, `react-engineer`, `frontend-specialist`, `red-team`, `accessibility-reviewer`, `test-engineer`, `devops-engineer`. The Next.js, payments and background-job roles do not apply.
+- `.agent/` is committed, so everyone who clones the repo gets the prompts and `project-context.md`.
+- The prompts say `agent/…`; here the folder is `.agent/`.
+- Next.js, payments, background-job and hackathon roles don't apply.
 
 ## Maintenance and handover
 
-- **Ownership:** domain, hosting, MongoDB Atlas, Cloudinary, GitHub and analytics are all owned by the official PANS account, with **at least two admins** on each and two-factor sign-in on.
-- **Monthly checklist:** check external links, review open opportunities, update events and executives, remove expired announcements, take a database backup, and update dependencies (`npm outdated`, `npm audit`).
-- **Each election:** create admin accounts for the incoming administration, remove departing admins, update the executives session and record the handover date here.
-- **Admin guide:** a one-page "How to post an event or opportunity" guide with screenshots of the dashboard will live in `docs/admin-guide.md` before handover.
+- **Ownership:** domain, hosting, Atlas, Cloudinary, GitHub and analytics on the official PANS account, two admins each, two-factor on.
+- **Monthly:** check links, review opportunities, update events, clear expired announcements, back up the database, `npm audit`.
+- **Each session:** the Secretary General updates the Executive Council, Senate and committee officers; departing admins are removed and new ones created.
+- **Admin guide:** `docs/admin-guide.md` (how to post an event, opportunity or album; how to clear placeholders) before handover.
 
 ---
 
-*Maintained by the PANS UNILAG web team. Requirements are owned by the PANS UNILAG executive council.*
+*Maintained by the PANS UNILAG web team. Content owned by the PANS UNILAG Executive Council. Service to Humanity.*
