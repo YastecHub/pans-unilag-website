@@ -1,10 +1,11 @@
 # PANS UNILAG Website
 
-The official website of the **Pharmaceutical Association of Nigerian Students (PANS), University of Lagos chapter**: a fast, accessible, mobile-first home for the association's news, events, opportunities, publications, history and student services.
+The official website of the **Pharmaceutical Association of Nigerian Students (PANS), University of Lagos chapter**: a fast, accessible, mobile-first home for the association's news, events, opportunities, publications, history and student services, with an admin dashboard so executives can keep it up to date without a developer.
 
-> **Status:** Pre-development. The repository is initialised; the Next.js app has not been scaffolded yet.
+> **Stack:** MERN (MongoDB, Express, React, Node.js) with TypeScript, plus Cloudinary for images. Agreed by the whole team on 14 October 2026; replaces the earlier Next.js plan.
+> **Status:** Pre-development. The repository exists; the client and server apps have not been scaffolded yet.
 > **Launch target:** **Friday 16 October 2026**, brought forward from the PRD's original 31 October 2026.
-> **Source of truth for requirements:** *PANS UNILAG Website: Product Requirements Document (PRD) Summary*, plus the team's *Recommendations & Build Plan* doc.
+> **Requirements:** *PANS UNILAG Website: Product Requirements Document (PRD) Summary*, plus the team's *Recommendations & Build Plan* doc.
 
 ---
 
@@ -15,21 +16,24 @@ The official website of the **Pharmaceutical Association of Nigerian Students (P
 3. [Launch scope (v1)](#launch-scope-v1)
 4. [Out of scope for v1](#out-of-scope-for-v1)
 5. [Tech stack](#tech-stack)
-6. [Project structure](#project-structure)
-7. [Architecture rules](#architecture-rules)
-8. [Getting started](#getting-started)
-9. [Environment variables](#environment-variables)
-10. [Content model](#content-model)
-11. [Images and Cloudinary](#images-and-cloudinary)
-12. [CGPA calculator](#cgpa-calculator)
-13. [Forms, privacy and data protection](#forms-privacy-and-data-protection)
-14. [Performance and accessibility targets](#performance-and-accessibility-targets)
-15. [Team workflow](#team-workflow)
-16. [Timeline](#timeline)
-17. [Definition of done](#definition-of-done)
-18. [Open decisions](#open-decisions)
-19. [Using the AI agent prompts (`.agent/`)](#using-the-ai-agent-prompts-agent)
-20. [Maintenance and handover](#maintenance-and-handover)
+6. [System overview](#system-overview)
+7. [Project structure](#project-structure)
+8. [Architecture rules](#architecture-rules)
+9. [API reference (planned)](#api-reference-planned)
+10. [Data model](#data-model)
+11. [Getting started](#getting-started)
+12. [Environment variables](#environment-variables)
+13. [Images and Cloudinary](#images-and-cloudinary)
+14. [CGPA calculator](#cgpa-calculator)
+15. [Security, privacy and data protection](#security-privacy-and-data-protection)
+16. [Performance, SEO and accessibility](#performance-seo-and-accessibility)
+17. [Deployment](#deployment)
+18. [Team workflow](#team-workflow)
+19. [Timeline](#timeline)
+20. [Definition of done](#definition-of-done)
+21. [Open decisions](#open-decisions)
+22. [Using the AI agent prompts (`.agent/`)](#using-the-ai-agent-prompts-agent)
+23. [Maintenance and handover](#maintenance-and-handover)
 
 ---
 
@@ -39,7 +43,7 @@ Build and launch a functional, accessible, mobile-friendly PANS UNILAG website t
 
 - is genuinely useful to PANSites (pharmacy students at UNILAG);
 - communicates the association's work and preserves its history;
-- can be updated by authorised administrators **without a developer**; and
+- can be updated by authorised administrators through an admin dashboard, **without a developer**; and
 - can be handed over cleanly to future PANS administrations.
 
 ## Audience
@@ -47,33 +51,47 @@ Build and launch a functional, accessible, mobile-friendly PANS UNILAG website t
 | Audience | What they come for |
 | --- | --- |
 | **PANSites (primary)** | Announcements, events, opportunities, academic tools, publications, feedback |
-| PANS executives and committee members | Publishing updates, events, opportunities and gallery albums |
+| PANS executives and committee members | Publishing updates, events, opportunities and gallery albums through the admin dashboard |
 | Pharmacy alumni | Staying connected, mentoring, supporting initiatives |
 | Prospective students and the wider pharmacy community | Who PANS UNILAG is, what it has achieved, how to engage |
 
 ## Launch scope (v1)
 
-Everything below ships on launch day **if its content is approved by the content freeze on Wednesday 14 October (evening)**. Items whose content is not ready move to the following week; the code still ships.
+Everything below ships on launch day **if its content is approved by the content freeze on Wednesday 14 October (evening)**. Code for an item whose content is late still ships; the content follows the week after.
+
+### Public site
 
 | # | Area | Feature | PRD priority | Notes |
 | --- | --- | --- | --- | --- |
 | 1 | Home | Landing page | P1 | Pinned announcements, next 3 events, open opportunities, quick links |
 | 2 | About | Who we are, history and milestones, impact | P1 | Only **verified** milestones (e.g. first Pharmalympics, first Pharmathon) |
 | 3 | People | Current executives, committees, past executives | P1 | IPSF, ADMAP, Flagship and other committees; role emails only, never personal phone numbers |
-| 4 | Events | Upcoming events, event detail, month calendar view, "add to calendar" | P1 | Past events archive themselves automatically after their date |
-| 5 | Opportunities | Single opportunities hub with type filter and detail pages | P1 | Sorted by closing date; hidden automatically after the deadline |
+| 4 | Events | Upcoming events, event detail, month calendar view, "add to calendar" | P1 | Past events archive themselves after their end date |
+| 5 | Opportunities | Single hub with type filter and detail pages | P1 | Sorted by closing date; hidden automatically after the deadline |
 | 6 | Publications | Recipharm editions, PANS newspaper, Substack | P1 | Approved PDFs or official links only |
 | 7 | Connect | Feedback and suggestions form (anonymous option), contact | P1 | Page states who reads submissions and how fast they respond |
 | 8 | Legal | Privacy notice | New | Required because forms collect personal data |
-| 9 | Academics | **CGPA calculator** | New (added by the team) | Client-side only; grade scale editable by admins. See [CGPA calculator](#cgpa-calculator) |
+| 9 | Academics | **CGPA calculator** | New (added by the team) | Runs in the browser; grade scale editable by admins. See [CGPA calculator](#cgpa-calculator) |
 | 10 | Academics | Academic resources (starter set) | P3 → v1 | Vetted links by level and semester; **no copyrighted textbook uploads** |
 | 11 | Documents | Constitution and approved documents | P2 → v1 | Approved PDF only |
 | 12 | Gallery | Gallery and event archive | P2 → v1 | Albums grouped by event and year; photo consent required |
 | 13 | Connect | Alumni connection form | P2 → v1 | Minimal fields, consent checkbox |
 | 14 | Site-wide | Light/dark mode | P2 → v1 | Follows system setting, plus a manual toggle |
-| 15 | Site-wide | Site search and filters | P3 → v1 | Static search index; filters on Opportunities and Events |
-| 16 | Site-wide | 404 page, social link previews (Open Graph), privacy-friendly analytics | New | Small, high-value additions |
+| 15 | Site-wide | Search and filters | P3 → v1 | MongoDB text search endpoint; filters on Opportunities and Events |
+| 16 | Site-wide | 404 page, social link previews, privacy-friendly analytics | New | See [SEO](#performance-seo-and-accessibility) for the link-preview caveat |
 | 17 | Site-wide | Install to phone / offline reading (PWA) | New | **Stretch goal**: the first item to drop if time runs short |
+
+### Admin dashboard (`/admin`)
+
+| Priority for Friday | Capability |
+| --- | --- |
+| **Must** | Secure sign-in for named admins; create, edit, archive and delete **announcements, events and opportunities** |
+| **Must** | View feedback and alumni submissions (admins only) |
+| Should | Manage executives, committees, publications, documents, resources, grading scale and site settings |
+| Should | Upload images to Cloudinary from the dashboard (signed uploads) |
+| Could | Gallery album builder with drag-to-reorder |
+
+Anything not editable in the dashboard by Friday is loaded with a **seed script** from the content inventory and moved into the dashboard the following week.
 
 ### Site map
 
@@ -88,166 +106,263 @@ Home
 └── Connect ───────── Feedback & suggestions · Contact · Privacy notice · Alumni
 Header (every page): search · light/dark toggle
 Footer (every page): contact email · social links · privacy notice
+/admin (not linked publicly): sign-in · content management · submissions
 ```
 
 ## Out of scope for v1
 
-- **Member accounts and restricted content.** Logins and stored student data need security testing that cannot be done properly by launch. Planned for phase 2, together with restricted academic resources.
+- **Student/member accounts and restricted content.** Only named admins sign in. Student logins and restricted resources are planned for phase 2.
 - A complete cross-institutional academic library (see PRD section 4).
 - Hosting copyrighted textbooks or internal lecture slides without the owners' written approval.
 
 ## Tech stack
 
-| Concern | Choice | Status |
+| Layer | Choice | Status |
 | --- | --- | --- |
-| Framework | [Next.js](https://nextjs.org/docs) (App Router, current stable 16.x) | **Decided** |
-| Language | TypeScript (strict mode) | **Decided** |
-| Images and media | [Cloudinary](https://cloudinary.com/documentation) via [`next-cloudinary`](https://next.cloudinary.dev) | **Decided** |
-| Styling | Tailwind CSS (the `create-next-app` default) with design tokens as CSS variables | Proposed |
-| Content management | Headless CMS so admins edit without a developer. Recommended: Sanity, with Cloudinary as the image source | **To decide** (see [Open decisions](#open-decisions)) |
-| Forms | Embedded Tally or Google Forms owned by the official PANS account | Proposed |
-| Search | Static search index built at deploy time (e.g. Pagefind) | Proposed |
-| Testing | Vitest for unit tests (CGPA maths, date and archive logic); Playwright smoke tests for key journeys | Proposed |
-| Hosting | Vercel (Hobby plan is for non-commercial use; confirm it fits PANS) | Proposed |
-| Analytics | Privacy-friendly analytics (no cookies, no personal data) | Proposed |
-| Node.js | **20.9 or later** (Next.js minimum); use the current LTS | Required |
+| Database | **MongoDB** on MongoDB Atlas, modelled with **Mongoose** | **Decided** |
+| API | **Express** on **Node.js**, written in TypeScript | **Decided** |
+| Frontend | **React** + TypeScript, built with **Vite**, routing with **React Router** | **Decided** (Vite and React Router proposed) |
+| Images and media | **Cloudinary**: `cloudinary` SDK on the server, `@cloudinary/react` + `@cloudinary/url-gen` on the client | **Decided** |
+| Validation | **Zod** schemas at every API entry point | Proposed |
+| Styling | Tailwind CSS with design tokens as CSS variables | Proposed |
+| Server data on the client | TanStack Query (caching, loading and error states) | Proposed |
+| Auth (admins only) | Email + password, hashed with argon2 or bcrypt; session JWT in an `httpOnly`, `Secure`, `SameSite` cookie | Proposed |
+| Testing | Vitest (client and server logic), Supertest (API), Playwright (smoke tests) | Proposed |
+| Hosting | Client: Vercel, Netlify or Cloudflare Pages (static). API: Render. Database: MongoDB Atlas | Proposed, see [Deployment](#deployment) |
+| Node.js | **22 LTS** recommended (current Vite needs Node 20.19+ or 22.12+) | Required |
+| Repository | One repo, **npm workspaces**: `client/` and `server/` | Proposed |
+
+## System overview
+
+```
+ Browser (React SPA)                     Express API (Node.js)                MongoDB Atlas
+ ┌──────────────────────┐   HTTPS/JSON   ┌───────────────────────────┐        ┌──────────────┐
+ │ Public pages         │ ─────────────▶ │ /api/*  public, read-only │ ─────▶ │ collections  │
+ │ CGPA calculator      │                │ /api/feedback, /alumni    │        │ (Mongoose)   │
+ │ /admin dashboard     │ ─ cookie auth ▶│ /api/admin/* (auth only)  │        └──────────────┘
+ └──────────┬───────────┘                └─────────────┬─────────────┘
+            │ optimised image URLs                     │ signs uploads (API secret)
+            ▼                                          ▼
+                         Cloudinary (image storage + delivery CDN)
+```
+
+The browser never sees database credentials or the Cloudinary API secret. Admin image uploads go **directly from the browser to Cloudinary** using a short-lived signature issued by the API.
 
 ## Project structure
 
-The layout follows the Next.js guidance in [`.agent/architect.md`](.agent/architect.md) and [`.agent/frontend-specialist.md`](.agent/frontend-specialist.md): **routes in `src/app`, feature UI in `src/features/<feature>`, and server-only code in `src/server`**. Create folders when a feature needs them; do not commit empty layers.
+The layout follows [`.agent/architect.md`](.agent/architect.md): for a Node.js API, `src/modules/<feature>/{http,application,domain,infrastructure}` with app assembly separate from server startup; for a React SPA, `src/features/<feature>/{components,hooks,api}` with shared UI primitives and router assembly. Create folders when a feature needs them; do not commit empty layers.
 
 ```
 pans-unilag-website/
-├── .agent/                      # Reusable AI-assistant role prompts (see section below)
-├── public/                      # Static files: favicon, manifest, robots assets
-├── src/
-│   ├── app/                     # Routes only (App Router). Thin: fetch data, compose features
-│   │   ├── layout.tsx           # Root layout: header, footer, theme, fonts, metadata
-│   │   ├── page.tsx             # Home
-│   │   ├── about/               # /about, /about/history, /about/impact
-│   │   ├── people/              # /people/executives, /people/committees, /people/past-executives
-│   │   ├── events/              # /events, /events/[slug]
-│   │   ├── opportunities/       # /opportunities, /opportunities/[slug]
-│   │   ├── publications/        # /publications, /publications/documents
-│   │   ├── gallery/             # /gallery, /gallery/[album]
-│   │   ├── academics/           # /academics/cgpa-calculator, /academics/resources
-│   │   ├── connect/             # /connect/feedback, /connect/alumni, /connect/contact
-│   │   ├── privacy/             # /privacy
-│   │   ├── not-found.tsx        # 404 page
-│   │   ├── sitemap.ts           # Generated sitemap.xml
-│   │   └── robots.ts            # Generated robots.txt
-│   ├── features/                # One folder per business feature
-│   │   ├── events/
-│   │   │   ├── components/      # EventCard, EventList, CalendarMonth, AddToCalendar
-│   │   │   └── model/           # Types and pure logic (e.g. upcoming vs past)
-│   │   ├── opportunities/
-│   │   ├── people/
-│   │   ├── publications/
-│   │   ├── gallery/
-│   │   ├── resources/
-│   │   ├── cgpa/
-│   │   │   ├── components/      # Calculator UI (client component)
-│   │   │   └── model/           # Pure grade-point and CGPA maths + unit tests
-│   │   └── search/
-│   ├── components/
-│   │   ├── layout/              # Header, Footer, Navigation, SkipLink
-│   │   └── ui/                  # Domain-neutral primitives: Button, Card, Badge, ThemeToggle
-│   ├── server/                  # Server-only code. Never imported by client components
-│   │   ├── content/             # CMS client and typed queries, one file per content type
-│   │   └── cloudinary/          # Signed-upload and admin helpers (uses the API secret)
-│   ├── lib/                     # Shared helpers safe for both sides: env validation, dates, formatting
-│   └── styles/                  # globals.css and design tokens (colours, spacing, type scale)
-├── tests/
-│   └── e2e/                     # Playwright smoke tests for key journeys
-├── .env.example                 # Documented variable names, no real values (to be added at scaffold)
+├── .agent/                          # AI-assistant role prompts (currently git-ignored)
+├── client/                          # React + Vite + TypeScript SPA
+│   ├── public/                      # favicon, manifest, robots.txt, default Open Graph image
+│   ├── src/
+│   │   ├── app/                     # App assembly only
+│   │   │   ├── router.tsx           # Route table (public routes + lazy-loaded /admin)
+│   │   │   ├── providers.tsx        # QueryClient, theme, auth context
+│   │   │   └── layouts/             # PublicLayout (header/footer), AdminLayout
+│   │   ├── features/                # One folder per business feature
+│   │   │   ├── home/
+│   │   │   ├── about/
+│   │   │   ├── people/
+│   │   │   ├── events/
+│   │   │   │   ├── api/             # Typed fetchers + query hooks (useEvents, useEvent)
+│   │   │   │   ├── components/      # EventCard, EventList, CalendarMonth, AddToCalendar
+│   │   │   │   └── pages/           # EventsPage, EventDetailPage (wired in router.tsx)
+│   │   │   ├── opportunities/
+│   │   │   ├── publications/
+│   │   │   ├── gallery/
+│   │   │   ├── academics/
+│   │   │   │   └── cgpa/            # Calculator UI + pure maths in model/ (unit tested)
+│   │   │   ├── connect/             # Feedback, alumni, contact
+│   │   │   ├── search/
+│   │   │   └── admin/               # Dashboard screens, sign-in, resource editors
+│   │   ├── components/
+│   │   │   ├── layout/              # Header, Footer, Navigation, SkipLink
+│   │   │   └── ui/                  # Domain-neutral primitives: Button, Card, Badge, ThemeToggle
+│   │   ├── lib/                     # http client, cloudinary helpers, dates (Africa/Lagos), env
+│   │   └── styles/                  # globals.css, design tokens
+│   └── index.html
+├── server/                          # Express + TypeScript API
+│   ├── src/
+│   │   ├── app.ts                   # Builds the Express app: middleware, routes, error handler
+│   │   ├── server.ts                # Starts the HTTP server and connects to MongoDB
+│   │   ├── config/                  # env.ts (validated with Zod), db.ts, cloudinary.ts
+│   │   ├── middleware/              # requireAdmin, validate, rateLimit, errorHandler, notFound
+│   │   └── modules/                 # One folder per business feature
+│   │       ├── events/
+│   │       │   ├── http/            # events.routes.ts, events.controller.ts, events.schemas.ts
+│   │       │   ├── application/     # events.service.ts (use cases)
+│   │       │   ├── domain/          # event.rules.ts (pure: isUpcoming, archive rules)
+│   │       │   └── infrastructure/  # event.model.ts (Mongoose)
+│   │       ├── announcements/
+│   │       ├── opportunities/
+│   │       ├── people/              # executives + committees
+│   │       ├── milestones/
+│   │       ├── publications/
+│   │       ├── gallery/
+│   │       ├── documents/
+│   │       ├── resources/
+│   │       ├── grading/             # grading scale for the CGPA calculator
+│   │       ├── submissions/         # feedback + alumni
+│   │       ├── search/
+│   │       ├── settings/
+│   │       ├── media/               # Cloudinary upload signatures
+│   │       └── auth/                # admin users, sign-in, sessions
+│   ├── scripts/
+│   │   ├── seed.ts                  # Loads launch content from seed/*.json
+│   │   └── create-admin.ts          # Creates an admin account from the command line
+│   ├── seed/                        # JSON exported from the content inventory
+│   └── tests/                       # Supertest API tests
+├── tests/e2e/                       # Playwright smoke tests (public journeys + admin sign-in)
+├── package.json                     # npm workspaces root: scripts that run client + server
 ├── .gitattributes
 ├── .gitignore
 └── README.md
 ```
 
+Client and server do **not** import from each other. The client describes API responses with its own TypeScript types in each feature's `api/` folder.
+
 ## Architecture rules
 
 These come from the `.agent` role prompts and apply to every pull request.
 
-1. **Routes are thin.** `src/app/**/page.tsx` files fetch data through `src/server/content` and compose components from `src/features`. Business logic does not live in route files.
-2. **Server Components by default.** Add `"use client"` only to interactive leaves (calendar navigation, filters, theme toggle, CGPA calculator, search box). Keep client bundles small.
-3. **Secrets stay on the server.** `CLOUDINARY_API_SECRET` and CMS tokens are used only inside `src/server/**`. Mark those modules with `import "server-only"`. Only variables prefixed `NEXT_PUBLIC_` reach the browser.
-4. **Shared UI must be domain-neutral.** A component moves to `src/components/ui` only when it has no PANS-specific knowledge. Otherwise it stays in its feature folder.
-5. **Pure logic is testable.** Date rules (archiving), opportunity deadlines and CGPA maths live in `model/` files as pure functions with unit tests.
-6. **Every page handles all states:** loading, empty ("No open opportunities right now"), error and not-found, not only the happy path.
-7. **No new libraries without a reason.** Do not add a global state store, UI kit or data-fetching library unless a concrete need is agreed in a PR.
+1. **Thin HTTP layer.** Express routes and controllers parse the request, validate it with Zod, call a service and shape the response. Business rules live in `application/` and `domain/`; Mongoose stays in `infrastructure/`.
+2. **Validate every input on the server**, including admin requests. Reject unknown fields. A hidden button in the UI is not authorisation.
+3. **Return only intended fields.** Never send password hashes, internal notes or submitters' details to public endpoints.
+4. **Secrets stay on the server.** `MONGODB_URI`, `JWT_SECRET` and `CLOUDINARY_API_SECRET` exist only in server environment variables. Anything prefixed `VITE_` is public, because it ends up in the browser bundle.
+5. **Pure logic is testable.** Date rules (archiving), deadlines and CGPA maths are pure functions with unit tests.
+6. **Every screen handles all states:** loading, empty ("No open opportunities right now"), error and not-found, not only the happy path.
+7. **The admin area is code-split.** `/admin` is lazy-loaded so public visitors never download dashboard code.
+8. **No new libraries without a reason.** Agree additions in a pull request.
+
+## API reference (planned)
+
+All responses are JSON. Lists support `?page=` and `?limit=` (max 50). Dates are ISO 8601; the site displays them in **Africa/Lagos** time.
+
+### Public
+
+| Method | Path | Purpose |
+| --- | --- | --- |
+| GET | `/api/health` | Health check for hosting and uptime monitoring |
+| GET | `/api/settings` | Contact email, social links, quick links, home banner |
+| GET | `/api/announcements` | Active (not expired) announcements, pinned first |
+| GET | `/api/events?status=upcoming\|past&month=YYYY-MM` | Events list or calendar month |
+| GET | `/api/events/:slug` | One event |
+| GET | `/api/opportunities?type=` | Open opportunities, closing soonest first |
+| GET | `/api/opportunities/:slug` | One opportunity |
+| GET | `/api/executives?session=2026/2027` | Executives for a session (defaults to current) |
+| GET | `/api/committees` | Committees |
+| GET | `/api/milestones` | History timeline |
+| GET | `/api/publications?series=` | Publications |
+| GET | `/api/gallery`, `/api/gallery/:slug` | Albums and one album |
+| GET | `/api/documents` | Latest approved documents |
+| GET | `/api/resources?level=&semester=` | Academic resource links |
+| GET | `/api/grading-scale` | Grade scale for the CGPA calculator |
+| GET | `/api/search?q=` | Search across events, opportunities, publications and resources |
+| POST | `/api/feedback` | Submit feedback (rate-limited, anonymous allowed) |
+| POST | `/api/alumni` | Submit alumni details (rate-limited, consent required) |
+
+### Admin (signed-in admins only)
+
+| Method | Path | Purpose |
+| --- | --- | --- |
+| POST | `/api/auth/login`, `/api/auth/logout` | Sign in and out (login is rate-limited) |
+| GET | `/api/auth/me` | Current admin |
+| GET, POST | `/api/admin/:resource` | List and create (`announcements`, `events`, `opportunities`, `executives`, …) |
+| GET, PATCH, DELETE | `/api/admin/:resource/:id` | Read, update, archive or delete one item |
+| GET | `/api/admin/submissions/feedback`, `/api/admin/submissions/alumni` | View submissions |
+| POST | `/api/admin/media/signature` | Short-lived Cloudinary upload signature |
+
+## Data model
+
+MongoDB collections (one Mongoose model each). Every item that goes out of date has a date field, so the API stops returning it automatically (PRD section 5: "outdated opportunities or event notices should be archived").
+
+| Collection | Key fields | Automatic behaviour / indexes |
+| --- | --- | --- |
+| `announcements` | title, body, publishAt, expiresAt, pinned | Hidden after `expiresAt`; index on `expiresAt` |
+| `events` | title, slug (unique), startsAt, endsAt, venue, description, coverImage, registrationUrl, committee | Upcoming vs past by `endsAt`; text index for search |
+| `opportunities` | title, slug (unique), type, eligibility, deadline, applyUrl, lastCheckedAt | Hidden after `deadline`; flagged if not checked in 30 days |
+| `executives` | name, role, session, photo, bio (≤ 60 words), roleEmail, order | Earlier sessions build Past Executives |
+| `committees` | name, purpose, lead, activities, contact | None |
+| `milestones` | year, title, description, verifiedBy | Sorted by year |
+| `publications` | title, series (`recipharm`, `newspaper`, `substack`), edition, date, cover, fileUrl or link | Grouped by series and year |
+| `albums` | title, slug, eventRef, date, cover, photos[] (publicId, caption, alt), consentConfirmed | Grouped by year |
+| `documents` | title, version, approvedOn, approvedBy, fileUrl | Latest approved version shown |
+| `resources` | title, level, semester, course, url, verifiedBy | Grouped by level and semester |
+| `gradingscales` | grade, minScore, maxScore, gradePoint, active | Feeds the CGPA calculator |
+| `settings` | contactEmail, socialLinks, quickLinks, homeBanner | Single document |
+| `feedback` | category, message, contactEmail (optional), createdAt, status | **Admin-only.** Deleted after 12 months |
+| `alumni` | name, graduationYear, email, phone (optional), interests[], consentAt | **Admin-only.** Kept until the person opts out |
+| `admins` | name, email (unique), passwordHash, role (`admin`, `editor`), lastLoginAt | Never returned by any public endpoint |
+
+Images are stored in Cloudinary; MongoDB stores only the Cloudinary `publicId`, alt text and caption. **Alt text is required** on every image, and `verifiedBy` on every milestone and resource.
 
 ## Getting started
 
 ### Prerequisites
 
-- Node.js **20.9+** (current LTS recommended) and npm
+- Node.js **22 LTS** and npm
 - Git
-- Access to the official PANS Cloudinary account (ask the web lead)
+- A MongoDB connection string (a personal free Atlas cluster for development, or local MongoDB)
+- Cloudinary credentials (ask the web lead; use a separate development folder)
 
 ### One-time scaffold (web lead only)
 
-`create-next-app` refuses to scaffold into a folder that already contains files such as this README. Scaffold into a temporary folder and move the files across:
-
 ```bash
-# from the parent folder of this repository
-npx create-next-app@latest pans-scaffold --ts --eslint --tailwind --app --src-dir --import-alias "@/*"
-# copy everything from pans-scaffold/ into pans-unilag-website/ EXCEPT README.md and .gitignore
-# (merge any extra .gitignore entries by hand), then delete pans-scaffold/
-cd pans-unilag-website
-npm install next-cloudinary
+# at the repository root
+npm init -y                                   # then add "workspaces": ["client", "server"] to package.json
+npm create vite@latest client -- --template react-ts
+mkdir server && cd server && npm init -y && cd ..
+npm install -w server express mongoose zod cors helmet cookie-parser express-rate-limit jsonwebtoken argon2 cloudinary
+npm install -w server -D typescript tsx @types/node @types/express @types/cors @types/cookie-parser @types/jsonwebtoken
+npm install -w client react-router @tanstack/react-query @cloudinary/react @cloudinary/url-gen
 ```
 
-### Everyday development
+Then add `server/tsconfig.json`, root scripts that run both apps together (for example with `concurrently`), and `.env.example` files for both apps. Check each package's current documentation for exact versions and setup.
+
+### Everyday development (once scaffolded)
 
 ```bash
-npm install          # install dependencies
-cp .env.example .env.local   # then fill in values (never commit .env.local)
-npm run dev          # http://localhost:3000
-npm run lint         # ESLint (Next.js 16 no longer lints during build)
-npm run build        # production build: run before opening a PR
-npm run start        # serve the production build locally
+npm install                      # installs both workspaces
+cp server/.env.example server/.env    # fill in values; never commit .env
+cp client/.env.example client/.env
+npm run seed -w server           # load launch content into your database
+npm run dev                      # client on http://localhost:5173, API on http://localhost:4000
+npm run lint                     # lint both workspaces
+npm run test                     # unit and API tests
+npm run build                    # production builds: run before opening a PR
 ```
-
-Test scripts (`npm test`, `npm run test:e2e`) will be added when Vitest and Playwright are set up.
 
 ## Environment variables
 
-| Variable | Where it is used | Secret? |
+### `server/.env`
+
+| Variable | Purpose | Secret? |
 | --- | --- | --- |
-| `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME` | Building image URLs in the browser and on the server | No |
-| `NEXT_PUBLIC_CLOUDINARY_API_KEY` | Cloudinary Upload Widget (admin uploads only) | No, but do not share widely |
-| `CLOUDINARY_API_SECRET` | Signing uploads in `src/server/cloudinary` | **Yes, server only** |
-| `NEXT_PUBLIC_SITE_URL` | Canonical URLs, sitemap, social previews | No |
-| CMS project ID and read token | `src/server/content` | Token is **secret** (added once the CMS is chosen) |
+| `NODE_ENV` | `development` or `production` | No |
+| `PORT` | API port (default 4000) | No |
+| `MONGODB_URI` | Atlas connection string | **Yes** |
+| `CLIENT_ORIGIN` | Allowed CORS origin(s), e.g. the production site URL | No |
+| `JWT_SECRET` | Signs admin session tokens (long random value) | **Yes** |
+| `CLOUDINARY_CLOUD_NAME` | Cloudinary account | No |
+| `CLOUDINARY_API_KEY` | Cloudinary API key | Keep private |
+| `CLOUDINARY_API_SECRET` | Signs uploads | **Yes** |
 
-Real values live in `.env.local` locally and in the hosting provider's environment settings. **Never commit them.**
+### `client/.env`
 
-## Content model
-
-Every item that goes out of date has a date field, so the site archives it automatically (PRD section 5: "outdated opportunities or event notices should be archived").
-
-| Content type | Key fields | Automatic behaviour |
+| Variable | Purpose | Secret? |
 | --- | --- | --- |
-| Announcement | title, body, publishDate, expiryDate, pinned | Leaves the home page after `expiryDate` |
-| Event | title, slug, startsAt, endsAt, venue, description, coverImage, registrationUrl, committee | Moves from Upcoming to Past after `endsAt` |
-| Opportunity | title, slug, type, eligibility, deadline, applyUrl, lastCheckedAt | Hidden after `deadline`; flagged if not checked in 30 days |
-| Executive | name, role, session (e.g. `2026/2027`), photo, bio (≤ 60 words), roleEmail, order | Earlier sessions build the Past Executives page |
-| Committee | name, purpose, lead, activities, contact | None |
-| Milestone | year, title, description, verifiedBy | Renders the history timeline in year order |
-| Publication | title, series (`recipharm`, `newspaper`, `substack`), edition, date, cover, fileOrUrl | Grouped by series and year |
-| GalleryAlbum | event, date, cover, photos[] (each with caption and alt), consentConfirmed | Grouped by year |
-| Document | title, version, approvedOn, approvedBy, file | Shows the latest approved version |
-| ResourceLink | title, level, semester, course, url, verifiedBy | Grouped by level and semester |
-| GradingScale | grade, minScore, maxScore, gradePoint | Feeds the CGPA calculator |
-| SiteSettings | contactEmail, socialLinks, quickLinks, homeBanner | None |
+| `VITE_API_URL` | Base URL of the API | No (public) |
+| `VITE_CLOUDINARY_CLOUD_NAME` | Builds image URLs | No (public) |
+| `VITE_SITE_URL` | Canonical URL for links and previews | No (public) |
 
-**Required fields:** alt text on every image; `verifiedBy` on every milestone and resource link.
+Production values live in the hosting providers' environment settings. **Never commit `.env` files.**
 
 ## Images and Cloudinary
 
-- Use `CldImage` from `next-cloudinary` for every Cloudinary image so it gets automatic format (`f_auto`), quality (`q_auto`) and responsive sizes.
-- Always pass a meaningful `alt` and a `sizes` attribute; lazy-load everything below the fold.
+- Render every Cloudinary image with `AdvancedImage` from `@cloudinary/react`, using automatic format and quality (`f_auto`, `q_auto`) and a width suited to where it appears. Always set `alt`, `width`, `height` and `loading="lazy"` below the fold.
 - Organise uploads by folder:
 
 ```
@@ -260,79 +375,87 @@ pans-unilag/
 └── site/                        # logos, banners, Open Graph images
 ```
 
-- Upload originals no larger than about 2500 px on the long edge; Cloudinary handles the rest.
-- Only upload photos with consent, and remove any photo on request (the takedown contact is on the privacy page).
-- Admin uploads must be **signed** (via `src/server/cloudinary`); never expose an unsigned upload preset publicly.
+- Admin uploads are **signed**: the dashboard asks `POST /api/admin/media/signature`, then uploads straight to Cloudinary. Never create an unsigned upload preset.
+- Upload originals no larger than about 2500 px on the long edge. Only upload photos with consent, and remove any photo on request.
 
 ## CGPA calculator
 
-- Runs entirely in the browser. **Nothing the student enters is stored or sent anywhere.**
+- Runs entirely in the browser. **Nothing the student enters is stored or sent anywhere.** It only fetches the grade scale from `/api/grading-scale`.
 - Students add courses (code optional, units, score or grade); the calculator shows the semester GPA and running CGPA.
-- The grade scale (grade, score range, grade points) comes from the `GradingScale` content type, so admins can correct it without a code change.
+- Admins edit the grade scale in the dashboard, so corrections need no code change.
 - **The Pharm.D grade points and pass marks must be confirmed by the Faculty (via the Academic Secretary) before launch.** Until then, the page shows: *"Unofficial estimate. Your official result is the one issued by the University."*
-- The maths lives in `src/features/cgpa/model` as pure functions with unit tests covering rounding, zero-unit courses, empty input and failed courses.
+- The maths lives in `client/src/features/academics/cgpa/model` as pure functions with unit tests covering rounding, zero-unit courses, empty input and failed courses.
 
-## Forms, privacy and data protection
+## Security, privacy and data protection
 
-- Forms (feedback, alumni) are embedded from a form tool owned by the **official PANS account**, never a personal account. Responses are visible only to named administrators.
-- **Feedback:** the page states who reads submissions and the response time. The anonymous option asks for no name or email. Urgent welfare or safety issues are directed to a direct contact, not the form.
-- **Alumni:** name, graduation year, email, optional phone, areas of interest and a consent checkbox. No date of birth or home address.
-- A **privacy notice** covers what is collected, why, who sees it, how long it is kept and how to request deletion.
-- The **Nigeria Data Protection Act 2023** applies. Confirm with the Faculty or UNILAG's data protection office whether PANS needs its own NDPC registration (an alumni list can pass the registration thresholds). This README is not legal advice.
+Owning a backend and database means PANS now stores personal data and runs a sign-in system. These are launch requirements, not extras:
 
-## Performance and accessibility targets
+- **Admin sign-in:** passwords hashed with argon2 (or bcrypt); session token in an `httpOnly`, `Secure`, `SameSite=Lax` cookie; login rate-limited; no public sign-up (admins are created with `scripts/create-admin.ts`); at least two admins at all times.
+- **API hardening:** `helmet` security headers, a CORS allowlist (`CLIENT_ORIGIN` only), Zod validation that rejects unknown fields, rate limits on `/api/feedback`, `/api/alumni` and `/api/auth/login`, and a request size limit.
+- **No injection:** never pass raw request objects into Mongoose queries; validate and pick fields explicitly.
+- **Forms:** feedback can be anonymous (no name or email required). Alumni submissions require a consent checkbox. Only admins can read submissions, and the privacy notice states who reads them, why, how long they are kept and how to request deletion.
+- **Backups:** the free Atlas tier has **no automatic backups**. Run `mongodump` at least weekly and before every major change, and store the dumps somewhere only the web lead and one executive can reach.
+- **Nigeria Data Protection Act 2023:** the site now holds personal data in its own database. Confirm with the Faculty or UNILAG's data protection office whether PANS needs its own NDPC registration. This README is not legal advice.
+- Use the `.agent/red-team.md` prompt for a security review of the auth and submissions modules before launch.
+
+## Performance, SEO and accessibility
 
 | Target | Threshold |
 | --- | --- |
-| Home page weight (first load, mobile) | **< 1 MB** |
-| Other pages | **< 500 KB** |
+| Home page weight (first load, mobile) | **< 1 MB** including JavaScript |
+| Initial JavaScript for public pages | Keep small; `/admin` is code-split |
 | Lighthouse (mobile): Performance, Accessibility, Best Practices, SEO | **≥ 90** each |
-| Accessibility standard | **WCAG 2.1 AA**: 4.5:1 text contrast, keyboard navigation, visible focus, alt text, no text inside images |
-| Fonts | One web font at most (via `next/font`), or system fonts |
+| Accessibility | **WCAG 2.1 AA**: 4.5:1 text contrast, keyboard navigation, visible focus, alt text, no text inside images |
+| Fonts | One web font at most, or system fonts |
 | Real-device check | Mid-range Android phone on a throttled 3G/4G connection before sign-off |
 
-Also avoid autoplaying video and heavy carousels, and respect `prefers-reduced-motion` and `prefers-color-scheme`.
+**Link previews and search engines:** a React single-page app builds pages in the browser. WhatsApp, X and many crawlers do **not** run JavaScript, so a shared link to a specific event would show only the site-wide preview. For v1, set good site-wide Open Graph tags in `client/index.html`. After launch, have Express inject per-page titles and preview images for event and opportunity URLs, or pre-render those pages.
+
+## Deployment
+
+| Part | Proposed host | Notes |
+| --- | --- | --- |
+| Client (static build) | Vercel, Netlify or Cloudflare Pages | Free tiers suit a static site; add an SPA fallback rewrite to `index.html` |
+| API | Render | **Free instances sleep after 15 minutes without traffic and take about a minute to wake**, so the first visitor after a quiet spell would wait. The always-on Starter instance costs about $7/month. See [Open decisions](#open-decisions) |
+| Database | MongoDB Atlas free cluster (M0) | 512 MB storage, no automatic backups, pauses after 30 days with no connections |
+| Images | Cloudinary | Free plan; confirm usage limits on the pricing page |
+
+All accounts are owned by the **official PANS account**, never a personal one.
 
 ## Team workflow
 
 ### Git
 
-- The repository is initialised locally on `main`. **No commits have been made and no remote is configured yet.** When the team's GitHub repository exists (under an organisation owned by the official PANS account):
-
-```bash
-git remote add origin https://github.com/<pans-org>/pans-unilag-website.git
-git add . && git commit -m "chore: initial project setup"
-git push -u origin main
-```
-
-- `main` is protected: changes land only through pull requests with at least **one approving review** and a passing build.
-- Branch names: `feat/<area>-<short-description>`, `fix/...`, `docs/...`, `chore/...` (for example `feat/events-calendar-view`).
-- Commit messages follow [Conventional Commits](https://www.conventionalcommits.org): `feat: add opportunity type filter`.
-- Each pull request: one feature or fix, a short description, screenshots at mobile and desktop width, and `npm run lint` and `npm run build` passing locally.
-- Every pull request gets a preview deployment so the editorial team and executives can review before merging.
+- The repository is on GitHub at `YastecHub/pans-unilag-website`. Move it to an organisation owned by the official PANS account before handover.
+- `main` is protected: changes land only through pull requests with at least **one approving review** and passing checks.
+- Branch names: `feat/<area>-<short-description>`, `fix/...`, `docs/...`, `chore/...` (for example `feat/server-events-api`, `feat/client-events-page`).
+- Commit messages follow [Conventional Commits](https://www.conventionalcommits.org): `feat(server): add opportunities endpoints`.
+- Each pull request: one feature or fix, a short description, screenshots at mobile and desktop width for UI changes, and lint, tests and build passing locally.
 
 ### Roles
 
 | Role | Responsibility | Person |
 | --- | --- | --- |
 | Web lead | Architecture, reviews, deployments, accounts | TBD |
-| Developers | Features in pairs (e.g. calculator and search; gallery and theming) | TBD |
+| Backend developers | Express modules, Mongoose models, auth, seed scripts | TBD |
+| Frontend developers | Public pages, CGPA calculator, admin dashboard | TBD |
 | Design | Visual identity, tokens, key screens, mobile-first layouts | TBD |
 | Editor-in-Chief | Editorial process, content inventory, copy approval | Anu (EIC) |
 | Writers and researchers | Verified content, history, profiles, opportunities | TBD |
 | Approvers | History, profiles, publications, health content sign-off | TBD |
 
-Content is tracked in one shared inventory sheet with columns for page, owner, status and approver.
+Content is tracked in one shared inventory sheet (page, owner, status, approver). It is exported to `server/seed/*.json` for the seed script.
 
 ## Timeline
 
-| Day | Development | Content and approvals |
-| --- | --- | --- |
-| **Mon 12 Oct** | Decisions, accounts, scaffold, design tokens, layout shell | Content inventory assigned; writing starts |
-| **Tue 13 Oct** | Design sign-off; navigation, home, CMS schemas, Cloudinary setup | Profiles, history and committee copy drafted |
-| **Wed 14 Oct** | Feature pages, CGPA calculator, search, gallery | **Content freeze (evening)**; grading scale confirmed |
-| **Thu 15 Oct** | Content entry, QA, accessibility and Lighthouse checks, fixes | **Executive review and approval** |
-| **Fri 16 Oct** | Production deploy on the domain, final check | **Launch announcement** |
+The stack changed on Wednesday, so the remaining two days are tight. Build in this order and cut from the bottom of each list if needed.
+
+| Day | Backend | Frontend | Content and approvals |
+| --- | --- | --- | --- |
+| **Wed 14 Oct** | Scaffold workspaces; Mongoose models; public read endpoints; seed script | Scaffold Vite app; layout, navigation, theme; Home, Events, Opportunities pages | **Content freeze (evening)**; grading scale confirmed |
+| **Thu 15 Oct** | Admin auth; admin CRUD for announcements, events, opportunities; submissions; upload signatures; security pass | Remaining public pages; CGPA calculator; admin sign-in and editors; forms | Content seeded and entered; **executive review and approval** |
+| **Fri 16 Oct** | Deploy API and database; backups; smoke tests | Deploy client; Lighthouse and accessibility checks | **Launch announcement** |
+| Week after | Remaining admin editors; per-page link previews | Gallery builder; PWA if dropped | Late content added through the dashboard |
 
 ## Definition of done
 
@@ -341,8 +464,9 @@ From PRD section 9. The site is ready to launch when:
 - [ ] All agreed launch pages are complete and display correctly on mobile and desktop.
 - [ ] Navigation, buttons, external links and forms have been tested.
 - [ ] Content has been reviewed for accuracy, spelling, permissions and appropriate access.
-- [ ] The website has a named administrator and a documented update process.
-- [ ] Basic security, backups and privacy practices are in place for collected information.
+- [ ] The website has a named administrator and a documented update process (admin dashboard guide).
+- [ ] Admin sign-in, validation, rate limits and CORS are in place; secrets are only in server environment variables.
+- [ ] A database backup has been taken and restored once as a test.
 - [ ] Performance and accessibility targets above are met.
 - [ ] The executive team has reviewed and approved the launch version.
 
@@ -350,32 +474,33 @@ From PRD section 9. The site is ready to launch when:
 
 | Decision | Recommended default | Decide by |
 | --- | --- | --- |
-| Official PANS account that owns every service | Create a dedicated email account | Mon 12 Oct |
-| CMS | Sanity with Cloudinary as the image source; fallback is typed content files in the repo for launch, CMS the week after | Mon 12 Oct |
-| Domain | A `.com.ng` or `.org.ng` name registered for 2+ years with auto-renew | Mon 12 Oct |
-| Hosting | Vercel, provided its non-commercial terms fit PANS | Mon 12 Oct |
-| Final approvers | President (history), each executive (own profile), EIC (publications), Faculty adviser (health content) | Mon 12 Oct |
-| Feedback reviewer and response time | General Secretary plus one other executive; reply within 7 days | Tue 13 Oct |
+| API hosting budget | Render Starter (about $7/month) so the API never sleeps; otherwise accept a slow first load after quiet periods | Wed 14 Oct |
+| Client host | Vercel, Netlify or Cloudflare Pages (any static host) | Wed 14 Oct |
+| Domain | A `.com.ng` or `.org.ng` name registered for 2+ years with auto-renew | Wed 14 Oct |
+| Forms on Friday | Store in MongoDB via the API; if admin screens slip, embed Tally or Google Forms for launch | Wed 14 Oct |
+| Admins at launch | At least two named admins (e.g. General Secretary and PRO) plus the web lead | Thu 15 Oct |
+| Feedback reviewer and response time | General Secretary plus one other executive; reply within 7 days | Thu 15 Oct |
 | CGPA grading scale | Confirmed by the Faculty via the Academic Secretary | Wed 14 Oct |
 
 ## Using the AI agent prompts (`.agent/`)
 
-The `.agent/` folder contains reusable role prompts (orchestrator, architect, Next.js specialist, frontend specialist, accessibility reviewer, test engineer and more). They are plain Markdown instructions, not running agents. To use one, tell your coding assistant explicitly, for example:
+The `.agent/` folder contains reusable role prompts (orchestrator, architect, engineer, database specialist, react engineer, red team, accessibility reviewer, test engineer and more). They are plain Markdown instructions, not running agents. Tell your coding assistant explicitly which ones to apply, for example:
 
-> Read and apply `.agent/frontend-specialist.md` and `.agent/project-context.md`. Implement the opportunities list page described in the README.
+> Read and apply `.agent/engineer.md`, `.agent/database-specialist.md` and `.agent/project-context.md`. Implement the events module in `server/src/modules/events` as described in the README.
 
 Notes:
 
+- **`.agent/` is currently listed in `.gitignore`, so teammates who clone the repo will not get it.** Remove that line if the whole team should share the prompts.
 - The prompts refer to `agent/…` paths; in this repository the folder is **`.agent/`**.
-- Keep confirmed project facts in [`.agent/project-context.md`](.agent/project-context.md) so every role starts from the same context.
-- Roles that do not apply to this project (payments, background jobs, hackathon ideas) can be ignored.
+- Keep confirmed facts in [`.agent/project-context.md`](.agent/project-context.md) so every role starts from the same context.
+- Useful roles for this stack: `engineer`, `database-specialist`, `react-engineer`, `frontend-specialist`, `red-team`, `accessibility-reviewer`, `test-engineer`, `devops-engineer`. The Next.js, payments and background-job roles do not apply.
 
 ## Maintenance and handover
 
-- **Ownership:** the domain, hosting, CMS, Cloudinary, GitHub organisation, forms and analytics are all owned by the official PANS account, with **at least two admins** on each and two-factor sign-in on.
-- **Monthly checklist:** check external links, review open opportunities, update events and executives, and remove expired announcements.
-- **Each election:** transfer account access to the incoming administration, update the Executives session and record the handover date here.
-- **Admin guide:** a one-page "How to post an event or opportunity" guide with screenshots will live in `docs/admin-guide.md` before handover.
+- **Ownership:** domain, hosting, MongoDB Atlas, Cloudinary, GitHub and analytics are all owned by the official PANS account, with **at least two admins** on each and two-factor sign-in on.
+- **Monthly checklist:** check external links, review open opportunities, update events and executives, remove expired announcements, take a database backup, and update dependencies (`npm outdated`, `npm audit`).
+- **Each election:** create admin accounts for the incoming administration, remove departing admins, update the executives session and record the handover date here.
+- **Admin guide:** a one-page "How to post an event or opportunity" guide with screenshots of the dashboard will live in `docs/admin-guide.md` before handover.
 
 ---
 

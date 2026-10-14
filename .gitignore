@@ -8,9 +8,8 @@ node_modules/
 !.yarn/releases
 !.yarn/versions
 
-# Next.js build output
-.next/
-out/
+# build output (client: Vite, server: tsc)
+dist/
 build/
 
 # testing
@@ -31,15 +30,17 @@ yarn-error.log*
 
 # hosting
 .vercel
+.netlify
 
 # TypeScript
 *.tsbuildinfo
-next-env.d.ts
+
+# database dumps (never commit backups)
+dump/
+*.archive
 
 # OS and editor files
 .DS_Store
 Thumbs.db
 .idea/
 *.swp
-
-.agent/
