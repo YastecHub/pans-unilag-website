@@ -470,6 +470,34 @@ pans-unilag-website/
 8. **Use the brand tokens**, never raw hex values in components.
 9. **No new libraries without a reason** agreed in a pull request.
 
+### API conventions (server)
+
+The API skeleton (issue #3) provides these building blocks. Use them instead of writing your own:
+
+| Need | Use | Where |
+| --- | --- | --- |
+| Validate params, query or body | `validate({ params, query, body })` with **`z.strictObject(...)`** schemas, so unknown fields are rejected | `server/src/middleware/validate.ts` |
+| Return an error from a route or service | `throw new HttpError(404, 'Event not found')` | `server/src/lib/httpError.ts` |
+| Limit abuse on a route (login, forms) | `createRateLimiter({ windowMs, limit })` | `server/src/middleware/rateLimit.ts` |
+| Add a new environment variable | Add it to the Zod schema in `config/env.ts` **and** to `server/.env.example` | `server/src/config/env.ts` |
+| Add a feature | `modules/<feature>/http/<feature>.routes.ts` exporting a router, mounted under `/api/<feature>` in `app.ts` | `server/src/modules/` |
+| Test an endpoint | Supertest against `createApp(...)` (no port, no database needed) | `server/tests/` |
+
+```ts
+// modules/events/http/events.routes.ts (example shape)
+router.get(
+  '/:slug',
+  validate({ params: z.strictObject({ slug: z.string().min(1) }) }),
+  async (req, res) => {
+    const event = await eventsService.findBySlug(req.params.slug)
+    if (!event) throw new HttpError(404, 'Event not found')
+    res.json(event)
+  },
+)
+```
+
+Express 5 passes errors thrown in async handlers to the error handler automatically, so no `try/catch` is needed in routes.
+
 ## Data model
 
 All collections share `isPlaceholder` (boolean), `placeholderNote` (string), `createdAt` and `updatedAt`. Dates are stored in UTC and shown in **Africa/Lagos** time.
@@ -496,6 +524,23 @@ All collections share `isPlaceholder` (boolean), `placeholderNote` (string), `cr
 | `admins` | name, email (unique), passwordHash, role (`admin`, `editor`), lastLoginAt | Never public |
 
 ## API reference (planned)
+
+All responses are JSON. Errors always have the same shape, with `details` present for validation errors:
+
+```json
+{ "error": { "message": "Invalid request", "details": [{ "location": "body", "path": "email", "message": "Invalid email address" }] } }
+```
+
+| Status | When |
+| --- | --- |
+| 400 | Invalid JSON or failed validation |
+| 401 / 403 | Not signed in / not allowed (admin routes) |
+| 404 | Unknown route or item |
+| 413 | Request body over 100 KB |
+| 429 | Rate limit reached |
+| 500 | Unexpected error (no internal details in production) |
+
+`GET /api/health` (live) returns `{ "status": "ok" | "degraded", "db": "connected" | "disconnected" | …, "uptimeSeconds": n }`.
 
 Public (read-only unless noted):
 
@@ -542,6 +587,8 @@ npm run dev                            # client http://localhost:5173, API http:
 ```
 
 In development the client forwards `/api/*` requests to the API, so open **http://localhost:5173** and everything works from one address. Check the API directly at http://localhost:4000/api/health. Never commit `.env` files.
+
+The API needs a `MONGODB_URI` in `server/.env` (a free personal Atlas cluster or local MongoDB). Without one it stops at startup with a message saying what is missing; if Atlas refuses the connection, add your IP address under **Network Access**.
 
 ### Scripts (run from the repository root)
 
