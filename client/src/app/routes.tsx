@@ -5,6 +5,9 @@ import {
   MembershipPage,
   WhoWeArePage,
 } from '../features/about/pages/AboutPages.tsx'
+import { EventPage } from '../features/events/pages/EventPage.tsx'
+import { PastEventsPage } from '../features/events/pages/PastEventsPage.tsx'
+import { UpcomingEventsPage } from '../features/events/pages/UpcomingEventsPage.tsx'
 import {
   ConstitutionPage,
   ElectionsPage,
@@ -50,6 +53,9 @@ export const routes: RouteObject[] = [
       { path: '/governance/finance', element: <FinancePage /> },
       { path: '/governance/meetings', element: <MeetingsPage /> },
       { path: '/governance/constitution', element: <ConstitutionPage /> },
+      { path: '/events', element: <UpcomingEventsPage /> },
+      { path: '/events/past', element: <PastEventsPage /> },
+      { path: '/events/:slug', element: <EventPage /> },
       ...OVERVIEW_SECTIONS.map((section) => ({
         path: section.to,
         element: <SectionOverviewPage section={section} />,

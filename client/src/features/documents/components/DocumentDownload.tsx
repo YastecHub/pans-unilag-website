@@ -53,7 +53,7 @@ export function DocumentDownload({ slug, pendingNote }: Props) {
       <div>
         <ButtonAnchor href={doc.fileUrl} target="_blank" rel="noopener noreferrer">
           Download the {slug === 'constitution' ? 'constitution' : 'document'} ({downloadLabel(doc)}
-          )<span className="sr-only"> (opens in a new tab)</span>
+          ) <span className="sr-only">(opens in a new tab)</span>
         </ButtonAnchor>
       </div>
     </Card>

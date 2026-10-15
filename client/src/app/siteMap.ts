@@ -159,9 +159,6 @@ export type StubPage = {
 
 /** Every page that is still a stub, with the issue that replaces it. */
 export const STUB_PAGES: StubPage[] = [
-  { path: '/events', title: 'Upcoming events', issue: 29 },
-  { path: '/events/past', title: 'Past events', issue: 29 },
-  { path: '/events/:slug', title: 'Event', issue: 29 },
   { path: '/gallery', title: 'Gallery', issue: 30 },
   { path: '/gallery/:slug', title: 'Album', issue: 30 },
   { path: '/opportunities', title: 'Opportunities', issue: 31 },

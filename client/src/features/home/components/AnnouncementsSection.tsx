@@ -62,7 +62,7 @@ function AnnouncementCard({ announcement: a }: { announcement: Announcement }) {
           </Link>
         ) : (
           <a href={a.link} className="font-medium" rel="noopener noreferrer" target="_blank">
-            Read more<span className="sr-only"> (opens in a new tab)</span>
+            Read more <span className="sr-only">(opens in a new tab)</span>
           </a>
         ))}
     </Card>

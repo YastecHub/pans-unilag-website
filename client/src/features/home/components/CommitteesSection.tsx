@@ -1,10 +1,11 @@
 import { Link } from 'react-router'
+import { cardLink } from '../../../components/ui/Card.tsx'
 import { ButtonLink } from '../../../components/ui/Button.tsx'
 import { PlaceholderText } from '../../../components/ui/Placeholder.tsx'
 import { Skeleton } from '../../../components/ui/Skeleton.tsx'
 import { EmptyState, ErrorState, LoadingState } from '../../../components/ui/States.tsx'
 import { type Committee, shortSession, useCommittees } from '../../committees/api/committees.ts'
-import { CardGrid, cardLink, HomeSection } from './HomeSection.tsx'
+import { CardGrid, HomeSection } from './HomeSection.tsx'
 
 const SHOWN = 6
 

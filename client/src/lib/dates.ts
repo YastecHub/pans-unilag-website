@@ -43,3 +43,23 @@ export function formatMonthRange(startIso: string, endIso: string): string {
   if (s.longMonth !== e.longMonth) return `${s.longMonth} – ${e.longMonth} ${e.year}`
   return `${s.longMonth} ${s.year}`
 }
+
+/** Lagos is UTC+1 all year, so a Lagos wall-clock reading is the UTC reading shifted by an hour. */
+const LAGOS_OFFSET_MS = 60 * 60 * 1000
+const lagosIso = (value: string | Date) =>
+  new Date(new Date(value).getTime() + LAGOS_OFFSET_MS).toISOString()
+
+/** The Lagos calendar day: "2026-11-30". */
+export function lagosDay(value: string | Date): string {
+  return lagosIso(value).slice(0, 10)
+}
+
+/** The Lagos calendar month: "2026-11". */
+export function lagosMonth(value: string | Date): string {
+  return lagosIso(value).slice(0, 7)
+}
+
+/** Lagos wall-clock time, 24-hour: "18:30". */
+export function lagosTime(value: string | Date): string {
+  return lagosIso(value).slice(11, 16)
+}
