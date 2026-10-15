@@ -717,6 +717,8 @@ Unexpected crashes outside a request (an unhandled promise rejection or exceptio
 
 `GET /api/health` (live) returns `{ "status": "ok" | "degraded", "db": "connected" | "disconnected" | …, "uptimeSeconds": n }`.
 
+`GET /api/pages/:slug` (live) returns `{ slug, title, order, sections: [{ heading, bodyMarkdown, articleRefs }], isPlaceholder, placeholderNote?, updatedAt }`; unknown slug → 404 `NOT_FOUND`, malformed slug → 400 `VALIDATION_ERROR`. Cached for 5 minutes (`Cache-Control: public, max-age=300`).
+
 Public (read-only unless noted):
 
 | Method | Path | Purpose |
