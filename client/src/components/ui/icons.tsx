@@ -55,3 +55,37 @@ export const MonitorIcon = ({ className = 'size-[22px]' }: IconProps) => (
     <path d="M8 20h8M12 16v4" />
   </svg>
 )
+
+export const CalendarIcon = ({ className = 'size-4' }: IconProps) => (
+  <svg {...base} className={className}>
+    <rect x="3" y="5" width="18" height="16" rx="2" />
+    <path d="M3 10h18M8 3v4M16 3v4" />
+  </svg>
+)
+
+export const PinIcon = ({ className = 'size-4' }: IconProps) => (
+  <svg {...base} className={className}>
+    <path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z" />
+    <circle cx="12" cy="10" r="2.5" />
+  </svg>
+)
+
+export const ArrowRightIcon = ({ className = 'size-4' }: IconProps) => (
+  <svg {...base} className={className}>
+    <path d="M5 12h14M13 6l6 6-6 6" />
+  </svg>
+)
+
+export const CalculatorIcon = ({ className = 'size-8' }: IconProps) => (
+  <svg {...base} strokeWidth={1.6} className={className}>
+    <rect x="5" y="3" width="14" height="18" rx="2" />
+    <path d="M8 7h8M8 12h.01M12 12h.01M16 12h.01M8 16h.01M12 16h.01M16 16h.01" />
+  </svg>
+)
+
+export const MessageIcon = ({ className = 'size-8' }: IconProps) => (
+  <svg {...base} strokeWidth={1.6} className={className}>
+    <path d="M4 5h16v11H9l-5 4z" />
+    <path d="M8 9h8M8 12h5" />
+  </svg>
+)

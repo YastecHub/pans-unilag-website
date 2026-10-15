@@ -6,6 +6,9 @@ export const SITE = {
   name: 'Pharmaceutical Association of Nigeria Students, University of Lagos',
   shortName: 'PANS UNILAG',
   motto: 'Service to Humanity',
+  /** One line for the home page hero (from the constitution's objectives). */
+  purpose:
+    'The association of every pharmacy student at the University of Lagos: for academic growth, welfare and unity, and to project the image of the pharmacy profession.',
   postalAddress: [
     'c/o The Dean’s Office, Faculty of Pharmacy',
     'College of Medicine Campus, University of Lagos',
