@@ -1,6 +1,10 @@
 import { createDocument } from 'zod-openapi'
 import { healthPaths } from '../modules/health/http/health.openapi.js'
+import { committeesPaths } from '../modules/committees/http/committees.openapi.js'
+import { executivesPaths } from '../modules/executives/http/executives.openapi.js'
 import { pagesPaths } from '../modules/pages/http/pages.openapi.js'
+import { patronsPaths } from '../modules/patrons/http/patrons.openapi.js'
+import { senatePaths } from '../modules/senate/http/senate.openapi.js'
 
 /**
  * Builds the OpenAPI 3.1 document from each module's `<feature>.openapi.ts`.
@@ -22,10 +26,18 @@ export function buildOpenApiDocument() {
     tags: [
       { name: 'Health', description: 'Service status' },
       { name: 'Pages', description: 'Constitution-derived About pages' },
+      {
+        name: 'Leadership',
+        description: 'Executive Council, Senate, committees and patrons',
+      },
     ],
     paths: {
       ...healthPaths,
       ...pagesPaths,
+      ...executivesPaths,
+      ...senatePaths,
+      ...committeesPaths,
+      ...patronsPaths,
     },
   })
 }

@@ -9,9 +9,21 @@ import { notFound } from './middleware/notFound.js'
 import { requestId } from './middleware/requestId.js'
 import { createRequestLogger } from './middleware/requestLogger.js'
 import { healthRouter } from './modules/health/http/health.routes.js'
+import type { CommitteeReader } from './modules/committees/application/committeeView.js'
+import { committeesRouter } from './modules/committees/http/committees.routes.js'
+import { mongoCommitteeReader } from './modules/committees/infrastructure/committee.repository.js'
+import type { ExecutiveReader } from './modules/executives/application/executiveView.js'
+import { executivesRouter } from './modules/executives/http/executives.routes.js'
+import { mongoExecutiveReader } from './modules/executives/infrastructure/executive.repository.js'
 import type { PageReader } from './modules/pages/application/pageView.js'
 import { pagesRouter } from './modules/pages/http/pages.routes.js'
 import { mongoPageReader } from './modules/pages/infrastructure/page.repository.js'
+import type { PatronReader } from './modules/patrons/application/patronView.js'
+import { patronsRouter } from './modules/patrons/http/patrons.routes.js'
+import { mongoPatronReader } from './modules/patrons/infrastructure/patron.repository.js'
+import type { SenatorReader } from './modules/senate/application/senatorView.js'
+import { senateRouter } from './modules/senate/http/senate.routes.js'
+import { mongoSenatorReader } from './modules/senate/infrastructure/senator.repository.js'
 
 export type AppOptions = {
   /** Browser origins allowed to call the API (CORS). */
@@ -29,10 +41,18 @@ export type AppOptions = {
 
 export type Readers = {
   pages: PageReader
+  executives: ExecutiveReader
+  senate: SenatorReader
+  committees: CommitteeReader
+  patrons: PatronReader
 }
 
 const mongoReaders: Readers = {
   pages: mongoPageReader,
+  executives: mongoExecutiveReader,
+  senate: mongoSenatorReader,
+  committees: mongoCommitteeReader,
+  patrons: mongoPatronReader,
 }
 
 /**
@@ -73,6 +93,10 @@ export function createApp({
   if (docsEnabled) app.use('/api/docs', docsRouter())
   app.use('/api/health', healthRouter())
   app.use('/api/pages', pagesRouter(readers.pages))
+  app.use('/api/executives', executivesRouter(readers.executives))
+  app.use('/api/senate', senateRouter(readers.senate))
+  app.use('/api/committees', committeesRouter(readers.committees))
+  app.use('/api/patrons', patronsRouter(readers.patrons))
 
   app.use(notFound)
   app.use(createErrorHandler({ isProduction, logger }))

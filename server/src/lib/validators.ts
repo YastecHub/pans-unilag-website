@@ -1,14 +1,12 @@
 /** Shared field rules for content models. */
+import { isSession } from './sessions.js'
 
 /** Academic session, e.g. "2026/2027" (the second year must follow the first). */
 export const sessionField = {
   type: String,
   required: true,
   validate: {
-    validator: (value: string) => {
-      const match = /^(\d{4})\/(\d{4})$/.exec(value)
-      return !!match && Number(match[2]) === Number(match[1]) + 1
-    },
+    validator: isSession,
     message: 'session must look like "2026/2027"',
   },
 } as const
