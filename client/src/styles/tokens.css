@@ -37,6 +37,9 @@
   --color-danger: #b42318; /* form errors */
   --color-browser-bar: #0e6434; /* <meta name="theme-color"> */
 
+  /* Breakpoint where the header switches from the menu button to the full 8-item navigation. */
+  --breakpoint-nav: 80rem;
+
   /* Fonts (self-hosted via @fontsource, font-display: swap) */
   --font-heading: 'Poppins', ui-sans-serif, system-ui, sans-serif;
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;

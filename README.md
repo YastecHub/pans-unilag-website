@@ -475,7 +475,7 @@ pans-unilag-website/
 ├── client/                          # React + Vite + TypeScript SPA
 │   ├── public/                      # favicon (from the badge), manifest, robots.txt, og-default.png
 │   └── src/
-│       ├── app/                     # router.tsx, providers.tsx, layouts/ (Public, Admin)
+│       ├── app/                     # routes.tsx, siteMap.ts (every URL + the menus), router.tsx, layouts/, pages/ (stubs, 404)
 │       ├── features/
 │       │   ├── home/
 │       │   ├── about/               # who we are, membership & rights, history, impact
@@ -618,6 +618,25 @@ export const eventsPaths: ZodOpenApiPathsObject = {
 Express 5 passes errors thrown in async handlers to the error handler automatically, so no `try/catch` is needed in routes.
 
 **API docs (Swagger):** with the API running, open **http://localhost:4000/api/docs** (or http://localhost:5173/api/docs through the client) to browse and try every endpoint. The raw OpenAPI 3.1 document is at `/api/docs/openapi.json`. Docs are on by default outside production; set `API_DOCS_ENABLED=true` or `false` to override.
+
+### Client conventions (app shell)
+
+The app shell (issue #6) provides these building blocks:
+
+| Need | Use | Where |
+| --- | --- | --- |
+| Build a page | Replace its stub: add `{ path, element: <YourPage /> }` in `routes.tsx` (before the stubs) and delete its entry from `STUB_PAGES` | `client/src/app/` |
+| Add a URL or menu item | Edit `MAIN_NAV` / `STUB_PAGES`; the router, both menus and the tests update automatically | `client/src/app/siteMap.ts` |
+| Page title in the browser tab | `usePageTitle('Events')` → "Events · PANS UNILAG" | `client/src/lib/usePageTitle.ts` |
+| Page width and side padding | `<Container>` (1200 px, 16–40 px padding) | `client/src/components/layout/` |
+| Site name, address, social links | `SITE` (moves to `/api/settings` in #19) | `client/src/lib/site.ts` |
+| Theme in a component | `useThemePreference()` | `client/src/lib/` |
+| Test a page | `renderRoute('/events')` renders the whole app at that URL | `client/src/test/` |
+
+- Every page renders inside `<main id="main">`. After each navigation, focus moves there so screen readers announce the new page.
+- Pages start with exactly one `<h1>`.
+- The full menu shows from **1280 px** (the `nav:` breakpoint). Narrower screens use the Menu button.
+- `/admin` is lazy-loaded into its own small bundle, so public visitors never download it.
 
 ## Data model
 

@@ -13,6 +13,8 @@ export default defineConfig({
     },
   },
   test: {
+    environment: 'jsdom',
+    setupFiles: ['./src/test/setup.ts'],
     // Vitest blanks CSS by default; tokens.test.ts reads tokens.css to check contrast.
     css: { include: [/tokens\.css/] },
   },
