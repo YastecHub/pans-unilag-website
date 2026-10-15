@@ -28,6 +28,17 @@ import { mongoPublicationReader } from './modules/publications/infrastructure/pu
 import type { ResourceReader } from './modules/resources/application/resourceView.js'
 import { resourcesRouter } from './modules/resources/http/resources.routes.js'
 import { mongoResourceReader } from './modules/resources/infrastructure/resource.repository.js'
+import {
+  ADMIN_RESOURCES,
+  type AdminCollection,
+  type AdminResourceName,
+} from './modules/admin/application/adminResources.js'
+import type { PlaceholderSource } from './modules/admin/application/placeholders.js'
+import type { SubmissionAdminStore } from './modules/admin/application/submissionsAdmin.js'
+import { adminRouter } from './modules/admin/http/admin.routes.js'
+import { mongoAdminCollection } from './modules/admin/infrastructure/mongoAdminCollection.js'
+import { mongoPlaceholderSources } from './modules/admin/infrastructure/placeholder.sources.js'
+import { mongoSubmissionAdminStore } from './modules/admin/infrastructure/submissionsAdmin.store.js'
 import type { AdminStore } from './modules/auth/application/adminView.js'
 import { authRouter } from './modules/auth/http/auth.routes.js'
 import { mongoAdminStore } from './modules/auth/infrastructure/admin.store.js'
@@ -94,6 +105,10 @@ export type AuthOptions = {
   admins?: AdminStore
   sessionHours?: number
   loginRateLimit?: { windowMs: number; limit: number }
+  /** Dashboard data. Each defaults to MongoDB; tests pass in-memory versions. */
+  adminCollections?: Partial<Record<AdminResourceName, AdminCollection>>
+  placeholderSources?: PlaceholderSource[]
+  submissionAdmin?: SubmissionAdminStore
 }
 
 export type Readers = {
@@ -203,6 +218,21 @@ export function createApp({
         now,
         sessionHours: auth.sessionHours,
         loginRateLimit: auth.loginRateLimit,
+      }),
+    )
+    const collections = Object.fromEntries(
+      ADMIN_RESOURCES.map((r) => [
+        r.name,
+        auth.adminCollections?.[r.name] ?? mongoAdminCollection(r.model),
+      ]),
+    ) as Record<AdminResourceName, AdminCollection>
+    app.use(
+      '/api/admin',
+      guard.requireAdmin,
+      adminRouter({
+        collections,
+        placeholders: auth.placeholderSources ?? mongoPlaceholderSources,
+        submissions: auth.submissionAdmin ?? mongoSubmissionAdminStore,
       }),
     )
   }
