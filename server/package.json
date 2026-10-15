@@ -11,9 +11,11 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run --passWithNoTests",
     "seed": "tsx scripts/seed.ts",
-    "seed:check": "tsx scripts/seed.ts --check"
+    "seed:check": "tsx scripts/seed.ts --check",
+    "upload-album": "tsx scripts/upload-album.ts"
   },
   "dependencies": {
+    "cloudinary": "^2.11.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "express": "^5.3.0",
@@ -31,6 +33,7 @@
     "@types/node": "^24.13.3",
     "@types/supertest": "^7.2.1",
     "@types/swagger-ui-express": "^4.1.8",
+    "sharp": "^0.35.5",
     "supertest": "^7.3.1",
     "tsx": "^4.23.15",
     "typescript": "~6.0.2",

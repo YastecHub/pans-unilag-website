@@ -1,4 +1,5 @@
 import type { Model } from 'mongoose'
+import { AlbumModel } from '../modules/albums/infrastructure/album.model.js'
 import { CommitteeModel } from '../modules/committees/infrastructure/committee.model.js'
 import { EventModel } from '../modules/events/infrastructure/event.model.js'
 import { ExecutiveModel } from '../modules/executives/infrastructure/executive.model.js'
@@ -33,6 +34,7 @@ export const SEED_TARGETS: SeedTarget[] = [
   { file: 'patrons.json', model: PatronModel, key: ['order'] },
   { file: 'committees.json', model: CommitteeModel, key: ['slug'] },
   { file: 'events.json', model: EventModel, key: ['slug'] },
+  { file: 'albums.json', model: AlbumModel, key: ['slug'] },
   { file: 'grading.json', model: GradingScaleModel, key: ['slug'] },
   { file: 'settings.json', model: SettingsModel, key: ['key'] },
 ]
