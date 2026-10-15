@@ -663,7 +663,7 @@ All collections share `isPlaceholder` (boolean), `placeholderNote` (string), `cr
 | `committees` | name, shortName, slug (unique), description, activities[], achievements[], plans[], motto, officers[{ title, name, level }], session, order | 11 for 2026/27 |
 | `patrons` | name, title, isDean, order | |
 | `milestones` | year, title, description, verifiedBy | `verifiedBy` required unless placeholder |
-| `events` | title, slug (unique), series, dayNumber, startsAt, endsAt, datePrecision (`day` \| `month`), venue, description, coverImage, registrationUrl, committeeRef | Upcoming vs past by `endsAt`; text index |
+| `events` | title, slug (unique), series, dayNumber, startsAt, endsAt, datePrecision (`day` \| `month` \| `unknown`), committee (slug), venue, description, coverImage, registrationUrl, committeeRef | Upcoming vs past by `endsAt`; `unknown` dates count as past |
 | `albums` | title, slug, eventRef, series, date, cover, photos[{ publicId, alt, caption }], sourceFolderUrl, consentConfirmed | Grouped by series and year |
 | `announcements` | title, body, publishAt, expiresAt, pinned | Hidden after `expiresAt` |
 | `opportunities` | title, slug, type, eligibility, deadline, applyUrl, lastCheckedAt | Hidden after `deadline` |

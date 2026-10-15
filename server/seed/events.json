@@ -1,0 +1,204 @@
+[
+  {
+    "slug": "health-week-2026-day-1",
+    "title": "Trade Fair & Cooking Competition",
+    "series": "PANS Health Week 2026: Redefine+",
+    "dayNumber": 1,
+    "datePrecision": "unknown",
+    "isPlaceholder": true,
+    "placeholderNote": "Date and short description needed"
+  },
+  {
+    "slug": "health-week-2026-day-2",
+    "title": "Trade Fair",
+    "series": "PANS Health Week 2026: Redefine+",
+    "dayNumber": 2,
+    "datePrecision": "unknown",
+    "isPlaceholder": true,
+    "placeholderNote": "Date and short description needed"
+  },
+  {
+    "slug": "health-week-2026-day-3",
+    "title": "Medical Outreach 2026",
+    "series": "PANS Health Week 2026: Redefine+",
+    "dayNumber": 3,
+    "datePrecision": "unknown",
+    "isPlaceholder": true,
+    "placeholderNote": "Date and short description needed",
+    "committee": "ppht"
+  },
+  {
+    "slug": "health-week-2026-day-4",
+    "title": "FOP Preshow",
+    "series": "PANS Health Week 2026: Redefine+",
+    "dayNumber": 4,
+    "datePrecision": "unknown",
+    "isPlaceholder": true,
+    "placeholderNote": "Date and short description needed"
+  },
+  {
+    "slug": "health-week-2026-day-5",
+    "title": "Pharmathon",
+    "series": "PANS Health Week 2026: Redefine+",
+    "dayNumber": 5,
+    "datePrecision": "unknown",
+    "isPlaceholder": true,
+    "placeholderNote": "Date and short description needed"
+  },
+  {
+    "slug": "health-week-2026-day-6",
+    "title": "Quiz & Debate",
+    "series": "PANS Health Week 2026: Redefine+",
+    "dayNumber": 6,
+    "datePrecision": "unknown",
+    "isPlaceholder": true,
+    "placeholderNote": "Date and short description needed"
+  },
+  {
+    "slug": "health-week-2026-day-7",
+    "title": "IPSF Counselling Competition",
+    "series": "PANS Health Week 2026: Redefine+",
+    "dayNumber": 7,
+    "datePrecision": "unknown",
+    "isPlaceholder": true,
+    "placeholderNote": "Date and short description needed"
+  },
+  {
+    "slug": "health-week-2026-day-8",
+    "title": "Symposium",
+    "series": "PANS Health Week 2026: Redefine+",
+    "dayNumber": 8,
+    "datePrecision": "unknown",
+    "isPlaceholder": true,
+    "placeholderNote": "Date and short description needed"
+  },
+  {
+    "slug": "health-week-2026-day-9",
+    "title": "ADMAP Rally",
+    "series": "PANS Health Week 2026: Redefine+",
+    "dayNumber": 9,
+    "datePrecision": "unknown",
+    "isPlaceholder": true,
+    "placeholderNote": "Date and short description needed",
+    "committee": "admap"
+  },
+  {
+    "slug": "pharmalympics-2026-day-1",
+    "title": "Opening Ceremony & Court Games",
+    "series": "Pharmalympics 2026",
+    "dayNumber": 1,
+    "datePrecision": "unknown",
+    "isPlaceholder": true,
+    "placeholderNote": "Date and short description needed"
+  },
+  {
+    "slug": "pharmalympics-2026-day-2",
+    "title": "Athletics & Swimming",
+    "series": "Pharmalympics 2026",
+    "dayNumber": 2,
+    "datePrecision": "unknown",
+    "isPlaceholder": true,
+    "placeholderNote": "Date and short description needed"
+  },
+  {
+    "slug": "pharmalympics-2026-day-3",
+    "title": "Football (1)",
+    "series": "Pharmalympics 2026",
+    "dayNumber": 3,
+    "datePrecision": "unknown",
+    "isPlaceholder": true,
+    "placeholderNote": "Date and short description needed"
+  },
+  {
+    "slug": "pharmalympics-2026-day-4",
+    "title": "Football (2)",
+    "series": "Pharmalympics 2026",
+    "dayNumber": 4,
+    "datePrecision": "unknown",
+    "isPlaceholder": true,
+    "placeholderNote": "Date and short description needed"
+  },
+  {
+    "slug": "pharmalympics-2026-day-5",
+    "title": "Court Games (Lawn Tennis & Volleyball)",
+    "series": "Pharmalympics 2026",
+    "dayNumber": 5,
+    "datePrecision": "unknown",
+    "isPlaceholder": true,
+    "placeholderNote": "Date and short description needed"
+  },
+  {
+    "slug": "pharmalympics-2026-day-6",
+    "title": "Football (3)",
+    "series": "Pharmalympics 2026",
+    "dayNumber": 6,
+    "datePrecision": "unknown",
+    "isPlaceholder": true,
+    "placeholderNote": "Date and short description needed"
+  },
+  {
+    "slug": "pharmalympics-2026-day-7",
+    "title": "Indoor Games",
+    "series": "Pharmalympics 2026",
+    "dayNumber": 7,
+    "datePrecision": "unknown",
+    "isPlaceholder": true,
+    "placeholderNote": "Date and short description needed"
+  },
+  {
+    "slug": "pharmalympics-2026-day-8",
+    "title": "Court Games Finals",
+    "series": "Pharmalympics 2026",
+    "dayNumber": 8,
+    "datePrecision": "unknown",
+    "isPlaceholder": true,
+    "placeholderNote": "Date and short description needed"
+  },
+  {
+    "slug": "pharmalympics-2026-day-9",
+    "title": "Football Finale",
+    "series": "Pharmalympics 2026",
+    "dayNumber": 9,
+    "datePrecision": "unknown",
+    "isPlaceholder": true,
+    "placeholderNote": "Date and short description needed"
+  },
+  {
+    "slug": "freshers-week-2026",
+    "title": "Freshers' Week",
+    "startsAt": "2026-11-30T00:00:00+01:00",
+    "endsAt": "2026-12-04T23:59:59+01:00",
+    "datePrecision": "day",
+    "isPlaceholder": true,
+    "placeholderNote": "Venue, registration link and description to be confirmed"
+  },
+  {
+    "slug": "pharmalympics-2027",
+    "title": "Pharmalympics 2027",
+    "series": "Pharmalympics 2027",
+    "startsAt": "2027-04-01T00:00:00+01:00",
+    "endsAt": "2027-05-31T23:59:59+01:00",
+    "datePrecision": "month",
+    "isPlaceholder": true,
+    "placeholderNote": "Exact dates, venue, registration link and description to be confirmed"
+  },
+  {
+    "slug": "health-week-2027",
+    "title": "PANS Health Week 2027",
+    "series": "PANS Health Week 2027",
+    "startsAt": "2027-06-07T00:00:00+01:00",
+    "endsAt": "2027-06-11T23:59:59+01:00",
+    "datePrecision": "day",
+    "isPlaceholder": true,
+    "placeholderNote": "Venue, registration link and description to be confirmed"
+  },
+  {
+    "slug": "pans-dinner-2027",
+    "title": "PANS Dinner",
+    "startsAt": "2027-09-01T00:00:00+01:00",
+    "endsAt": "2027-09-30T23:59:59+01:00",
+    "datePrecision": "month",
+    "isPlaceholder": true,
+    "placeholderNote": "Exact date, venue, registration link and description to be confirmed"
+  }
+]
