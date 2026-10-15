@@ -159,10 +159,6 @@ export type StubPage = {
 
 /** Every page that is still a stub, with the issue that replaces it. */
 export const STUB_PAGES: StubPage[] = [
-  { path: '/about', title: 'Who we are', issue: 26 },
-  { path: '/about/membership', title: 'Membership & rights', issue: 26 },
-  { path: '/about/history', title: 'History & milestones', issue: 26 },
-  { path: '/about/impact', title: 'Impact', issue: 26 },
   { path: '/leadership/executive-council', title: 'Executive Council 2026/27', issue: 27 },
   { path: '/leadership/senate', title: 'Senate 2026/27', issue: 27 },
   { path: '/leadership/committees', title: 'Committees', issue: 27 },
@@ -190,6 +186,13 @@ export const STUB_PAGES: StubPage[] = [
   { path: '/connect/privacy', title: 'Privacy notice', issue: 35 },
   { path: '/search', title: 'Search', issue: 36 },
 ]
+
+/** The menu section with this label (the About pages show its links beside them). */
+export function navSection(label: string): NavSection {
+  const section = MAIN_NAV.find((s) => s.label === label)
+  if (!section) throw new Error(`No menu section called ${label}`)
+  return section
+}
 
 /** Sections whose own URL is an overview of their pages (the others use their first page). */
 export const OVERVIEW_SECTIONS = MAIN_NAV.filter(
