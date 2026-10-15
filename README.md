@@ -51,11 +51,13 @@ When sources disagree, the higher row wins.
 
 | Rank | Source | What it governs |
 | --- | --- | --- |
-| 1 | **PANS UNILAG Constitution** (reviewed and adopted 9 July 2026), as summarised in *PANS UNILAG Website: Content to Include* | Name, motto, objectives, membership, governance, offices, elections, committees' constitutional roles, finance, members' rights, contact address |
-| 2 | **President's announcement of committee leads, 2026/2027** | Which committees exist this session and who leads them |
-| 3 | **PANS Committees write-ups** | Committee descriptions, activities, achievements and plans |
-| 4 | **Brand Guidelines (PANS UNILAG Website)** | Logo, colours, fonts, type scale |
-| 5 | **PRD** and the team's *Recommendations & Build Plan* doc | Features, priorities, launch scope |
+| 1 | **PANS UNILAG Constitution** (reviewed and adopted 9 July 2026; full 55-page PDF received 15 Oct), summarised in *PANS UNILAG Website: Content to Include* | Name, motto, objectives, membership, governance, offices, elections, committees' constitutional roles, finance, members' rights, contact address |
+| 2 | **Faculty of Pharmacy student handbook**, §3.5 (grading) and §3.7 (academic standing), pp. 22–23 | CGPA scale, pass mark, credit units, academic standing rules. University rules override the constitution (Art. 1) |
+| 3 | **Leadership updates from the PANS President**, relayed by the web lead (see *Decisions log*) | Who is shown for the Senate and Executive Council this session, and when names, bios and photos arrive |
+| 4 | **President's announcement of committee leads, 2026/2027** | Which committees exist this session and who leads them |
+| 5 | **PANS Committees write-ups** | Committee descriptions, activities, achievements and plans |
+| 6 | **Brand Guidelines (PANS UNILAG Website)** | Logo, colours, fonts, type scale |
+| 7 | **PRD** and the team's *Recommendations & Build Plan* doc | Features, priorities, launch scope |
 
 Photo sources (Google Drive folders for Pharmalympics 2026 and PANS Health Week 2026) are listed in the team's content inventory sheet. Their links are not kept in this repository.
 
@@ -137,22 +139,22 @@ Home
 │                      Membership & rights
 │                      History & milestones            [placeholder]
 │                      Impact                          [placeholder]
-├── Leadership ─────── Executive Council 2026/27       [names/photos: placeholders except President]
-│                      Senate 2026/27                  [placeholder list; roles from constitution]
+├── Leadership ─────── Executive Council 2026/27       [names, bios: placeholders except the President's name; photos after the October photoshoot]
+│                      Senate 2026/27                  [4 principal officers only; placeholders until the Senate election]
 │                      Committees (11)                 [leads known; 4 descriptions placeholder]
 │                      Patrons                         [placeholder]
 ├── Governance ─────── How PANS is governed (Congress, EC, Senate, Interim Council, representation)
 │                      Elections
 │                      Finance & accountability
 │                      Meetings & procedures
-│                      Constitution                    [PDF download: placeholder until file arrives]
+│                      Constitution                    [PDF download (file received)]
 ├── Events ─────────── Upcoming                        [empty state until events are added]
 │                      Past events (Health Week 2026, Pharmalympics 2026)
 │                      Gallery
 ├── Opportunities ──── Hub (run by CPD & CBC)          [empty state until listings are added]
 ├── Publications ───── Recipharm (annual magazine)     [placeholder editions]
 │                      Newspaper · Substack            [placeholder links]
-├── Academics ──────── CGPA calculator                 [ready: UNILAG scale]
+├── Academics ──────── CGPA calculator                 [ready: Faculty of Pharmacy scale and pass mark]
 │                      Resources                       [placeholder]
 │                      Student support (Welfare & Academic support)
 └── Connect ────────── Feedback & suggestions (to the Secretary General)
@@ -194,19 +196,19 @@ Header: search · light/dark toggle         Footer: name, motto, address, social
 | Committees 2026/27: names and leads (11) | ✅ Ready | President's announcement |
 | Committee descriptions: ADMAP, PPHT, SDG, Research Club, CPD & CBC, Alumni Network, IPSF | ✅ Ready | Committees write-ups |
 | Committee descriptions: Content, Media, Design, Academics | 🟨 Placeholder | Write-ups needed |
-| President | 🟨 Partial | Name known (Abigail Moejoh); photo and bio needed |
-| Other 13 executive officers | 🟨 Placeholder | Names, levels, photos, bios needed |
-| Senate members and principal officers | 🟨 Placeholder | List needed |
+| President | 🟨 Partial | Name known (Abigail Moejoh). Short bio to come from the President; official photo after the photoshoot (by 31 Oct 2026) |
+| Other 13 executive officers | 🟨 Placeholder | Names and short bios to come from the President; official photos after the photoshoot (by 31 Oct 2026) |
+| Senate principal officers (4) | 🟨 Placeholder | The Senate election has not been held yet. Only the four principal officers are shown, as placeholders |
 | Patrons (Dean of the Faculty + four others) | 🟨 Placeholder | Names needed |
 | History & milestones (first Pharmalympics, first Pharmathon, etc.) | 🟨 Placeholder | Verified dates and facts needed |
 | Impact (numbers, outcomes) | 🟨 Placeholder | Figures needed |
-| Full constitution PDF | 🟨 Placeholder | File needed (summary pages ship regardless) |
+| Full constitution PDF | ✅ Received | 55 pages, 7.1 MB (Canva export). The last page shows three handwritten signatures: confirm with the President that it may be published as is |
 | Upcoming events | 🟨 Empty state | Event details needed |
 | Past events: Health Week 2026, Pharmalympics 2026 | 🟨 Partial | Photos ready; descriptions and dates needed |
 | Opportunities | 🟨 Empty state | Listings from CPD & CBC |
 | Recipharm, newspaper, Substack | 🟨 Placeholder | Editions and links needed |
 | Academic resources | 🟨 Placeholder | Vetted links from Academics Committee |
-| CGPA calculator | ✅ Ready | UNILAG standard scale, confirmed by the Faculty |
+| CGPA calculator and academic standing | ✅ Ready | Faculty of Pharmacy handbook §3.5 and §3.7 |
 | Official email and social handles | 🟨 Placeholder | Needed. Never use personal emails or phone numbers |
 | High-resolution logo | 🟨 Placeholder | SVG or ≥ 1000 px needed |
 
@@ -243,9 +245,24 @@ Missing content must be **visible as missing**, so nobody mistakes a placeholder
 | Assistant Sports Secretary | *Placeholder* | Assists and acts | 200L at election (300L in tenure) |
 | Welfare Secretary | *Placeholder* | Academic, social and psychological welfare; chairs Academic and Welfare Committees | 3+ sessions (500L) |
 
+Each officer card shows **office, name, short bio and photo**.
+
+- **Names and short bios** come from the President. Until then: "Name to be announced" and "Bio coming soon".
+- **Photos** are taken at the October photoshoot and added by **31 October 2026**. Until then every card uses the person silhouette with "Photo coming soon", including the President's.
+- Art. 8 lists no duties for the Editor-in-Chief; use the Editorial Board section (Art. 19 S.F: chairs the board, publishes Recipharm annually).
+
 ### Senate (Art. 5, 16–18)
 
-22 Senators (6 each from 200L–400L, 4 from 500L). Principal officers: **Senate President, Deputy Senate President, Senate Leader, Chief Whip**. Names are placeholders until the list is provided.
+**The Senate page shows only the four principal officers**, in this order:
+
+| Office | Holder 2026/27 | Key duties (summary) | Eligibility |
+| --- | --- | --- | --- |
+| Senate President | *Placeholder* | Presides over the Senate and Congress; interprets the constitution; heads the Interim Council | Senator from 400L (going to 500L) with one session in the Senate |
+| Deputy Senate President | *Placeholder* | Acts for the Senate President; always votes | Senator from 300L (400L in tenure) |
+| Senate Leader | *Placeholder* | Minutes, attendance register, notices; Senate secretariat; secretary of the Interim Council | Senator from 400L with one session in the Senate |
+| Chief Whip | *Placeholder* | Keeps order at Congress and Senate meetings | Senator from 400L (going to 500L) with one session in the Senate |
+
+**The 2026/27 Senate election has not been held yet**, so all four are placeholders ("Election pending"). The ordinary Senators are not listed. The Governance page still explains the Senate's make-up: 22 Senators, 6 each from 200L–400L and 4 from 500L.
 
 ### Committees shown on the site
 
@@ -269,7 +286,7 @@ Committee pages show: name, short name, description, activities, achievements, p
 
 ## Governance content from the constitution
 
-The *Content to Include* PDF is the copy source for these pages; each section cites its article (e.g. "Art. 19") so readers can check the constitution. Key facts the UI must get right:
+The *Content to Include* PDF is the copy source for these pages; each section cites its article (e.g. "Art. 19") so readers can check the constitution. The full PDF prints "Article 18" twice and has no Article 19. We cite the second one, Standing Committees, as **Art. 19**, the order it falls in. The Constitution page offers the PDF as a download labelled with its size (7.1 MB). Key facts the UI must get right:
 
 - **Three levels of government:** Executive Council (one session), Senate (22 members, tenure runs with the EC), General Assembly/**Congress** (all registered members; the highest organ).
 - **Congress quorum:** one quarter of registered members. **Senate quorum:** one third.
@@ -297,7 +314,7 @@ The *Content to Include* PDF is the copy source for these pages; each section ci
 
 ## CGPA calculator
 
-Uses the **standard University of Lagos 5-point grading scale, confirmed by the Faculty**.
+Source: **Faculty of Pharmacy student handbook, §3.5 "Scoring and grading system" (p. 22)**. These rules override anything else in this README.
 
 | Score (%) | Grade | Grade point |
 | --- | --- | --- |
@@ -308,21 +325,46 @@ Uses the **standard University of Lagos 5-point grading scale, confirmed by the 
 | 40–44 | E | 1 |
 | 0–39 | F | 0 |
 
-| CGPA | Class of degree |
+> ⚠️ The handbook prints F as "<50", which overlaps C, D and E. We use **0–39**, the only reading consistent with the rest of the table. **To confirm with the Faculty.**
+
+| CGPA | Result (handbook wording) |
 | --- | --- |
-| 4.50–5.00 | First Class |
-| 3.50–4.49 | Second Class Upper |
-| 2.40–3.49 | Second Class Lower |
-| 1.50–2.39 | Third Class |
-| 1.00–1.49 | Pass |
+| 2.40–5.00 | **Pass** |
+| 0.00–2.39 | **Fail** |
 
-Behaviour:
+The handbook defines only Pass and Fail. It does **not** list classes of degree (First Class, etc.), so the calculator doesn't show one. Add classes only if the Faculty supplies them.
 
-- **GPA** = Σ(course units × grade point) ÷ Σ(course units) for a semester; **CGPA** uses all semesters entered. Shown to **2 decimal places**.
-- Students enter course code (optional), units and either a score or a grade. Scores map to grades using the table above.
-- Runs **entirely in the browser**; nothing is stored or sent. The scale is fetched from `/api/grading-scale` so admins can update it without code.
-- Footnote: *"Calculated with the UNILAG 5-point scale. Your official result is the one issued by the University."*
-- Unit tests cover: boundaries (39/40, 44/45, 49/50, 59/60, 69/70), zero total units, empty input, failed courses, rounding at x.xx5, and class-of-degree boundaries (4.49/4.50, 3.49/3.50, 2.39/2.40, 1.49/1.50).
+- **Credit units:** each course is 1–3 units (handbook: "Min of 1 and Max of 3").
+- **Grade point** for a course = units × grade point.
+- **GPA** (one semester) = Σ(units × grade point) ÷ Σ(units).
+- **CGPA** = the same sum across every semester entered.
+- Results are shown to **2 decimal places**. Pass/Fail and the 2.40 checks use the rounded value, so the label always matches the number on screen.
+
+### Academic standing (handbook §3.7, p. 23)
+
+Shown as a short explainer under the result. The calculator gives guidance only; it doesn't decide anyone's standing. The pass mark for every rule is **2.40**.
+
+| Status | When (summary) |
+| --- | --- |
+| **Good standing** | CGPA **and** semester GPA are both 2.40 or above |
+| **Warning** | Previously in good standing, CGPA is at least 2.40 but the semester GPA is below 2.40 (not for first-year students) |
+| **Probation** | E.g. on Warning and the semester GPA is below 2.40 again, or both CGPA and GPA fall below 2.40 |
+| **Withdrawal** | E.g. on Probation and the semester GPA is below 2.40 again; CGPA below 2.40 for a third time after two probations; absent for three consecutive semesters |
+| **New entrants** (first year: 100L UTME, 200L or 300L direct entry) | First-semester GPA below 2.40 → Probation; below 2.40 again → Withdrawal |
+
+Calculator behaviour:
+
+- When the latest semester GPA or the CGPA is below 2.40, show a calm note: *"Below the 2.40 pass mark. Check the academic standing rules and speak to your level adviser."* The note never says "you are on probation".
+- Students enter, per course: course code (optional), units (1–3) and either a score or a grade. Scores map to grades using the table above.
+- Runs **entirely in the browser**; nothing is stored or sent. The scale is fetched from `/api/grading-scale` so admins can update it without code (bundled copy as a fallback).
+- Footnote: *"Calculated with the Faculty of Pharmacy grading scale (student handbook §3.5). Your official result is the one issued by the University."*
+- **Unit tests** cover:
+  - score boundaries: 39/40, 44/45, 49/50, 59/60, 69/70, 100;
+  - units outside 1–3 are rejected;
+  - zero total units and empty input;
+  - failed courses;
+  - rounding at x.xx5;
+  - the pass mark: 2.39 vs 2.40, including 2.395 rounding up to 2.40.
 
 ## Who owns which content
 
@@ -424,7 +466,7 @@ pans-unilag-website/
 │   │       ├── publications/
 │   │       ├── documents/           # constitution PDF etc.
 │   │       ├── resources/
-│   │       ├── grading/             # UNILAG scale + degree classes
+│   │       ├── grading/             # Faculty grading scale + pass mark
 │   │       ├── submissions/         # feedback + alumni
 │   │       ├── settings/            # contact, socials, quick links
 │   │       ├── placeholders/        # aggregated to-do list for admins
@@ -449,15 +491,15 @@ pans-unilag-website/
 | File | Built from | Placeholders inside |
 | --- | --- | --- |
 | `pages.json` | Content to Include PDF (sections 1–14) | None |
-| `executives.json` | 14 offices from the constitution | 13 officers (President filled) |
-| `senate.json` | Principal offices + 22 seats | All names |
+| `executives.json` | 14 offices from the constitution | 13 names (President's name filled); all bios and photos |
+| `senate.json` | The 4 principal offices | All names (election pending) |
 | `committees.json` | President's announcement + write-ups | 4 descriptions, all photos |
 | `patrons.json` | Constitution Art. 4 | All names |
 | `milestones.json` | To be supplied | All |
 | `events.json` | Health Week 2026 (9), Pharmalympics 2026 (9) | Dates and descriptions |
 | `albums.json` | Drive folders (curated) | None once photos are uploaded |
 | `publications.json` | To be supplied | Recipharm, newspaper, Substack |
-| `grading.json` | UNILAG scale + classes | None |
+| `grading.json` | Faculty handbook §3.5: grades, Pass/Fail bands, 1–3 units | None |
 | `settings.json` | Constitution contact address | Email, social handles |
 
 ## Architecture rules
@@ -533,7 +575,7 @@ All collections share `isPlaceholder` (boolean), `placeholderNote` (string), `cr
 | --- | --- | --- |
 | `pages` | slug (unique), title, sections[{ heading, bodyMarkdown, articleRefs[] }], order | About, Membership, Governance, Elections, Finance, Meetings, Student support |
 | `executives` | office (one of the 14), name, level, session, photo, bio (≤ 60 words), roleEmail, order | Earlier sessions build Past Executives |
-| `senate` | position (Senate President, Deputy Senate President, Senate Leader, Chief Whip, Senator), name, level, session | |
+| `senate` | position (Senate President, Deputy Senate President, Senate Leader, Chief Whip), name, level, session, order | Principal officers only for 2026/27 |
 | `committees` | name, shortName, slug (unique), description, activities[], achievements[], plans[], motto, officers[{ title, name, level }], session, order | 11 for 2026/27 |
 | `patrons` | name, title, isDean, order | |
 | `milestones` | year, title, description, verifiedBy | `verifiedBy` required unless placeholder |
@@ -544,7 +586,7 @@ All collections share `isPlaceholder` (boolean), `placeholderNote` (string), `cr
 | `publications` | title, series (`recipharm`, `newspaper`, `substack`), edition, date, cover, fileUrl or link | |
 | `documents` | title, version, approvedOn, approvedBy, fileUrl | Constitution adopted 9 July 2026 |
 | `resources` | title, level, semester, course, url, verifiedBy | |
-| `gradingscales` | grades[{ letter, min, max, point }], classes[{ name, min, max }], active, source | One active scale |
+| `gradingscales` | grades[{ letter, min, max, point }], bands[{ name, min, max }] (Pass/Fail), passMark (2.40), units { min: 1, max: 3 }, active, source | One active scale |
 | `settings` | contactEmail, socialLinks, quickLinks, homeBanner, postalAddress, location | Single document |
 | `feedback` | category (`suggestion`, `complaint`, `welfare`, `other`), message, contactEmail?, status, createdAt | Admin-only; deleted after 12 months |
 | `alumni` | name, graduationYear, email, phone?, interests[], consentAt | Admin-only; kept until opt-out |
@@ -599,7 +641,7 @@ Public (read-only unless noted):
 | GET | `/api/settings` | Contact, socials, quick links, banner |
 | GET | `/api/pages/:slug` | Constitution-derived page content |
 | GET | `/api/executives?session=` | Executive Council (current session by default) |
-| GET | `/api/senate?session=` | Senate |
+| GET | `/api/senate?session=` | Senate principal officers |
 | GET | `/api/committees`, `/api/committees/:slug` | Committees |
 | GET | `/api/patrons` | Patrons |
 | GET | `/api/milestones` | History timeline |
@@ -611,7 +653,7 @@ Public (read-only unless noted):
 | GET | `/api/publications?series=` | Publications |
 | GET | `/api/documents` | Constitution and approved documents |
 | GET | `/api/resources?level=&semester=` | Academic resources |
-| GET | `/api/grading-scale` | CGPA scale and degree classes |
+| GET | `/api/grading-scale` | Grading scale, Pass/Fail bands, pass mark and unit limits |
 | GET | `/api/search?q=` | Search (excludes placeholders) |
 | POST | `/api/feedback` | Feedback (rate-limited, anonymous allowed) |
 | POST | `/api/alumni` | Alumni details (rate-limited, consent required) |
@@ -802,6 +844,10 @@ Work flows top to bottom; items in the same row can run in parallel.
 | 14 Oct | Missing content ships as clearly marked placeholders, never invented content |
 | 14 Oct | CGPA uses the UNILAG standard 5-point scale, confirmed by the Faculty |
 | 14 Oct | Work is tracked as 46 GitHub issues; contributions follow CONTRIBUTING.md with squash-merged PRs |
+| 15 Oct | CGPA follows the Faculty of Pharmacy handbook §3.5: Pass 2.40–5.00 / Fail 0–2.39, no degree classes, 1–3 units per course; F read as 0–39 (handbook typo "<50", to confirm); academic standing (§3.7) shown as guidance |
+| 15 Oct | Senate page shows only the four principal officers, as placeholders until the Senate election |
+| 15 Oct | Executive cards show office, name, short bio and photo; names and bios to come from the President; photos after the October photoshoot (by 31 Oct) |
+| 15 Oct | Full constitution PDF received (55 pp., 7.1 MB) |
 
 ## Using the AI agent prompts (`.agent/`)
 
