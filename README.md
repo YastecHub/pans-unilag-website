@@ -730,6 +730,8 @@ Academics and site (live): `GET /api/grading-scale` returns the active scale `{ 
 
 Forms (live): `POST /api/feedback` (`category`, `message` 10–2000 characters, optional `contactEmail`; anonymous when left out) and `POST /api/alumni` (`name`, `graduationYear`, `email`, optional `phone`, `interests` from `mentoring`, `speaking`, `internships-and-jobs`, `events`, `supporting-pans`, and `consent: true`) reply `201 { "received": true }` and never echo what was sent. Each is limited to **5 per hour per IP** (429 `RATE_LIMITED`). Both forms carry a hidden `website` field: when a bot fills it the reply is the same but nothing is stored. Feedback is deleted automatically after 12 months (TTL index); signing up to the alumni network again with the same email updates the entry. No public endpoint reads submissions back; admins read them after sign-in (admin auth issue).
 
+Search (live): `GET /api/search?q=&type=&limit=` returns `{ query, results: [{ type, title, summary, url, externalUrl?, score }] }`, best match first (default 20, at most 50). It covers events, open opportunities, publications, resources and committees through one MongoDB text index per collection (title weighted ×10; whole words, so "pharm" does not match "pharmacy"). **Placeholders are never returned**, so most events and all publications appear only once their real content is in. `q` must be 2–100 characters (400 otherwise); quotes and minus signs are treated as ordinary text. `url` is the page on the site; resources also give `externalUrl`.
+
 Public (read-only unless noted):
 
 | Method | Path | Purpose |

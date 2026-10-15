@@ -1,5 +1,7 @@
 import { model, Schema } from 'mongoose'
 import { contentPlugin } from '../../../lib/contentPlugin.js'
+import { textIndex, textWeights } from '../../../lib/textIndex.js'
+import { SEARCH_FIELDS } from '../../search/application/hits.js'
 import { httpsUrlUnlessPlaceholder } from '../../../lib/urls.js'
 
 export const OPPORTUNITY_TYPES = [
@@ -33,5 +35,9 @@ const opportunitySchema = new Schema({
   lastCheckedAt: { type: Date },
 })
 opportunitySchema.plugin(contentPlugin)
+opportunitySchema.index(textIndex(SEARCH_FIELDS.opportunity), {
+  name: 'search',
+  weights: textWeights(SEARCH_FIELDS.opportunity),
+})
 
 export const OpportunityModel = model('Opportunity', opportunitySchema)

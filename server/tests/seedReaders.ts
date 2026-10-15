@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import type { Model } from 'mongoose'
 import type { Readers } from '../src/app.js'
+import { memorySearchSource } from './memorySearch.js'
 import type { StoredAlbum } from '../src/modules/albums/application/albumView.js'
 import { AlbumModel } from '../src/modules/albums/infrastructure/album.model.js'
 import { toCommitteeView } from '../src/modules/committees/application/committeeView.js'
@@ -107,5 +108,13 @@ export function seedReaders(): Readers {
     resources: { list: async () => [] },
     gradingScale: { findActive: async () => scales.find((s) => s.active) ?? null },
     settings: { find: async () => settings ?? null },
+    // Opportunities and resources have no seed data, so search starts with events, publications and committees.
+    search: [
+      memorySearchSource('event', events),
+      memorySearchSource('opportunity', []),
+      memorySearchSource('publication', publications),
+      memorySearchSource('resource', []),
+      memorySearchSource('committee', committees),
+    ],
   }
 }

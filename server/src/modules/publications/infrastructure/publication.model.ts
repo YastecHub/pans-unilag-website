@@ -1,5 +1,7 @@
 import { model, Schema } from 'mongoose'
 import { contentPlugin } from '../../../lib/contentPlugin.js'
+import { textIndex, textWeights } from '../../../lib/textIndex.js'
+import { SEARCH_FIELDS } from '../../search/application/hits.js'
 import { optionalHttpsUrl } from '../../../lib/urls.js'
 import { photoField } from '../../../lib/validators.js'
 
@@ -34,5 +36,9 @@ const publicationSchema = new Schema({
   link: optionalHttpsUrl,
 })
 publicationSchema.plugin(contentPlugin)
+publicationSchema.index(textIndex(SEARCH_FIELDS.publication), {
+  name: 'search',
+  weights: textWeights(SEARCH_FIELDS.publication),
+})
 
 export const PublicationModel = model('Publication', publicationSchema)

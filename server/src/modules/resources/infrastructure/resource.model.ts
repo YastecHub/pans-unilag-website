@@ -1,5 +1,7 @@
 import { model, Schema } from 'mongoose'
 import { contentPlugin } from '../../../lib/contentPlugin.js'
+import { textIndex, textWeights } from '../../../lib/textIndex.js'
+import { SEARCH_FIELDS } from '../../search/application/hits.js'
 import { httpsUrlUnlessPlaceholder } from '../../../lib/urls.js'
 import { LEVELS } from '../../../lib/validators.js'
 
@@ -29,6 +31,10 @@ const resourceSchema = new Schema({
   },
 })
 resourceSchema.plugin(contentPlugin)
+resourceSchema.index(textIndex(SEARCH_FIELDS.resource), {
+  name: 'search',
+  weights: textWeights(SEARCH_FIELDS.resource),
+})
 resourceSchema.index({ level: 1, semester: 1, course: 1 })
 
 export const ResourceModel = model('Resource', resourceSchema)
