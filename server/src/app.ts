@@ -39,6 +39,8 @@ import { adminRouter } from './modules/admin/http/admin.routes.js'
 import { mongoAdminCollection } from './modules/admin/infrastructure/mongoAdminCollection.js'
 import { mongoPlaceholderSources } from './modules/admin/infrastructure/placeholder.sources.js'
 import { mongoSubmissionAdminStore } from './modules/admin/infrastructure/submissionsAdmin.store.js'
+import type { MediaConfig } from './modules/media/application/mediaFolders.js'
+import { mediaRouter } from './modules/media/http/media.routes.js'
 import type { AdminStore } from './modules/auth/application/adminView.js'
 import { authRouter } from './modules/auth/http/auth.routes.js'
 import { mongoAdminStore } from './modules/auth/infrastructure/admin.store.js'
@@ -109,6 +111,8 @@ export type AuthOptions = {
   adminCollections?: Partial<Record<AdminResourceName, AdminCollection>>
   placeholderSources?: PlaceholderSource[]
   submissionAdmin?: SubmissionAdminStore
+  /** Cloudinary credentials for signing dashboard uploads. Without them, signing returns 503. */
+  media?: MediaConfig
 }
 
 export type Readers = {
@@ -226,6 +230,7 @@ export function createApp({
         auth.adminCollections?.[r.name] ?? mongoAdminCollection(r.model),
       ]),
     ) as Record<AdminResourceName, AdminCollection>
+    app.use('/api/admin/media', guard.requireAdmin, mediaRouter(auth.media, now))
     app.use(
       '/api/admin',
       guard.requireAdmin,
