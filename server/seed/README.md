@@ -4,12 +4,12 @@ JSON files in this folder are loaded into MongoDB by the seed script. They hold 
 
 ## Commands (from the repository root)
 
-| Command | What it does |
-| --- | --- |
-| `npm run seed -w server` | Adds documents that don't exist yet. **Never changes existing ones**, so content edited in the dashboard is safe. Run it as often as you like. |
-| `npm run seed -w server -- --update` | Also overwrites existing documents with the values in these files. Use only to deliberately refresh seed content. |
-| `npm run seed -w server -- --reset` | Empties the seeded collections, then seeds. **Development only**: refuses to run when `NODE_ENV=production`. |
-| `npm run seed:check -w server` | Validates the files against the models without a database. Also runs in CI (`server/tests/seedFiles.test.ts`). |
+| Command                              | What it does                                                                                                                                   |
+| ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `npm run seed -w server`             | Adds documents that don't exist yet. **Never changes existing ones**, so content edited in the dashboard is safe. Run it as often as you like. |
+| `npm run seed -w server -- --update` | Also overwrites existing documents with the values in these files. Use only to deliberately refresh seed content.                              |
+| `npm run seed -w server -- --reset`  | Empties the seeded collections, then seeds. **Development only**: refuses to run when `NODE_ENV=production`.                                   |
+| `npm run seed:check -w server`       | Validates the files against the models without a database. Also runs in CI (`server/tests/seedFiles.test.ts`).                                 |
 
 The script reads `MONGODB_URI` from `server/.env` and prints the database it is about to write to. Every file is validated before anything is written, so a mistake never leaves a half-seeded database.
 
@@ -27,21 +27,23 @@ The script reads `MONGODB_URI` from `server/.env` and prints the database it is 
 
 ## Files, keys and shapes
 
-The fields follow the main README's *Data model*. The issue that adds each model and file (#9–#12) confirms the exact fields in its PR and updates this table.
+The fields follow the main README's _Data model_. The issue that adds each model and file (#9–#12) confirms the exact fields in its PR and updates this table.
 
-| File | Key | Issue |
-| --- | --- | --- |
-| `pages.json` | `slug` | #9 |
-| `executives.json` | `session`, `office` | #10 |
-| `senate.json` | `session`, `position` | #10 |
-| `patrons.json` | `order` | #10 |
-| `committees.json` | `slug` | #11 |
-| `events.json` | `slug` | #12 |
-| `grading.json` | `slug` | #12 |
-| `settings.json` | `key` (always `"site"`: one document) | #12 |
-| `milestones.json`, `albums.json`, `publications.json` | `slug` | later content issues |
+| File                                                  | Key                                   | Issue                |
+| ----------------------------------------------------- | ------------------------------------- | -------------------- |
+| `pages.json`                                          | `slug`                                | #9                   |
+| `executives.json`                                     | `session`, `office`                   | #10                  |
+| `senate.json`                                         | `session`, `position`                 | #10                  |
+| `patrons.json`                                        | `order`                               | #10                  |
+| `committees.json`                                     | `slug`                                | #11                  |
+| `events.json`                                         | `slug`                                | #12                  |
+| `grading.json`                                        | `slug`                                | #12                  |
+| `settings.json`                                       | `key` (always `"site"`: one document) | #12                  |
+| `milestones.json`, `albums.json`, `publications.json` | `slug`                                | later content issues |
 
 ### `pages.json`
+
+Eleven pages built from *Content to Include* (sections 2–14): who-we-are, membership-and-rights, governance (incl. standing committees), executive-council (office duties), senate, elections, finance-and-accountability, meetings-and-procedures, student-support, constitution, contact. Officer duties live here, not in `executives.json`. `bodyMarkdown` is Markdown; every section cites at least one article.
 
 ```json
 [
@@ -50,7 +52,11 @@ The fields follow the main README's *Data model*. The issue that adds each model
     "title": "Who we are",
     "order": 1,
     "sections": [
-      { "heading": "Our motto", "bodyMarkdown": "**Service to Humanity**", "articleRefs": ["Art. 2"] }
+      {
+        "heading": "Our motto",
+        "bodyMarkdown": "**Service to Humanity**",
+        "articleRefs": ["Art. 2"]
+      }
     ]
   }
 ]
@@ -100,7 +106,14 @@ The fields follow the main README's *Data model*. The issue that adds each model
 
 ```json
 [
-  { "order": 1, "title": "Dean, Faculty of Pharmacy", "isDean": true, "name": "Name to be announced", "isPlaceholder": true, "placeholderNote": "Dean's name needed" }
+  {
+    "order": 1,
+    "title": "Dean, Faculty of Pharmacy",
+    "isDean": true,
+    "name": "Name to be announced",
+    "isPlaceholder": true,
+    "placeholderNote": "Dean's name needed"
+  }
 ]
 ```
 
@@ -163,7 +176,10 @@ The fields follow the main README's *Data model*. The issue that adds each model
     "active": true,
     "source": "Faculty of Pharmacy student handbook §3.5, p. 22",
     "grades": [{ "letter": "A", "min": 70, "max": 100, "point": 5 }],
-    "bands": [{ "name": "Pass", "min": 2.4, "max": 5 }, { "name": "Fail", "min": 0, "max": 2.39 }],
+    "bands": [
+      { "name": "Pass", "min": 2.4, "max": 5 },
+      { "name": "Fail", "min": 0, "max": 2.39 }
+    ],
     "passMark": 2.4,
     "units": { "min": 1, "max": 3 }
   }
