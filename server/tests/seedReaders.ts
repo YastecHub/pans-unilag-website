@@ -1,0 +1,72 @@
+import { readFileSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
+import type { Model } from 'mongoose'
+import type { Readers } from '../src/app.js'
+import { toCommitteeView } from '../src/modules/committees/application/committeeView.js'
+import { CommitteeModel } from '../src/modules/committees/infrastructure/committee.model.js'
+import { toExecutiveView } from '../src/modules/executives/application/executiveView.js'
+import { ExecutiveModel } from '../src/modules/executives/infrastructure/executive.model.js'
+import { toPageView } from '../src/modules/pages/application/pageView.js'
+import { PageModel } from '../src/modules/pages/infrastructure/page.model.js'
+import { toPatronView } from '../src/modules/patrons/application/patronView.js'
+import { PatronModel } from '../src/modules/patrons/infrastructure/patron.model.js'
+import { toSenatorView } from '../src/modules/senate/application/senatorView.js'
+import { SenatorModel } from '../src/modules/senate/infrastructure/senator.model.js'
+
+/**
+ * Seed file entries as MongoDB would store them: each is passed through its model,
+ * so schema defaults (empty bio, level, …) are filled in exactly as after `npm run seed`.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function storedSeed<T>(file: string, model: Model<any>): T[] {
+  const raw = JSON.parse(
+    readFileSync(fileURLToPath(new URL(`../seed/${file}`, import.meta.url)), 'utf8'),
+  ) as object[]
+  return raw.map((entry) => new model(entry).toObject() as T)
+}
+
+const byOrder = <T extends { order: number }>(items: T[]) =>
+  [...items].sort((a, b) => a.order - b.order)
+
+/** In-memory readers over the real seed files, so API tests need no database. */
+export function seedReaders(): Readers {
+  const pages = storedSeed<Parameters<typeof toPageView>[0]>('pages.json', PageModel)
+  const executives = storedSeed<Parameters<typeof toExecutiveView>[0]>(
+    'executives.json',
+    ExecutiveModel,
+  )
+  const senate = storedSeed<Parameters<typeof toSenatorView>[0]>('senate.json', SenatorModel)
+  const committees = storedSeed<Parameters<typeof toCommitteeView>[0]>(
+    'committees.json',
+    CommitteeModel,
+  )
+  const patrons = storedSeed<Parameters<typeof toPatronView>[0]>('patrons.json', PatronModel)
+
+  const sessionReader = <S extends { session: string; order: number }, V>(
+    items: S[],
+    toView: (s: S) => V,
+  ) => ({
+    sessions: async () => items.map((i) => i.session),
+    listBySession: async (session: string) =>
+      byOrder(items.filter((i) => i.session === session)).map(toView),
+  })
+
+  return {
+    pages: {
+      findBySlug: async (slug) => {
+        const page = pages.find((p) => p.slug === slug)
+        return page ? toPageView(page) : null
+      },
+    },
+    executives: sessionReader(executives, toExecutiveView),
+    senate: sessionReader(senate, toSenatorView),
+    committees: {
+      ...sessionReader(committees, toCommitteeView),
+      findBySlug: async (slug) => {
+        const committee = committees.find((c) => c.slug === slug)
+        return committee ? toCommitteeView(committee) : null
+      },
+    },
+    patrons: { list: async () => byOrder(patrons).map(toPatronView) },
+  }
+}

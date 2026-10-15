@@ -45,3 +45,25 @@ export const errors = {
   rateLimited: { '429': errorResponse('Too many requests (RATE_LIMITED)') },
   internal: { '500': errorResponse('Unexpected error (INTERNAL_ERROR)') },
 } satisfies Record<string, ZodOpenApiResponsesObject>
+
+/** Spread into every public content schema: the placeholder flag and, while it applies, what is missing. */
+export const placeholderShape = {
+  isPlaceholder: z.boolean().meta({
+    description: 'True while the real content is missing; show it as a placeholder',
+  }),
+  placeholderNote: z
+    .string()
+    .optional()
+    .meta({ description: 'What is missing; only sent while isPlaceholder is true' }),
+}
+
+/** Fields of every session-based list response (Executive Council, Senate, committees). */
+export const sessionListShape = {
+  session: z.string().nullable().meta({
+    description: 'The session shown; null when there is no data yet',
+    example: '2026/2027',
+  }),
+  sessions: z
+    .array(z.string())
+    .meta({ description: 'Sessions with data, newest first', example: ['2026/2027'] }),
+}

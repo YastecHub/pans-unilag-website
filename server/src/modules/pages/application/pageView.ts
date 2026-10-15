@@ -1,14 +1,12 @@
 import type { ContentFields } from '../../../lib/contentPlugin.js'
+import { type PlaceholderView, placeholderView } from '../../../lib/publicView.js'
 
 /** What the public API returns for one page. Built from the stored document so internal fields never leak. */
-export type PageView = {
+export type PageView = PlaceholderView & {
   slug: string
   title: string
   order: number
   sections: { heading: string; bodyMarkdown: string; articleRefs: string[] }[]
-  isPlaceholder: boolean
-  /** Only present while the page is a placeholder. */
-  placeholderNote?: string
   /** ISO date-time of the last edit, for "Last updated" lines. */
   updatedAt?: string
 }
@@ -29,10 +27,7 @@ export function toPageView(page: StoredPage): PageView {
       bodyMarkdown,
       articleRefs: articleRefs ?? [],
     })),
-    isPlaceholder: page.isPlaceholder ?? false,
-    ...(page.isPlaceholder && page.placeholderNote
-      ? { placeholderNote: page.placeholderNote }
-      : {}),
+    ...placeholderView(page),
     ...(page.updatedAt ? { updatedAt: new Date(page.updatedAt).toISOString() } : {}),
   }
 }

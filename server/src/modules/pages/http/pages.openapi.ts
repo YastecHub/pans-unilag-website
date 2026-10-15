@@ -1,16 +1,9 @@
 import { z } from 'zod'
 import type { ZodOpenApiPathsObject } from 'zod-openapi'
-import { errors } from '../../../docs/schemas.js'
+import { errors, placeholderShape } from '../../../docs/schemas.js'
+import { slugParamsSchema } from '../../../lib/slug.js'
 
-export const SLUG_PATTERN = /^[a-z0-9]+(-[a-z0-9]+)*$/
-
-export const pageParamsSchema = z.strictObject({
-  slug: z
-    .string()
-    .max(80)
-    .regex(SLUG_PATTERN, 'Use lower-case words joined by hyphens, e.g. "who-we-are"')
-    .meta({ description: 'Page slug', example: 'who-we-are' }),
-})
+export const pageParamsSchema = slugParamsSchema('who-we-are')
 
 const sectionSchema = z.object({
   heading: z.string(),
@@ -26,11 +19,7 @@ export const pageResponseSchema = z
     title: z.string(),
     order: z.number().int().meta({ description: 'Position in the About section navigation' }),
     sections: z.array(sectionSchema),
-    isPlaceholder: z.boolean(),
-    placeholderNote: z
-      .string()
-      .optional()
-      .meta({ description: 'What is missing; only sent while isPlaceholder is true' }),
+    ...placeholderShape,
     updatedAt: z.iso.datetime().optional().meta({ description: 'Last edit' }),
   })
   .meta({

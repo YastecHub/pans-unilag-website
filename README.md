@@ -719,6 +719,8 @@ Unexpected crashes outside a request (an unhandled promise rejection or exceptio
 
 `GET /api/pages/:slug` (live) returns `{ slug, title, order, sections: [{ heading, bodyMarkdown, articleRefs }], isPlaceholder, placeholderNote?, updatedAt }`; unknown slug → 404 `NOT_FOUND`, malformed slug → 400 `VALIDATION_ERROR`. Cached for 5 minutes (`Cache-Control: public, max-age=300`).
 
+Leadership (live): `GET /api/executives`, `GET /api/senate` and `GET /api/committees` return `{ session, sessions, <items> }`. Without `?session=` they use the newest session that has data, so seeding the next Exco switches the site over; a session without data returns an empty list, and a malformed one returns 400. `GET /api/committees/:slug` returns one committee (404 if unknown); `GET /api/patrons` returns `{ patrons }` with the Dean first. Placeholders come back with `isPlaceholder: true` and their `placeholderNote`; every response is cached for 5 minutes.
+
 Public (read-only unless noted):
 
 | Method | Path | Purpose |
