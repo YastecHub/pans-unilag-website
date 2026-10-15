@@ -1,4 +1,5 @@
 import { Link } from 'react-router'
+import { Placeholder } from '../../components/ui/Placeholder.tsx'
 import { usePageTitle } from '../../lib/usePageTitle.ts'
 
 /**
@@ -16,10 +17,7 @@ export function AdminApp() {
       </header>
       <main id="main" className="mx-auto flex w-full max-w-3xl flex-col gap-4 px-4 py-12">
         <h1 className="text-h2">Admin</h1>
-        <div className="rounded-xl border-2 border-dashed border-text-muted bg-surface-alt p-6 text-text-muted">
-          <p className="font-medium text-text">Coming soon</p>
-          <p>Admin sign-in and editors are being built (issues #37 to #39).</p>
-        </div>
+        <Placeholder note="Admin sign-in and editors are being built (issues #37 to #39)." />
         <p>
           <Link to="/">Back to the website</Link>
         </p>
