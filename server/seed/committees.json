@@ -1,0 +1,337 @@
+[
+  {
+    "slug": "admap",
+    "name": "Anti-Drug Misuse and Abuse Program (ADMAP)",
+    "shortName": "ADMAP",
+    "session": "2026/2027",
+    "order": 1,
+    "officers": [
+      {
+        "title": "Lead",
+        "name": "Dada Aishat",
+        "level": "500L"
+      },
+      {
+        "title": "Assistant",
+        "name": "Akintomide Oluwatomilola Maizah",
+        "level": "300L"
+      }
+    ],
+    "description": "The Anti-Drug Misuse and Abuse Program (ADMAP) Committee is dedicated to advocating against drug misuse and abuse while promoting a healthier, safer, and drug-misuse-free society. Within PANS, the committee raises awareness among PANSites and the wider community about the dangers and consequences of drug misuse, encouraging responsible medication use and informed health decisions.\n\nADMAP contributes to PANS by advancing public health education and empowering PANSites to become advocates for responsible medication practices. Through sustained education, advocacy, and collective action, the committee aims to expand its reach and foster a well-informed society where drug misuse and abuse are prevented and their harmful effects reduced.",
+    "activities": [
+      "Educational programmes",
+      "Awareness campaigns",
+      "Community outreach",
+      "Its flagship rallies",
+      "Collaboration with healthcare professionals, organisations and stakeholders to support its advocacy"
+    ],
+    "achievements": [],
+    "plans": []
+  },
+  {
+    "slug": "content",
+    "name": "Content Committee",
+    "shortName": "Content",
+    "session": "2026/2027",
+    "order": 2,
+    "officers": [
+      {
+        "title": "Lead",
+        "name": "Obe Ipinuoluwa Deborah",
+        "level": "500L"
+      },
+      {
+        "title": "Assistant",
+        "name": "Ayanwola Favour",
+        "level": "300L"
+      }
+    ],
+    "description": "",
+    "activities": [],
+    "achievements": [],
+    "plans": [],
+    "isPlaceholder": true,
+    "placeholderNote": "Write-up (description, activities, plans) needed from the committee"
+  },
+  {
+    "slug": "media",
+    "name": "Media Committee",
+    "shortName": "Media",
+    "session": "2026/2027",
+    "order": 3,
+    "officers": [
+      {
+        "title": "Lead",
+        "name": "Adekunle Oluwatimileyin",
+        "level": "300L"
+      },
+      {
+        "title": "Assistant",
+        "name": "Sobayo Eniola Olamide",
+        "level": "300L"
+      }
+    ],
+    "description": "",
+    "activities": [],
+    "achievements": [],
+    "plans": [],
+    "isPlaceholder": true,
+    "placeholderNote": "Write-up (description, activities, plans) needed from the committee"
+  },
+  {
+    "slug": "design",
+    "name": "Design Committee",
+    "shortName": "Design",
+    "session": "2026/2027",
+    "order": 4,
+    "officers": [
+      {
+        "title": "Lead",
+        "name": "Odey Martins Wohu-owo",
+        "level": "400L"
+      },
+      {
+        "title": "Assistant",
+        "name": "Inyang Joel Ifiok",
+        "level": "300L"
+      }
+    ],
+    "description": "",
+    "activities": [],
+    "achievements": [],
+    "plans": [],
+    "isPlaceholder": true,
+    "placeholderNote": "Write-up (description, activities, plans) needed from the committee"
+  },
+  {
+    "slug": "ppht",
+    "name": "PANS Public Health Team",
+    "shortName": "PPHT",
+    "session": "2026/2027",
+    "order": 5,
+    "officers": [
+      {
+        "title": "Lead",
+        "name": "Kosiso Okonkwo",
+        "level": "500L"
+      },
+      {
+        "title": "Assistant",
+        "name": "Uzoka Ugochukwu Samuel",
+        "level": "400L"
+      }
+    ],
+    "description": "The PANS Public Health Team (PPHT) is a subsidiary of the Pharmaceutical Association of Nigeria Students (PANS), University of Lagos, dedicated to promoting public health awareness, disease prevention, and community well-being through health education, medical outreaches, and public health campaigns.\n\nThrough its initiatives, PPHT provides pharmacy students with opportunities to apply their knowledge beyond the classroom, develop practical public health skills, engage with communities, and understand the pharmacist’s role in promoting public health. Members contribute through project planning, research, health education, logistics, partnerships, and documentation, fostering teamwork and community service.\n\nPPHT welcomes pharmacy students who want to explore opportunities beyond academics, develop practical skills, and make a positive impact on society. At PPHT, there’s room for every pharmacy student who wants to do more than just academics. There’s a place for you.",
+    "activities": [
+      "The medical outreach component of PANS Health Week",
+      "The Know Your Drug series",
+      "World Malaria Day activities",
+      "Awareness campaigns commemorating global health days"
+    ],
+    "achievements": [
+      "Medical Outreach and Charity Drive 2026",
+      "First aid training",
+      "Faculty outreach",
+      "Sexual and Reproductive Health Awareness Day 2026",
+      "World Antimicrobial Awareness Day, organised in collaboration with other PANS committees and student organisations"
+    ],
+    "plans": [
+      "Strengthen existing initiatives",
+      "Expand collaborations",
+      "Create more opportunities for students to take part in meaningful public health activities and improve community health outcomes"
+    ]
+  },
+  {
+    "slug": "sdg",
+    "name": "Sustainable Development Goals (SDG) Committee",
+    "shortName": "SDG",
+    "session": "2026/2027",
+    "order": 6,
+    "officers": [
+      {
+        "title": "Lead",
+        "name": "Anjolaoluwa Oguntade",
+        "level": "500L"
+      },
+      {
+        "title": "Assistant",
+        "name": "Anekwe Chioma Jennifer",
+        "level": "400L"
+      }
+    ],
+    "description": "The Sustainable Development Goals (SDG) Committee of the Pharmaceutical Association of Nigeria Students (PANS), University of Lagos, promotes awareness and implementation of the United Nations Sustainable Development Goals through advocacy, health education, community service, and sustainable development initiatives.\n\nThrough its initiatives, it encourages PANSites to embrace social responsibility and contribute to sustainable development within and beyond the university community. Guided by the principle “From Awareness to Action, From Service to Impact,” the committee remains committed to turning awareness into meaningful community impact.",
+    "activities": [
+      "SDG awareness campaigns",
+      "Environmental projects",
+      "Community health outreaches",
+      "Collaborative initiatives addressing social and health-related challenges"
+    ],
+    "achievements": [
+      "A flagship SDG awareness project",
+      "An environmental project",
+      "A collaborative Women’s Day awareness initiative"
+    ],
+    "plans": [
+      "The Campus Challenge",
+      "Maternal health outreaches",
+      "Community health and sanitation awareness walks",
+      "Interactive SDG learning sessions"
+    ],
+    "motto": "From Awareness to Action, From Service to Impact"
+  },
+  {
+    "slug": "research-club",
+    "name": "PANS Research Club",
+    "shortName": "Research Club",
+    "session": "2026/2027",
+    "order": 7,
+    "officers": [
+      {
+        "title": "Lead",
+        "name": "Abdulqoyyum Olayinka Shittu",
+        "level": "500L"
+      },
+      {
+        "title": "Assistant",
+        "name": "Arifalo Rufus",
+        "level": "400L"
+      }
+    ],
+    "description": "The PANS Research Club of the Pharmaceutical Association of Nigeria Students (PANS), University of Lagos, is dedicated to developing research knowledge, practical skills, and critical thinking among pharmacy students from the early stages of their academic journey.\n\nThrough its initiatives, the PANS Research Club seeks to foster a research-oriented mindset among pharmacy students, encouraging scientific inquiry, innovation, and the development of meaningful solutions to challenges in pharmacy and healthcare.",
+    "activities": [
+      "Research methodology and scientific writing training",
+      "Journal reviews",
+      "Knowledge-sharing sessions",
+      "Computer-Aided Drug Design (CADD) training, in collaboration with the Faculty of Pharmacy Computational Research Unit (FAPCRU)"
+    ],
+    "achievements": [
+      "Foundational research writing training",
+      "Practical CADD training opportunities, also extended to PANSites beyond the club"
+    ],
+    "plans": [
+      "A research conference",
+      "Preparing final-year students for undergraduate research projects",
+      "More practical research opportunities",
+      "Encouraging student-led publications"
+    ]
+  },
+  {
+    "slug": "cpd-cbc",
+    "name": "Career and Professional Development & Capacity Building Committee",
+    "shortName": "CPD & CBC",
+    "session": "2026/2027",
+    "order": 8,
+    "officers": [
+      {
+        "title": "Lead",
+        "name": "Oladimeji Halimah Oladunmomi",
+        "level": "400L"
+      },
+      {
+        "title": "Assistant",
+        "name": "Daramola Babalola",
+        "level": "300L"
+      }
+    ],
+    "description": "The Career and Professional Development (CPD) & Capacity Building Committee (CBC) of the Pharmaceutical Association of Nigeria Students (PANS), University of Lagos, prepares pharmacy students for life beyond the classroom by promoting career development, practical skills, mentorship, and access to professional opportunities. Formed through the merger of two committees, it combines career guidance with capacity building to help PANSites make informed decisions about their professional journeys.\n\nThrough its initiatives, CPD & CBC seeks to equip PANSites with the skills, guidance, and confidence to pursue opportunities and navigate their professional journeys successfully.",
+    "activities": [],
+    "achievements": [
+      "The Japa Programme: a webinar on international study opportunities, scholarships, research and professional practice for pharmacists"
+    ],
+    "plans": [
+      "Career exploration sessions",
+      "Internship preparation",
+      "Mentorship programmes",
+      "Public speaking and pitching training",
+      "Practical support with CV writing, LinkedIn optimisation and applications",
+      "The PANS Opportunities Hub for sharing scholarships, internships and other opportunities",
+      "A Skills Library of useful resources and training materials",
+      "Stronger connections between students, alumni and industry professionals"
+    ]
+  },
+  {
+    "slug": "academics",
+    "name": "Academics Committee",
+    "shortName": "Academics",
+    "session": "2026/2027",
+    "order": 9,
+    "officers": [
+      {
+        "title": "Lead",
+        "name": "John Oguntoyinbo",
+        "level": "500L"
+      },
+      {
+        "title": "Assistant",
+        "name": "Emmanuel Naomi",
+        "level": "400L"
+      }
+    ],
+    "description": "",
+    "activities": [],
+    "achievements": [],
+    "plans": [],
+    "isPlaceholder": true,
+    "placeholderNote": "Write-up (description, activities, plans) needed from the committee"
+  },
+  {
+    "slug": "alumni-network",
+    "name": "PANS Alumni Network Committee",
+    "shortName": "Alumni Network",
+    "session": "2026/2027",
+    "order": 10,
+    "officers": [
+      {
+        "title": "Chairman",
+        "name": "Echezonah Momah",
+        "level": ""
+      },
+      {
+        "title": "Secretary",
+        "name": "Solola Amos",
+        "level": ""
+      }
+    ],
+    "description": "The Alumni and Network Committee of the Pharmaceutical Association of Nigeria Students (PANS), University of Lagos, is dedicated to building and maintaining cordial, lasting relationships between PANS-UNILAG and its alumni for the mutual benefit of both parties.\n\nAs a newly established committee, its initial focus is to create effective communication channels that keep alumni connected to the association and encourage their involvement in PANS activities, making it easier for PANS to connect with former members and benefit from their experience, support, and contributions.",
+    "activities": [],
+    "achievements": [],
+    "plans": [
+      "Effective communication channels that keep alumni connected to the association",
+      "Alumni involvement in PANS activities",
+      "A strong alumni network in which graduates remain connected as ambassadors of PANS, sharing their experiences and supporting the association’s growth"
+    ]
+  },
+  {
+    "slug": "ipsf",
+    "name": "International Pharmaceutical Students’ Federation (IPSF) UNILAG",
+    "shortName": "IPSF",
+    "session": "2026/2027",
+    "order": 11,
+    "officers": [
+      {
+        "title": "Local Exchange Officer (LEO)",
+        "name": "Kehinde Dora",
+        "level": "500L"
+      },
+      {
+        "title": "Local Liaison Officer (LLO)",
+        "name": "Obatomisin Grace Obafemi",
+        "level": "300L"
+      }
+    ],
+    "description": "The International Pharmaceutical Students’ Federation (IPSF) Committee of the Pharmaceutical Association of Nigeria Students (PANS), University of Lagos, promotes awareness of IPSF and its programmes, connecting PANSites with international opportunities in pharmacy, professional development, and public health.\n\nThrough these efforts, the IPSF Committee seeks to help PANSites become informed, globally minded pharmacy students equipped to learn, collaborate, and contribute to the advancement of pharmacy and public health.",
+    "activities": [
+      "Promoting the IPSF Student Exchange Programme",
+      "Sharing educational and scientific resources",
+      "Professional development opportunities",
+      "Relevant public health campaigns"
+    ],
+    "achievements": [],
+    "plans": [
+      "Increase IPSF awareness",
+      "Encourage participation in international exchange programmes",
+      "Strengthen knowledge sharing",
+      "Expand student engagement with the global pharmaceutical community"
+    ]
+  }
+]
