@@ -744,6 +744,14 @@ npm run create-admin -w server -- --email secretary@example.com --remove
 
 A new or reset password (24 random characters) is printed once; share it privately. Roles: `admin` (everything) and `editor` (content only).
 
+Dashboard API (live, all behind `requireAdmin`, 401 without a session):
+
+- `GET/POST /api/admin/{announcements,events,opportunities}` and `GET/PATCH/DELETE /api/admin/{…}/:id`. Bodies are validated with Zod (unknown fields rejected) **and** by the Mongoose model, including cross-field rules such as event dates; a duplicate slug returns 409. In PATCH, `null` clears a field. **Saving clears `isPlaceholder` and `placeholderNote`** unless the body sends `isPlaceholder: true`. Lists are most recently updated first (`?page=&pageSize=`, at most 100).
+- `GET /api/admin/placeholders` returns `{ total, groups: [{ collection, page, path, items: [{ id, label, note, updatedAt }] }] }`: every placeholder on the site, grouped by the page it appears on, as the admins' to-do list.
+- `GET /api/admin/submissions/feedback?status=new|read|resolved`, `PATCH /api/admin/submissions/feedback/:id` (`{ status }`), `GET /api/admin/submissions/alumni`, `DELETE /api/admin/submissions/alumni/:id` (removal requests).
+
+Add a resource to the dashboard by adding it to `ADMIN_RESOURCES` in `server/src/modules/admin/application/adminResources.ts`.
+
 Public (read-only unless noted):
 
 | Method | Path | Purpose |
