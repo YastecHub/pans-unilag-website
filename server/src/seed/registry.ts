@@ -1,4 +1,5 @@
 import type { Model } from 'mongoose'
+import { CommitteeModel } from '../modules/committees/infrastructure/committee.model.js'
 import { ExecutiveModel } from '../modules/executives/infrastructure/executive.model.js'
 import { PageModel } from '../modules/pages/infrastructure/page.model.js'
 import { PatronModel } from '../modules/patrons/infrastructure/patron.model.js'
@@ -27,4 +28,5 @@ export const SEED_TARGETS: SeedTarget[] = [
   { file: 'executives.json', model: ExecutiveModel, key: ['session', 'office'] },
   { file: 'senate.json', model: SenatorModel, key: ['session', 'position'] },
   { file: 'patrons.json', model: PatronModel, key: ['order'] },
+  { file: 'committees.json', model: CommitteeModel, key: ['slug'] },
 ]
