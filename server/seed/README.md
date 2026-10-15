@@ -43,7 +43,7 @@ The fields follow the main README's _Data model_. The issue that adds each model
 
 ### `pages.json`
 
-Eleven pages built from *Content to Include* (sections 2–14): who-we-are, membership-and-rights, governance (incl. standing committees), executive-council (office duties), senate, elections, finance-and-accountability, meetings-and-procedures, student-support, constitution, contact. Officer duties live here, not in `executives.json`. `bodyMarkdown` is Markdown; every section cites at least one article.
+Eleven pages built from _Content to Include_ (sections 2–14): who-we-are, membership-and-rights, governance (incl. standing committees), executive-council (office duties), senate, elections, finance-and-accountability, meetings-and-procedures, student-support, constitution, contact. Officer duties live here, not in `executives.json`. `bodyMarkdown` is Markdown; every section cites at least one article.
 
 ```json
 [

@@ -1,0 +1,34 @@
+[
+  {
+    "session": "2026/2027",
+    "position": "Senate President",
+    "order": 1,
+    "name": "Election pending",
+    "isPlaceholder": true,
+    "placeholderNote": "The 2026/27 Senate election has not been held yet"
+  },
+  {
+    "session": "2026/2027",
+    "position": "Deputy Senate President",
+    "order": 2,
+    "name": "Election pending",
+    "isPlaceholder": true,
+    "placeholderNote": "The 2026/27 Senate election has not been held yet"
+  },
+  {
+    "session": "2026/2027",
+    "position": "Senate Leader",
+    "order": 3,
+    "name": "Election pending",
+    "isPlaceholder": true,
+    "placeholderNote": "The 2026/27 Senate election has not been held yet"
+  },
+  {
+    "session": "2026/2027",
+    "position": "Chief Whip",
+    "order": 4,
+    "name": "Election pending",
+    "isPlaceholder": true,
+    "placeholderNote": "The 2026/27 Senate election has not been held yet"
+  }
+]

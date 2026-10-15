@@ -1,0 +1,42 @@
+[
+  {
+    "order": 1,
+    "title": "Dean, Faculty of Pharmacy",
+    "isDean": true,
+    "name": "Name to be announced",
+    "isPlaceholder": true,
+    "placeholderNote": "Name of the Dean of the Faculty of Pharmacy needed"
+  },
+  {
+    "order": 2,
+    "title": "Patron",
+    "isDean": false,
+    "name": "Name to be announced",
+    "isPlaceholder": true,
+    "placeholderNote": "Patron appointed by the Executive Council and approved by the Senate; name needed"
+  },
+  {
+    "order": 3,
+    "title": "Patron",
+    "isDean": false,
+    "name": "Name to be announced",
+    "isPlaceholder": true,
+    "placeholderNote": "Patron appointed by the Executive Council and approved by the Senate; name needed"
+  },
+  {
+    "order": 4,
+    "title": "Patron",
+    "isDean": false,
+    "name": "Name to be announced",
+    "isPlaceholder": true,
+    "placeholderNote": "Patron appointed by the Executive Council and approved by the Senate; name needed"
+  },
+  {
+    "order": 5,
+    "title": "Patron",
+    "isDean": false,
+    "name": "Name to be announced",
+    "isPlaceholder": true,
+    "placeholderNote": "Patron appointed by the Executive Council and approved by the Senate; name needed"
+  }
+]
