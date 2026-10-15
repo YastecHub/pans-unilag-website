@@ -45,6 +45,12 @@ import { mongoPageReader } from './modules/pages/infrastructure/page.repository.
 import type { PatronReader } from './modules/patrons/application/patronView.js'
 import { patronsRouter } from './modules/patrons/http/patrons.routes.js'
 import { mongoPatronReader } from './modules/patrons/infrastructure/patron.repository.js'
+import type { SubmissionStore } from './modules/submissions/application/submissionRules.js'
+import {
+  type FormRateLimit,
+  submissionsRouter,
+} from './modules/submissions/http/submissions.routes.js'
+import { mongoSubmissionStore } from './modules/submissions/infrastructure/submission.store.js'
 import type { SenatorReader } from './modules/senate/application/senatorView.js'
 import { senateRouter } from './modules/senate/http/senate.routes.js'
 import { mongoSenatorReader } from './modules/senate/infrastructure/senator.repository.js'
@@ -66,6 +72,10 @@ export type AppOptions = {
   readers?: Partial<Readers>
   /** The current time, for upcoming/past events, active announcements and open opportunities. Tests pass a fixed time. */
   now?: () => Date
+  /** Where form submissions are written. Defaults to MongoDB; tests pass an in-memory store. */
+  submissions?: SubmissionStore
+  /** Per-IP limit for each form (default 5 per hour). */
+  formRateLimit?: FormRateLimit
 }
 
 export type Readers = {
@@ -114,6 +124,8 @@ export function createApp({
   logRequests = false,
   readers: readerOverrides,
   now = () => new Date(),
+  submissions = mongoSubmissionStore,
+  formRateLimit,
 }: AppOptions): Express {
   const app = express()
   const readers = { ...mongoReaders, ...readerOverrides }
@@ -154,6 +166,7 @@ export function createApp({
   app.use('/api/resources', resourcesRouter(readers.resources))
   app.use('/api/grading-scale', gradingRouter(readers.gradingScale))
   app.use('/api/settings', settingsRouter(readers.settings))
+  app.use('/api', submissionsRouter(submissions, now, formRateLimit))
 
   app.use(notFound)
   app.use(createErrorHandler({ isProduction, logger }))
