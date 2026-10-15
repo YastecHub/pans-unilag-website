@@ -721,6 +721,8 @@ Unexpected crashes outside a request (an unhandled promise rejection or exceptio
 
 Leadership (live): `GET /api/executives`, `GET /api/senate` and `GET /api/committees` return `{ session, sessions, <items> }`. Without `?session=` they use the newest session that has data, so seeding the next Exco switches the site over; a session without data returns an empty list, and a malformed one returns 400. `GET /api/committees/:slug` returns one committee (404 if unknown); `GET /api/patrons` returns `{ patrons }` with the Dean first. Placeholders come back with `isPlaceholder: true` and their `placeholderNote`; every response is cached for 5 minutes.
 
+Events (live): `GET /api/events?status=upcoming|past&series=&month=YYYY-MM&page=&pageSize=` returns `{ events, page, pageSize, total, totalPages }` (default 12 per page, at most 50). Each event carries `datePrecision` (`day`, `month` or `unknown`) and a `status` worked out at request time: an event is **upcoming until the end of the Lagos day it ends on** and past from midnight; `unknown` dates are always past (`modules/events/domain/eventTiming.ts`). Upcoming events sort soonest first, past events most recent first (unknown dates last); with `series`, the days come in day order. `month` matches events whose dates overlap that Lagos month. `GET /api/events/:slug` returns one event. `GET /api/albums?series=` returns album cards (`photoCount`, no photo list) by series and day; `GET /api/albums/:slug` adds `photos` (`publicId`, `alt`, `caption`) and `sourceFolderUrl`. The consent flag is never returned.
+
 Public (read-only unless noted):
 
 | Method | Path | Purpose |

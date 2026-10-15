@@ -1,6 +1,8 @@
 import { createDocument } from 'zod-openapi'
 import { healthPaths } from '../modules/health/http/health.openapi.js'
+import { albumsPaths } from '../modules/albums/http/albums.openapi.js'
 import { committeesPaths } from '../modules/committees/http/committees.openapi.js'
+import { eventsPaths } from '../modules/events/http/events.openapi.js'
 import { executivesPaths } from '../modules/executives/http/executives.openapi.js'
 import { pagesPaths } from '../modules/pages/http/pages.openapi.js'
 import { patronsPaths } from '../modules/patrons/http/patrons.openapi.js'
@@ -30,6 +32,7 @@ export function buildOpenApiDocument() {
         name: 'Leadership',
         description: 'Executive Council, Senate, committees and patrons',
       },
+      { name: 'Events', description: 'Upcoming and past events, and their photo albums' },
     ],
     paths: {
       ...healthPaths,
@@ -38,6 +41,8 @@ export function buildOpenApiDocument() {
       ...senatePaths,
       ...committeesPaths,
       ...patronsPaths,
+      ...eventsPaths,
+      ...albumsPaths,
     },
   })
 }

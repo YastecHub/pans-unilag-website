@@ -5,12 +5,18 @@ export const ALLOWED_ORIGIN = 'http://localhost:5173'
 
 /** The app with in-memory readers over the seed files (override any with `readers`). */
 export function testApp(
-  options: { isProduction?: boolean; docsEnabled?: boolean; readers?: Partial<Readers> } = {},
+  options: {
+    isProduction?: boolean
+    docsEnabled?: boolean
+    readers?: Partial<Readers>
+    now?: () => Date
+  } = {},
 ) {
   return createApp({
     clientOrigins: [ALLOWED_ORIGIN],
     isProduction: options.isProduction ?? false,
     docsEnabled: options.docsEnabled ?? false,
     readers: { ...seedReaders(), ...options.readers },
+    now: options.now,
   })
 }
