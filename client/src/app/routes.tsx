@@ -23,6 +23,17 @@ export const routes: RouteObject[] = [
         element: <SectionOverviewPage section={section} />,
       })),
       ...STUB_PAGES.map((page) => ({ path: page.path, element: <PageStub page={page} /> })),
+      // Component gallery for developers. Left out of production builds (the import is removed with it).
+      ...(import.meta.env.DEV || import.meta.env.VITE_SHOW_UI_KIT === 'true'
+        ? [
+            {
+              path: '/_ui',
+              lazy: async () => ({
+                Component: (await import('../features/dev/UiKitPage.tsx')).UiKitPage,
+              }),
+            },
+          ]
+        : []),
       { path: '*', element: <NotFoundPage /> },
     ],
   },

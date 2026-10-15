@@ -251,7 +251,7 @@ Missing content must be **visible as missing**, so nobody mistakes a placeholder
 
 1. **Never invent content.** No fake names, dates, numbers or "Lorem ipsum". A placeholder states what will appear there: *"Photo and bio coming soon"*, *"Recipharm 2026 edition coming soon"*, *"Date to be announced"*.
 2. **Structure is real, details are pending.** For example, all 14 executive offices are shown with their constitutional duties; each officer card shows "Name to be announced" until filled.
-3. **One look for every placeholder:** a `Placeholder` component with a dashed border in `#4a5a50`, a `#e1e8db` background, an icon and the text "Coming soon". Image placeholders use a neutral silhouette (people) or the PANS badge on pale grey (events and publications) with the label "Photo coming soon".
+3. **One look for every placeholder:** the `Placeholder`, `PlaceholderImage` and `PlaceholderText` components with a dashed border in `#4a5a50`, a `#e1e8db` background, an icon and the text "Coming soon". Image placeholders use a neutral silhouette (people) or the PANS badge on pale grey (events and publications) with the label "Photo coming soon".
 4. **Data flag:** every content document has `isPlaceholder: boolean` and `placeholderNote: string`. The seed script creates placeholders; saving real content in the dashboard clears the flag.
 5. **Admin to-do list:** the dashboard has a **Placeholders** screen listing every item still marked `isPlaceholder`, grouped by page, so the team can work through them.
 6. **Empty lists are not placeholders.** Upcoming events and opportunities show a friendly empty state ("No upcoming events yet. Check back soon.") rather than fake entries.
@@ -632,6 +632,14 @@ The app shell (issue #6) provides these building blocks:
 | Site name, address, social links | `SITE` (moves to `/api/settings` in #19) | `client/src/lib/site.ts` |
 | Theme in a component | `useThemePreference()` | `client/src/lib/` |
 | Test a page | `renderRoute('/events')` renders the whole app at that URL | `client/src/test/` |
+| Buttons | `<Button>` for actions, `<ButtonLink to>` for navigation, `<ButtonAnchor href>` for other sites; variants `primary`, `secondary`, `accent` (on green/navy), `outline`, `ghost`, `danger` | `client/src/components/ui/Button.tsx` |
+| Content boxes and labels | `<Card tone="outlined" \| "filled" as="li">`, `<Badge tone="accent" \| "brand" \| "neutral">` | `client/src/components/ui/` |
+| Missing content | `<Placeholder note>`, `<PlaceholderImage kind="person" \| "badge">`, `<PlaceholderText>Name to be announced</PlaceholderText>` | `client/src/components/ui/Placeholder.tsx` |
+| Loading, empty, error | `<LoadingState>` + `<SkeletonCard>`, `<EmptyState title>`, `<ErrorState error onRetry>` (shows the request id to quote) | `client/src/components/ui/States.tsx` |
+| Call the API | `api.get<T>('/api/events')`, `api.post(...)`: JSON in and out, cookies sent, failures throw `ApiError { status, code, message, details, requestId }` | `client/src/lib/http.ts` |
+| Fetch data in a page | TanStack Query: `useQuery({ queryKey: ['events', status], queryFn: () => api.get(...) })`. 4xx errors are not retried | `client/src/lib/queryClient.ts` |
+| Show a Cloudinary image | `<Img publicId alt width height>`. `alt` is required by the types; crops to size, auto format and quality, lazy-loads | `client/src/components/ui/Img.tsx` |
+| See every component | Run `npm run dev` and open **http://localhost:5173/_ui**. This page is left out of production builds | `client/src/features/dev/` |
 
 - Every page renders inside `<main id="main">`. After each navigation, focus moves there so screen readers announce the new page.
 - Pages start with exactly one `<h1>`.
