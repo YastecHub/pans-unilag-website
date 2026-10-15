@@ -1,5 +1,6 @@
 import { createDocument } from 'zod-openapi'
 import { healthPaths } from '../modules/health/http/health.openapi.js'
+import { pagesPaths } from '../modules/pages/http/pages.openapi.js'
 
 /**
  * Builds the OpenAPI 3.1 document from each module's `<feature>.openapi.ts`.
@@ -18,9 +19,13 @@ export function buildOpenApiDocument() {
         'All responses are JSON. Errors share one shape (`ErrorResponse`): switch on `error.code`, show `error.message`, and quote `error.requestId` (also sent as the `X-Request-Id` header) when reporting a problem.',
       ].join('\n'),
     },
-    tags: [{ name: 'Health', description: 'Service status' }],
+    tags: [
+      { name: 'Health', description: 'Service status' },
+      { name: 'Pages', description: 'Constitution-derived About pages' },
+    ],
     paths: {
       ...healthPaths,
+      ...pagesPaths,
     },
   })
 }

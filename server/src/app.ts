@@ -9,6 +9,9 @@ import { notFound } from './middleware/notFound.js'
 import { requestId } from './middleware/requestId.js'
 import { createRequestLogger } from './middleware/requestLogger.js'
 import { healthRouter } from './modules/health/http/health.routes.js'
+import type { PageReader } from './modules/pages/application/pageView.js'
+import { pagesRouter } from './modules/pages/http/pages.routes.js'
+import { mongoPageReader } from './modules/pages/infrastructure/page.repository.js'
 
 export type AppOptions = {
   /** Browser origins allowed to call the API (CORS). */
@@ -20,6 +23,16 @@ export type AppOptions = {
   logger?: Logger
   /** Log one line per request. */
   logRequests?: boolean
+  /** Where each module reads its data. Defaults to MongoDB; tests pass in-memory readers. */
+  readers?: Partial<Readers>
+}
+
+export type Readers = {
+  pages: PageReader
+}
+
+const mongoReaders: Readers = {
+  pages: mongoPageReader,
 }
 
 /**
@@ -32,8 +45,10 @@ export function createApp({
   docsEnabled = false,
   logger = silentLogger,
   logRequests = false,
+  readers: readerOverrides,
 }: AppOptions): Express {
   const app = express()
+  const readers = { ...mongoReaders, ...readerOverrides }
 
   app.disable('x-powered-by')
   // Behind one proxy on the host (e.g. Render), so rate limits see the real client IP.
@@ -57,6 +72,7 @@ export function createApp({
 
   if (docsEnabled) app.use('/api/docs', docsRouter())
   app.use('/api/health', healthRouter())
+  app.use('/api/pages', pagesRouter(readers.pages))
 
   app.use(notFound)
   app.use(createErrorHandler({ isProduction, logger }))
