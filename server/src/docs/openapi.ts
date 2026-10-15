@@ -1,11 +1,16 @@
 import { createDocument } from 'zod-openapi'
 import { healthPaths } from '../modules/health/http/health.openapi.js'
 import { albumsPaths } from '../modules/albums/http/albums.openapi.js'
+import { announcementsPaths } from '../modules/announcements/http/announcements.openapi.js'
 import { committeesPaths } from '../modules/committees/http/committees.openapi.js'
+import { documentsPaths } from '../modules/documents/http/documents.openapi.js'
 import { eventsPaths } from '../modules/events/http/events.openapi.js'
 import { executivesPaths } from '../modules/executives/http/executives.openapi.js'
+import { opportunitiesPaths } from '../modules/opportunities/http/opportunities.openapi.js'
 import { pagesPaths } from '../modules/pages/http/pages.openapi.js'
 import { patronsPaths } from '../modules/patrons/http/patrons.openapi.js'
+import { publicationsPaths } from '../modules/publications/http/publications.openapi.js'
+import { resourcesPaths } from '../modules/resources/http/resources.openapi.js'
 import { senatePaths } from '../modules/senate/http/senate.openapi.js'
 
 /**
@@ -33,6 +38,10 @@ export function buildOpenApiDocument() {
         description: 'Executive Council, Senate, committees and patrons',
       },
       { name: 'Events', description: 'Upcoming and past events, and their photo albums' },
+      {
+        name: 'Content',
+        description: 'Announcements, opportunities, publications, documents and academic resources',
+      },
     ],
     paths: {
       ...healthPaths,
@@ -43,6 +52,11 @@ export function buildOpenApiDocument() {
       ...patronsPaths,
       ...eventsPaths,
       ...albumsPaths,
+      ...announcementsPaths,
+      ...opportunitiesPaths,
+      ...publicationsPaths,
+      ...documentsPaths,
+      ...resourcesPaths,
     },
   })
 }

@@ -193,6 +193,44 @@ Re-running for the same event replaces its photos and keeps alt text you already
 
 **Free plan:** at roughly 0.5–1 MB per resized photo, 18 albums × 40 photos is about 0.4–0.7 GB of storage, well within Cloudinary's free plan.
 
+### `publications.json`
+
+One entry per series until real editions exist; add each Recipharm edition as its own entry with a PDF (`fileUrl`) or a page (`link`). A publication needs one of the two unless it is a placeholder.
+
+```json
+[
+  {
+    "slug": "recipharm-2026",
+    "title": "Recipharm 2026",
+    "series": "recipharm",
+    "edition": "2026",
+    "publishedOn": "2026-09-01T00:00:00+01:00",
+    "cover": "pans-unilag/publications/recipharm-2026/cover",
+    "fileUrl": "https://…/recipharm-2026.pdf"
+  }
+]
+```
+
+### `documents.json`
+
+Key: `slug` + `version`. A new constitution is a **new entry** with the same slug and a new version; the site shows the version with the latest `approvedOn`. `fileUrl` (https) is required unless the entry is a placeholder.
+
+```json
+[
+  {
+    "slug": "constitution",
+    "title": "Constitution of PANS UNILAG",
+    "version": "2026",
+    "approvedOn": "2026-07-09T00:00:00+01:00",
+    "pageCount": 55,
+    "isPlaceholder": true,
+    "placeholderNote": "PDF to be uploaded"
+  }
+]
+```
+
+Announcements, opportunities and resources have no seed files: they start empty and are added in the dashboard (the pages show their empty states).
+
 ### `grading.json`
 
 ```json

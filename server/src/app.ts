@@ -12,6 +12,21 @@ import { healthRouter } from './modules/health/http/health.routes.js'
 import type { AlbumReader } from './modules/albums/application/albumView.js'
 import { albumsRouter } from './modules/albums/http/albums.routes.js'
 import { mongoAlbumReader } from './modules/albums/infrastructure/album.repository.js'
+import type { AnnouncementReader } from './modules/announcements/application/announcementView.js'
+import { announcementsRouter } from './modules/announcements/http/announcements.routes.js'
+import { mongoAnnouncementReader } from './modules/announcements/infrastructure/announcement.repository.js'
+import type { DocumentReader } from './modules/documents/application/documentView.js'
+import { documentsRouter } from './modules/documents/http/documents.routes.js'
+import { mongoDocumentReader } from './modules/documents/infrastructure/document.repository.js'
+import type { OpportunityReader } from './modules/opportunities/application/opportunityView.js'
+import { opportunitiesRouter } from './modules/opportunities/http/opportunities.routes.js'
+import { mongoOpportunityReader } from './modules/opportunities/infrastructure/opportunity.repository.js'
+import type { PublicationReader } from './modules/publications/application/publicationView.js'
+import { publicationsRouter } from './modules/publications/http/publications.routes.js'
+import { mongoPublicationReader } from './modules/publications/infrastructure/publication.repository.js'
+import type { ResourceReader } from './modules/resources/application/resourceView.js'
+import { resourcesRouter } from './modules/resources/http/resources.routes.js'
+import { mongoResourceReader } from './modules/resources/infrastructure/resource.repository.js'
 import type { CommitteeReader } from './modules/committees/application/committeeView.js'
 import { committeesRouter } from './modules/committees/http/committees.routes.js'
 import { mongoCommitteeReader } from './modules/committees/infrastructure/committee.repository.js'
@@ -43,7 +58,7 @@ export type AppOptions = {
   logRequests?: boolean
   /** Where each module reads its data. Defaults to MongoDB; tests pass in-memory readers. */
   readers?: Partial<Readers>
-  /** The current time, for upcoming/past events. Tests pass a fixed time. */
+  /** The current time, for upcoming/past events, active announcements and open opportunities. Tests pass a fixed time. */
   now?: () => Date
 }
 
@@ -55,6 +70,11 @@ export type Readers = {
   patrons: PatronReader
   events: EventReader
   albums: AlbumReader
+  announcements: AnnouncementReader
+  opportunities: OpportunityReader
+  publications: PublicationReader
+  documents: DocumentReader
+  resources: ResourceReader
 }
 
 const mongoReaders: Readers = {
@@ -65,6 +85,11 @@ const mongoReaders: Readers = {
   patrons: mongoPatronReader,
   events: mongoEventReader,
   albums: mongoAlbumReader,
+  announcements: mongoAnnouncementReader,
+  opportunities: mongoOpportunityReader,
+  publications: mongoPublicationReader,
+  documents: mongoDocumentReader,
+  resources: mongoResourceReader,
 }
 
 /**
@@ -112,6 +137,11 @@ export function createApp({
   app.use('/api/patrons', patronsRouter(readers.patrons))
   app.use('/api/events', eventsRouter(readers.events, now))
   app.use('/api/albums', albumsRouter(readers.albums))
+  app.use('/api/announcements', announcementsRouter(readers.announcements, now))
+  app.use('/api/opportunities', opportunitiesRouter(readers.opportunities, now))
+  app.use('/api/publications', publicationsRouter(readers.publications))
+  app.use('/api/documents', documentsRouter(readers.documents))
+  app.use('/api/resources', resourcesRouter(readers.resources))
 
   app.use(notFound)
   app.use(createErrorHandler({ isProduction, logger }))
