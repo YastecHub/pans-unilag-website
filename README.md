@@ -637,6 +637,14 @@ The app shell (issue #6) provides these building blocks:
 | Site name, address, social links | `SITE` (moves to `/api/settings` in #19) | `client/src/lib/site.ts` |
 | Theme in a component | `useThemePreference()` | `client/src/lib/` |
 | Test a page | `renderRoute('/events')` renders the whole app at that URL | `client/src/test/` |
+| Buttons | `<Button>` for actions, `<ButtonLink to>` for navigation, `<ButtonAnchor href>` for other sites; variants `primary`, `secondary`, `accent` (on green/navy), `outline`, `ghost`, `danger` | `client/src/components/ui/Button.tsx` |
+| Content boxes and labels | `<Card tone="outlined" \| "filled" as="li">`, `<Badge tone="accent" \| "brand" \| "neutral">` | `client/src/components/ui/` |
+| Missing content | `<Placeholder note>`, `<PlaceholderImage kind="person" \| "badge">`, `<PlaceholderText>Name to be announced</PlaceholderText>` | `client/src/components/ui/Placeholder.tsx` |
+| Loading, empty, error | `<LoadingState>` + `<SkeletonCard>`, `<EmptyState title>`, `<ErrorState error onRetry>` (shows the request id to quote) | `client/src/components/ui/States.tsx` |
+| Call the API | `api.get<T>('/api/events')`, `api.post(...)`: JSON in and out, cookies sent, failures throw `ApiError { status, code, message, details, requestId }` | `client/src/lib/http.ts` |
+| Fetch data in a page | TanStack Query: `useQuery({ queryKey: ['events', status], queryFn: () => api.get(...) })`. 4xx errors are not retried | `client/src/lib/queryClient.ts` |
+| Show a Cloudinary image | `<Img publicId alt width height>`. `alt` is required by the types; crops to size, auto format and quality, lazy-loads | `client/src/components/ui/Img.tsx` |
+| See every component | Run `npm run dev` and open **http://localhost:5173/_ui**. This page is left out of production builds | `client/src/features/dev/` |
 
 - Every page renders inside `<main id="main">`. After each navigation, focus moves there so screen readers announce the new page.
 - Pages start with exactly one `<h1>`.

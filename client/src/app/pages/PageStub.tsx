@@ -1,4 +1,5 @@
 import { Container } from '../../components/layout/Container.tsx'
+import { Placeholder } from '../../components/ui/Placeholder.tsx'
 import { usePageTitle } from '../../lib/usePageTitle.ts'
 import type { StubPage } from '../siteMap.ts'
 
@@ -8,10 +9,10 @@ export function PageStub({ page }: { page: StubPage }) {
   return (
     <Container className="flex flex-col gap-6 py-12">
       <h1>{page.title}</h1>
-      <div className="flex max-w-2xl flex-col gap-1 rounded-xl border-2 border-dashed border-text-muted bg-surface-alt p-6 text-text-muted">
-        <p className="font-medium text-text">Coming soon</p>
-        <p>This page is being built (issue #{page.issue}).</p>
-      </div>
+      <Placeholder
+        note={`This page is being built (issue #${page.issue}).`}
+        className="max-w-2xl"
+      />
     </Container>
   )
 }
