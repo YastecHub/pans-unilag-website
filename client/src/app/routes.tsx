@@ -5,6 +5,13 @@ import {
   MembershipPage,
   WhoWeArePage,
 } from '../features/about/pages/AboutPages.tsx'
+import {
+  ConstitutionPage,
+  ElectionsPage,
+  FinancePage,
+  GovernancePage,
+  MeetingsPage,
+} from '../features/governance/pages/GovernancePages.tsx'
 import { HomePage } from '../features/home/pages/HomePage.tsx'
 import { CommitteePage } from '../features/leadership/pages/CommitteePage.tsx'
 import { CommitteesPage } from '../features/leadership/pages/CommitteesPage.tsx'
@@ -38,6 +45,11 @@ export const routes: RouteObject[] = [
       { path: '/leadership/committees', element: <CommitteesPage /> },
       { path: '/leadership/committees/:slug', element: <CommitteePage /> },
       { path: '/leadership/patrons', element: <PatronsPage /> },
+      { path: '/governance', element: <GovernancePage /> },
+      { path: '/governance/elections', element: <ElectionsPage /> },
+      { path: '/governance/finance', element: <FinancePage /> },
+      { path: '/governance/meetings', element: <MeetingsPage /> },
+      { path: '/governance/constitution', element: <ConstitutionPage /> },
       ...OVERVIEW_SECTIONS.map((section) => ({
         path: section.to,
         element: <SectionOverviewPage section={section} />,
