@@ -9,6 +9,25 @@
     />
     <meta name="theme-color" content="#0e6434" />
     <title>PANS UNILAG</title>
+    <!--
+      Sets the light/dark theme before the first paint, so the page never flashes the wrong one.
+      Mirrors src/lib/theme.ts (same storage key "pans-theme").
+    -->
+    <script>
+      ;(function () {
+        var theme
+        try {
+          theme = localStorage.getItem('pans-theme')
+        } catch (e) {}
+        if (theme !== 'light' && theme !== 'dark') {
+          theme =
+            window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+              ? 'dark'
+              : 'light'
+        }
+        document.documentElement.setAttribute('data-theme', theme)
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>
