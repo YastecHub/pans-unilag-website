@@ -12,6 +12,7 @@ import { pagesPaths } from '../modules/pages/http/pages.openapi.js'
 import { patronsPaths } from '../modules/patrons/http/patrons.openapi.js'
 import { publicationsPaths } from '../modules/publications/http/publications.openapi.js'
 import { resourcesPaths } from '../modules/resources/http/resources.openapi.js'
+import { submissionsPaths } from '../modules/submissions/http/submissions.openapi.js'
 import { senatePaths } from '../modules/senate/http/senate.openapi.js'
 import { settingsPaths } from '../modules/settings/http/settings.openapi.js'
 
@@ -46,6 +47,7 @@ export function buildOpenApiDocument() {
       },
       { name: 'Academics', description: 'CGPA calculator grading scale' },
       { name: 'Site', description: 'Contact details, social links and the site banner' },
+      { name: 'Forms', description: 'Feedback and alumni sign-ups (write-only, rate-limited)' },
     ],
     paths: {
       ...healthPaths,
@@ -63,6 +65,7 @@ export function buildOpenApiDocument() {
       ...resourcesPaths,
       ...gradingPaths,
       ...settingsPaths,
+      ...submissionsPaths,
     },
   })
 }

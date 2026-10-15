@@ -728,6 +728,8 @@ Other content (live): `GET /api/announcements` returns `{ announcements }` that 
 
 Academics and site (live): `GET /api/grading-scale` returns the active scale `{ slug, source, grades, bands, passMark, units }` (best grade first, Pass first), matching the tables in [CGPA calculator](#cgpa-calculator); 404 if no scale is active. `GET /api/settings` returns `{ postalAddress, location, contactEmail, socialLinks, quickLinks, homeBanner }` (`homeBanner` is null when empty; `contactEmail` stays empty, flagged as a placeholder, until the official email is supplied); 404 before seeding.
 
+Forms (live): `POST /api/feedback` (`category`, `message` 10–2000 characters, optional `contactEmail`; anonymous when left out) and `POST /api/alumni` (`name`, `graduationYear`, `email`, optional `phone`, `interests` from `mentoring`, `speaking`, `internships-and-jobs`, `events`, `supporting-pans`, and `consent: true`) reply `201 { "received": true }` and never echo what was sent. Each is limited to **5 per hour per IP** (429 `RATE_LIMITED`). Both forms carry a hidden `website` field: when a bot fills it the reply is the same but nothing is stored. Feedback is deleted automatically after 12 months (TTL index); signing up to the alumni network again with the same email updates the entry. No public endpoint reads submissions back; admins read them after sign-in (admin auth issue).
+
 Public (read-only unless noted):
 
 | Method | Path | Purpose |
