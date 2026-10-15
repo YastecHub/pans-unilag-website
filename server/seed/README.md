@@ -10,8 +10,11 @@ JSON files in this folder are loaded into MongoDB by the seed script. They hold 
 | `npm run seed -w server -- --update` | Also overwrites existing documents with the values in these files. Use only to deliberately refresh seed content.                              |
 | `npm run seed -w server -- --reset`  | Empties the seeded collections, then seeds. **Development only**: refuses to run when `NODE_ENV=production`.                                   |
 | `npm run seed:check -w server`       | Validates the files against the models without a database. Also runs in CI (`server/tests/seedFiles.test.ts`).                                 |
+| `npm run content:status -w server`   | Lists every placeholder (`isPlaceholder: true`) grouped by its note, as Markdown checkboxes for the content tracking issue (#14). No database needed. |
 
-The script reads `MONGODB_URI` from `server/.env` and prints the database it is about to write to. Every file is validated before anything is written, so a mistake never leaves a half-seeded database.
+**Keeping #14 up to date:** when content arrives, replace the placeholder (in the dashboard or here, setting `isPlaceholder: false`), run `npm run content:status -w server`, and paste the output into the issue's "Content still missing" section. A file marked `complete` has nothing left to collect.
+
+The seed script reads `MONGODB_URI` from `server/.env` and prints the database it is about to write to. Every file is validated before anything is written, so a mistake never leaves a half-seeded database.
 
 ## Rules for every file
 

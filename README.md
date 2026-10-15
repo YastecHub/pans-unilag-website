@@ -778,6 +778,7 @@ The API needs a `MONGODB_URI` in `server/.env` (a free personal Atlas cluster or
 | `npm run <script> -w client` or `-w server` | Run a script in one workspace only |
 | `npm run seed -w server` | Loads `server/seed/*.json` into MongoDB. Adds missing documents only, so it is safe to re-run; `-- --update` overwrites, `-- --reset` empties first (development only). See [`server/seed/README.md`](server/seed/README.md) |
 | `npm run seed:check -w server` | Validates the seed files without a database |
+| `npm run content:status -w server` | Prints what is still a placeholder in the seed files, as a checklist for the content tracking issue (#14) |
 | `npm run upload-album -w server -- --event <slug> --dir <folder> --consent-confirmed` | Resizes (≤ 2500 px, metadata stripped) and uploads one event's curated photos to Cloudinary, then records them in `albums.json`. See [`server/seed/README.md`](server/seed/README.md#albumsjson) |
 
 ## Environment variables

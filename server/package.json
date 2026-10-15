@@ -12,6 +12,7 @@
     "test": "vitest run --passWithNoTests",
     "seed": "tsx scripts/seed.ts",
     "seed:check": "tsx scripts/seed.ts --check",
+    "content:status": "tsx scripts/content-status.ts",
     "upload-album": "tsx scripts/upload-album.ts"
   },
   "dependencies": {
