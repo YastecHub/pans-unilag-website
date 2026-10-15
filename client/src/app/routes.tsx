@@ -6,6 +6,11 @@ import {
   WhoWeArePage,
 } from '../features/about/pages/AboutPages.tsx'
 import { HomePage } from '../features/home/pages/HomePage.tsx'
+import { CommitteePage } from '../features/leadership/pages/CommitteePage.tsx'
+import { CommitteesPage } from '../features/leadership/pages/CommitteesPage.tsx'
+import { ExecutiveCouncilPage } from '../features/leadership/pages/ExecutiveCouncilPage.tsx'
+import { PatronsPage } from '../features/leadership/pages/PatronsPage.tsx'
+import { SenatePage } from '../features/leadership/pages/SenatePage.tsx'
 import { PublicLayout } from './layouts/PublicLayout.tsx'
 import { NotFoundPage } from './pages/NotFoundPage.tsx'
 import { PageStub } from './pages/PageStub.tsx'
@@ -28,6 +33,11 @@ export const routes: RouteObject[] = [
       { path: '/about/membership', element: <MembershipPage /> },
       { path: '/about/history', element: <HistoryPage /> },
       { path: '/about/impact', element: <ImpactPage /> },
+      { path: '/leadership/executive-council', element: <ExecutiveCouncilPage /> },
+      { path: '/leadership/senate', element: <SenatePage /> },
+      { path: '/leadership/committees', element: <CommitteesPage /> },
+      { path: '/leadership/committees/:slug', element: <CommitteePage /> },
+      { path: '/leadership/patrons', element: <PatronsPage /> },
       ...OVERVIEW_SECTIONS.map((section) => ({
         path: section.to,
         element: <SectionOverviewPage section={section} />,

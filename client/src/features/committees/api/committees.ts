@@ -33,3 +33,10 @@ export function shortSession(session: string): string {
   const [first, second] = session.split('/')
   return second ? `${first}/${second.slice(-2)}` : session
 }
+
+export function useCommittee(slug: string) {
+  return useQuery({
+    queryKey: ['committees', slug],
+    queryFn: ({ signal }) => api.get<Committee>(`/api/committees/${slug}`, signal),
+  })
+}

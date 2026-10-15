@@ -10,10 +10,12 @@ type Props = {
   breadcrumbs?: Crumb[]
   /** One or two lines under the title. */
   intro?: ReactNode
+  /** A short label above the title, e.g. "Committee · 2026/27". */
+  eyebrow?: string
 }
 
 /** The pale band at the top of every inner page: breadcrumb, title (the page's only h1) and intro. */
-export function PageHeader({ title, breadcrumbs = [], intro }: Props) {
+export function PageHeader({ title, breadcrumbs = [], intro, eyebrow }: Props) {
   const trail: Crumb[] = [{ label: 'Home', to: '/' }, ...breadcrumbs, { label: title }]
   return (
     <div className="bg-surface-alt">
@@ -35,6 +37,11 @@ export function PageHeader({ title, breadcrumbs = [], intro }: Props) {
             })}
           </ol>
         </nav>
+        {eyebrow && (
+          <p className="font-heading text-small font-medium tracking-[0.08em] text-text-brand uppercase">
+            {eyebrow}
+          </p>
+        )}
         <h1>{title}</h1>
         {intro && <div className="max-w-[40rem] text-text-muted">{intro}</div>}
       </Container>
