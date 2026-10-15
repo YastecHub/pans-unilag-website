@@ -407,7 +407,9 @@ pans-unilag-website/
 │   │   ├── app.ts                   # builds the app (middleware, routes, errors)
 │   │   ├── server.ts                # connects to MongoDB and listens
 │   │   ├── config/                  # env.ts (Zod-validated), db.ts, cloudinary.ts
-│   │   ├── middleware/              # requireAdmin, validate, rateLimit, errorHandler, notFound
+│   │   ├── docs/                    # OpenAPI document + Swagger UI (/api/docs)
+│   │   ├── lib/                     # httpError (error codes), logger
+│   │   ├── middleware/              # requestId, requestLogger, validate, rateLimit, errorHandler, notFound, requireAdmin
 │   │   └── modules/
 │   │       ├── pages/               # constitution-derived page sections
 │   │       ├── executives/
@@ -470,6 +472,59 @@ pans-unilag-website/
 8. **Use the brand tokens**, never raw hex values in components.
 9. **No new libraries without a reason** agreed in a pull request.
 
+### API conventions (server)
+
+The API skeleton (issue #3) provides these building blocks. Use them instead of writing your own:
+
+| Need | Use | Where |
+| --- | --- | --- |
+| Validate params, query or body | `validate({ params, query, body })` with **`z.strictObject(...)`** schemas, so unknown fields are rejected | `server/src/middleware/validate.ts` |
+| Return an error from a route or service | `throw HttpError.notFound('Event not found')` (also `badRequest`, `validation`, `unauthorized`, `forbidden`, `conflict`, `tooManyRequests`) | `server/src/lib/httpError.ts` |
+| Handle Mongoose / MongoDB errors | Nothing: bad ObjectIds, schema validation and duplicate keys are mapped automatically (see *Error codes*) | `server/src/middleware/errorHandler.ts` |
+| Log something | `logger.info/warn/error(message, { requestId: req.id, ... })`. Never log secrets or personal data | `server/src/lib/logger.ts` |
+| Limit abuse on a route (login, forms) | `createRateLimiter({ windowMs, limit })` | `server/src/middleware/rateLimit.ts` |
+| Add a new environment variable | Add it to the Zod schema in `config/env.ts` **and** to `server/.env.example` | `server/src/config/env.ts` |
+| Add a feature | `modules/<feature>/http/<feature>.routes.ts` exporting a router, mounted under `/api/<feature>` in `app.ts` | `server/src/modules/` |
+| Document an endpoint | `modules/<feature>/http/<feature>.openapi.ts` exporting its paths, spread into `docs/openapi.ts`. **Every endpoint must be documented in the same PR** | `server/src/docs/` |
+| Test an endpoint | Supertest against `createApp(...)` (no port, no database needed) | `server/tests/` |
+
+Define each Zod schema **once** and use it for both validation and the docs, so they can't drift apart:
+
+```ts
+// modules/events/http/events.schemas.ts
+export const eventSlugParams = z.strictObject({ slug: z.string().min(1) })
+export const eventSchema = z.object({ title: z.string(), slug: z.string() /* ... */ }).meta({ id: 'Event' })
+
+// modules/events/http/events.routes.ts
+router.get('/:slug', validate({ params: eventSlugParams }), async (req, res) => {
+  const event = await eventsService.findBySlug(req.params.slug)
+  if (!event) throw HttpError.notFound('Event not found')
+  res.json(event)
+})
+
+// modules/events/http/events.openapi.ts
+export const eventsPaths: ZodOpenApiPathsObject = {
+  '/api/events/{slug}': {
+    get: {
+      tags: ['Events'],
+      operationId: 'getEvent',
+      summary: 'One event',
+      requestParams: { path: eventSlugParams },
+      responses: {
+        '200': { description: 'The event', content: { 'application/json': { schema: eventSchema } } },
+        ...errors.badRequest,
+        ...errors.notFound,
+        ...errors.internal,
+      },
+    },
+  },
+}
+```
+
+Express 5 passes errors thrown in async handlers to the error handler automatically, so no `try/catch` is needed in routes.
+
+**API docs (Swagger):** with the API running, open **http://localhost:4000/api/docs** (or http://localhost:5173/api/docs through the client) to browse and try every endpoint. The raw OpenAPI 3.1 document is at `/api/docs/openapi.json`. Docs are on by default outside production; set `API_DOCS_ENABLED=true` or `false` to override.
+
 ## Data model
 
 All collections share `isPlaceholder` (boolean), `placeholderNote` (string), `createdAt` and `updatedAt`. Dates are stored in UTC and shown in **Africa/Lagos** time.
@@ -496,6 +551,45 @@ All collections share `isPlaceholder` (boolean), `placeholderNote` (string), `cr
 | `admins` | name, email (unique), passwordHash, role (`admin`, `editor`), lastLoginAt | Never public |
 
 ## API reference (planned)
+
+All responses are JSON. Errors always have the same shape:
+
+```json
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Invalid request",
+    "details": [{ "location": "body", "path": "email", "message": "Invalid email address" }],
+    "requestId": "2f1c6c1e-6a3b-4d8e-9a43-1c2b7a5d9e10"
+  }
+}
+```
+
+- **`code`** is stable: the client should switch on it, never on `message`.
+- **`message`** is safe to show to users.
+- **`details`** appears only when useful (validation errors, conflicts).
+- **`requestId`** matches the `X-Request-Id` response header and the server log line. Show it in error screens so users can quote it.
+- Outside production, 500 responses also include `debug` (the stack trace). Production never exposes internal details.
+
+#### Error codes
+
+| Status | `code` | When |
+| --- | --- | --- |
+| 400 | `VALIDATION_ERROR` | Failed Zod or Mongoose validation (`details` lists each field) |
+| 400 | `INVALID_JSON` | Request body is not valid JSON |
+| 400 | `INVALID_ID` | Malformed id, e.g. not an ObjectId |
+| 400 | `BAD_REQUEST` | Any other bad request |
+| 401 | `UNAUTHORIZED` | Not signed in (admin routes) |
+| 403 | `FORBIDDEN` | Signed in but not allowed |
+| 404 | `NOT_FOUND` | Unknown route or item |
+| 409 | `CONFLICT` | Duplicate of a unique field (`details.fields` names it; the value is never echoed) |
+| 413 | `PAYLOAD_TOO_LARGE` | Request body over 100 KB |
+| 429 | `RATE_LIMITED` | Rate limit reached (`Retry-After` header set) |
+| 500 | `INTERNAL_ERROR` | Unexpected error; logged with the request id |
+
+Unexpected crashes outside a request (an unhandled promise rejection or exception) are logged and the process exits with code 1, so the host restarts it cleanly.
+
+`GET /api/health` (live) returns `{ "status": "ok" | "degraded", "db": "connected" | "disconnected" | …, "uptimeSeconds": n }`.
 
 Public (read-only unless noted):
 
@@ -541,7 +635,9 @@ cp client/.env.example client/.env     # Windows: copy client\.env.example clien
 npm run dev                            # client http://localhost:5173, API http://localhost:4000
 ```
 
-In development the client forwards `/api/*` requests to the API, so open **http://localhost:5173** and everything works from one address. Check the API directly at http://localhost:4000/api/health. Never commit `.env` files.
+In development the client forwards `/api/*` requests to the API, so open **http://localhost:5173** and everything works from one address. Check the API directly at http://localhost:4000/api/health, and browse the API docs at http://localhost:4000/api/docs. Never commit `.env` files.
+
+The API needs a `MONGODB_URI` in `server/.env` (a free personal Atlas cluster or local MongoDB). Without one it stops at startup with a message saying what is missing; if Atlas refuses the connection, add your IP address under **Network Access**.
 
 ### Scripts (run from the repository root)
 
@@ -559,7 +655,7 @@ The seed command (`npm run seed -w server`) arrives with issue #8.
 
 ## Environment variables
 
-**`server/.env`:** `NODE_ENV`, `PORT`, `MONGODB_URI` (secret), `CLIENT_ORIGIN`, `JWT_SECRET` (secret), `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` (secret).
+**`server/.env`:** `NODE_ENV`, `PORT`, `MONGODB_URI` (secret), `CLIENT_ORIGIN`, `API_DOCS_ENABLED` (optional; docs default on outside production), `JWT_SECRET` (secret), `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` (secret).
 
 **`client/.env`** (all public): `VITE_API_URL`, `VITE_CLOUDINARY_CLOUD_NAME`, `VITE_SITE_URL`.
 
