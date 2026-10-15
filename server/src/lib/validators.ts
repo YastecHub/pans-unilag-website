@@ -31,3 +31,32 @@ export function maxWords(limit: number) {
     message: `must be ${limit} words or fewer`,
   }
 }
+
+/** Unique slug: lower-case words joined by hyphens. */
+export const slugField = {
+  type: String,
+  required: true,
+  unique: true,
+  match: [/^[a-z0-9]+(-[a-z0-9]+)*$/, 'slug must be lower-case words joined by hyphens'] as [
+    RegExp,
+    string,
+  ],
+}
+
+/** An https:// link, or empty. */
+export const optionalHttpsUrl = {
+  type: String,
+  default: '',
+  trim: true,
+  match: [/^$|^https:\/\/\S+$/, 'must be an https:// link'] as [RegExp, string],
+}
+
+/** Makes a validator that requires a value unless the document is a placeholder. */
+export function requiredUnlessPlaceholder(field: string) {
+  return {
+    validator(this: { isPlaceholder?: boolean }, value: unknown) {
+      return this.isPlaceholder === true || (value !== undefined && value !== null && value !== '')
+    },
+    message: `${field} is required unless the item is a placeholder`,
+  }
+}

@@ -8,12 +8,16 @@ import { toCommitteeView } from '../src/modules/committees/application/committee
 import { CommitteeModel } from '../src/modules/committees/infrastructure/committee.model.js'
 import type { StoredEvent } from '../src/modules/events/application/eventView.js'
 import { EventModel } from '../src/modules/events/infrastructure/event.model.js'
+import type { StoredDocument } from '../src/modules/documents/application/documentView.js'
+import { DocumentModel } from '../src/modules/documents/infrastructure/document.model.js'
 import { toExecutiveView } from '../src/modules/executives/application/executiveView.js'
 import { ExecutiveModel } from '../src/modules/executives/infrastructure/executive.model.js'
 import { toPageView } from '../src/modules/pages/application/pageView.js'
 import { PageModel } from '../src/modules/pages/infrastructure/page.model.js'
 import { toPatronView } from '../src/modules/patrons/application/patronView.js'
 import { PatronModel } from '../src/modules/patrons/infrastructure/patron.model.js'
+import type { StoredPublication } from '../src/modules/publications/application/publicationView.js'
+import { PublicationModel } from '../src/modules/publications/infrastructure/publication.model.js'
 import { toSenatorView } from '../src/modules/senate/application/senatorView.js'
 import { SenatorModel } from '../src/modules/senate/infrastructure/senator.model.js'
 
@@ -47,6 +51,8 @@ export function seedReaders(): Readers {
   const patrons = storedSeed<Parameters<typeof toPatronView>[0]>('patrons.json', PatronModel)
   const events = storedSeed<StoredEvent>('events.json', EventModel)
   const albums = storedSeed<StoredAlbum>('albums.json', AlbumModel)
+  const publications = storedSeed<StoredPublication>('publications.json', PublicationModel)
+  const documents = storedSeed<StoredDocument>('documents.json', DocumentModel)
   const bySeries = <T extends { series?: string }>(items: T[], series?: string) =>
     series ? items.filter((i) => i.series === series) : items
 
@@ -84,5 +90,11 @@ export function seedReaders(): Readers {
       list: async ({ series }) => bySeries(albums, series),
       findBySlug: async (slug) => albums.find((a) => a.slug === slug) ?? null,
     },
+    publications: { list: async ({ series }) => bySeries(publications, series) },
+    documents: { list: async () => documents },
+    // No seed files: these lists start empty and are filled in the dashboard.
+    announcements: { list: async () => [] },
+    opportunities: { list: async () => [], findBySlug: async () => null },
+    resources: { list: async () => [] },
   }
 }

@@ -553,7 +553,8 @@ How seeding works, the rules for each file and their JSON shapes: [`server/seed/
 | `milestones.json` | To be supplied | All |
 | `events.json` | Past: Health Week 2026 (9), Pharmalympics 2026 (9). Upcoming: Freshers' Week, Pharmalympics 2027, Health Week 2027, PANS Dinner | Past: dates and descriptions. Upcoming: venues, registration links, descriptions |
 | `albums.json` | Drive folders (curated) | None once photos are uploaded |
-| `publications.json` | To be supplied | Recipharm, newspaper, Substack |
+| `publications.json` | One entry per series (Recipharm, newspaper, Substack) | All three: editions and links from the Editor-in-Chief |
+| `documents.json` | Constitution adopted 9 July 2026 (55 pages) | PDF upload (after the President confirms the signed last page) |
 | `grading.json` | Faculty handbook §3.5: grades, Pass/Fail bands, 1–3 units | None |
 | `settings.json` | Constitution contact address; social links (Instagram, X, YouTube, LinkedIn) | Official email |
 
@@ -665,11 +666,11 @@ All collections share `isPlaceholder` (boolean), `placeholderNote` (string), `cr
 | `milestones` | year, title, description, verifiedBy | `verifiedBy` required unless placeholder |
 | `events` | title, slug (unique), series, dayNumber, startsAt, endsAt, datePrecision (`day` \| `month` \| `unknown`), committee (slug), venue, description, coverImage, registrationUrl, committeeRef | Upcoming vs past by `endsAt`; `unknown` dates count as past |
 | `albums` | slug (= event slug), title, event (slug), series, cover, photos[{ publicId, alt, caption }], sourceFolderUrl, consentConfirmed | ≤ 40 photos; photos need confirmed consent and alt text |
-| `announcements` | title, body, publishAt, expiresAt, pinned | Hidden after `expiresAt` |
-| `opportunities` | title, slug, type, eligibility, deadline, applyUrl, lastCheckedAt | Hidden after `deadline` |
-| `publications` | title, series (`recipharm`, `newspaper`, `substack`), edition, date, cover, fileUrl or link | |
-| `documents` | title, version, approvedOn, approvedBy, fileUrl | Constitution adopted 9 July 2026 |
-| `resources` | title, level, semester, course, url, verifiedBy | |
+| `announcements` | title, body (≤ 1000 chars), publishAt, expiresAt, pinned, link | Shown from `publishAt` until `expiresAt` (exclusive) |
+| `opportunities` | title, slug, type (`scholarship`, `internship`, `competition`, `conference`, `training`, `job`, `other`), organisation, description, eligibility, deadline, applyUrl, lastCheckedAt | Open until the end of the deadline day (Lagos); no deadline = rolling |
+| `publications` | slug, title, series (`recipharm`, `newspaper`, `substack`), edition, publishedOn, summary, cover, fileUrl or link | A file or a link unless placeholder |
+| `documents` | slug, title, version, approvedOn, approvedBy, summary, fileUrl, fileSizeBytes, pageCount | Unique slug + version; the site shows the latest approved version. Constitution adopted 9 July 2026 |
+| `resources` | title, level, semester (`first`, `second`), course, description, url, verifiedBy | `url` and `verifiedBy` required unless placeholder |
 | `gradingscales` | grades[{ letter, min, max, point }], bands[{ name, min, max }] (Pass/Fail), passMark (2.40), units { min: 1, max: 3 }, active, source | One active scale |
 | `settings` | contactEmail, socialLinks[{ platform, url }], quickLinks, homeBanner, postalAddress, location | Single document |
 | `feedback` | category (`suggestion`, `complaint`, `welfare`, `other`), message, contactEmail?, status, createdAt | Admin-only; deleted after 12 months |
@@ -722,6 +723,8 @@ Unexpected crashes outside a request (an unhandled promise rejection or exceptio
 Leadership (live): `GET /api/executives`, `GET /api/senate` and `GET /api/committees` return `{ session, sessions, <items> }`. Without `?session=` they use the newest session that has data, so seeding the next Exco switches the site over; a session without data returns an empty list, and a malformed one returns 400. `GET /api/committees/:slug` returns one committee (404 if unknown); `GET /api/patrons` returns `{ patrons }` with the Dean first. Placeholders come back with `isPlaceholder: true` and their `placeholderNote`; every response is cached for 5 minutes.
 
 Events (live): `GET /api/events?status=upcoming|past&series=&month=YYYY-MM&page=&pageSize=` returns `{ events, page, pageSize, total, totalPages }` (default 12 per page, at most 50). Each event carries `datePrecision` (`day`, `month` or `unknown`) and a `status` worked out at request time: an event is **upcoming until the end of the Lagos day it ends on** and past from midnight; `unknown` dates are always past (`modules/events/domain/eventTiming.ts`). Upcoming events sort soonest first, past events most recent first (unknown dates last); with `series`, the days come in day order. `month` matches events whose dates overlap that Lagos month. `GET /api/events/:slug` returns one event. `GET /api/albums?series=` returns album cards (`photoCount`, no photo list) by series and day; `GET /api/albums/:slug` adds `photos` (`publicId`, `alt`, `caption`) and `sourceFolderUrl`. The consent flag is never returned.
+
+Other content (live): `GET /api/announcements` returns `{ announcements }` that are active now (`publishAt` reached, `expiresAt` not), pinned first, then newest. `GET /api/opportunities?type=` returns `{ opportunities }` that are still open (until the end of the deadline day in Lagos; no deadline = rolling, listed last), closing soonest first; `GET /api/opportunities/:slug` returns 404 once the deadline has passed, so old links never show a closed listing. `GET /api/publications?series=recipharm|newspaper|substack` returns `{ publications }`, newest first. `GET /api/documents` returns `{ documents }` with the latest approved version of each (the constitution until its PDF is uploaded is a placeholder). `GET /api/resources?level=&semester=` returns `{ resources }` by level, semester and course. Empty lists are normal results: the pages show their empty states.
 
 Public (read-only unless noted):
 

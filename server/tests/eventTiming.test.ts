@@ -1,10 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import {
-  eventStatus,
-  lagosMonthRange,
-  overlapsMonth,
-  startOfNextLagosDay,
-} from '../src/modules/events/domain/eventTiming.js'
+import { lagosMonthRange, startOfNextLagosDay } from '../src/lib/lagosTime.js'
+import { eventStatus, overlapsMonth } from '../src/modules/events/domain/eventTiming.js'
 
 const at = (iso: string) => new Date(iso)
 // Freshers' Week as seeded: ends 4 Dec 2026, 23:59:59 Lagos time.

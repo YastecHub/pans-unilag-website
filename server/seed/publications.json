@@ -1,0 +1,24 @@
+[
+  {
+    "slug": "recipharm",
+    "title": "Recipharm",
+    "series": "recipharm",
+    "summary": "The annual magazine of PANS UNILAG.",
+    "isPlaceholder": true,
+    "placeholderNote": "Editions (title, year, cover and PDF) to be supplied by the Editor-in-Chief"
+  },
+  {
+    "slug": "pans-unilag-newspaper",
+    "title": "PANS UNILAG newspaper",
+    "series": "newspaper",
+    "isPlaceholder": true,
+    "placeholderNote": "Newspaper name and editions to be supplied by the Editor-in-Chief"
+  },
+  {
+    "slug": "pans-unilag-substack",
+    "title": "PANS UNILAG on Substack",
+    "series": "substack",
+    "isPlaceholder": true,
+    "placeholderNote": "Substack link to be supplied by the Editor-in-Chief"
+  }
+]
