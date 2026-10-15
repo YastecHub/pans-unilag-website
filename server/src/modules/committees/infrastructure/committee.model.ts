@@ -1,5 +1,7 @@
 import { model, Schema } from 'mongoose'
 import { contentPlugin } from '../../../lib/contentPlugin.js'
+import { textIndex, textWeights } from '../../../lib/textIndex.js'
+import { SEARCH_FIELDS } from '../../search/application/hits.js'
 import { LEVELS, photoField, sessionField } from '../../../lib/validators.js'
 
 /** Officer titles vary by committee: Lead/Assistant, Chairman/Secretary, LEO/LLO. */
@@ -46,5 +48,9 @@ const committeeSchema = new Schema({
   coverImage: photoField,
 })
 committeeSchema.plugin(contentPlugin)
+committeeSchema.index(textIndex(SEARCH_FIELDS.committee), {
+  name: 'search',
+  weights: textWeights(SEARCH_FIELDS.committee),
+})
 
 export const CommitteeModel = model('Committee', committeeSchema)

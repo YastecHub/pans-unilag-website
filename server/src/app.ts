@@ -51,6 +51,9 @@ import {
   submissionsRouter,
 } from './modules/submissions/http/submissions.routes.js'
 import { mongoSubmissionStore } from './modules/submissions/infrastructure/submission.store.js'
+import type { SearchSource } from './modules/search/application/search.js'
+import { searchRouter } from './modules/search/http/search.routes.js'
+import { mongoSearchSources } from './modules/search/infrastructure/search.sources.js'
 import type { SenatorReader } from './modules/senate/application/senatorView.js'
 import { senateRouter } from './modules/senate/http/senate.routes.js'
 import { mongoSenatorReader } from './modules/senate/infrastructure/senator.repository.js'
@@ -93,6 +96,7 @@ export type Readers = {
   resources: ResourceReader
   gradingScale: GradingScaleReader
   settings: SettingsReader
+  search: SearchSource[]
 }
 
 const mongoReaders: Readers = {
@@ -110,6 +114,7 @@ const mongoReaders: Readers = {
   resources: mongoResourceReader,
   gradingScale: mongoGradingScaleReader,
   settings: mongoSettingsReader,
+  search: mongoSearchSources,
 }
 
 /**
@@ -166,6 +171,7 @@ export function createApp({
   app.use('/api/resources', resourcesRouter(readers.resources))
   app.use('/api/grading-scale', gradingRouter(readers.gradingScale))
   app.use('/api/settings', settingsRouter(readers.settings))
+  app.use('/api/search', searchRouter(readers.search, now))
   app.use('/api', submissionsRouter(submissions, now, formRateLimit))
 
   app.use(notFound)

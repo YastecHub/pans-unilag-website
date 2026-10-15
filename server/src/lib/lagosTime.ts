@@ -24,3 +24,8 @@ export function lagosMonthRange(month: string): [Date, Date] {
     new Date(Date.UTC(year, monthNumber, 1) - LAGOS_OFFSET_MS),
   ]
 }
+
+/** The first instant of the Lagos calendar day that contains `date`. */
+export function startOfLagosDay(date: Date): Date {
+  return new Date(startOfNextLagosDay(date).getTime() - 24 * 60 * 60 * 1000)
+}

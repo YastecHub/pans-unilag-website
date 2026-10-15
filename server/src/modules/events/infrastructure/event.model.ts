@@ -1,5 +1,7 @@
 import { model, Schema } from 'mongoose'
 import { contentPlugin } from '../../../lib/contentPlugin.js'
+import { textIndex, textWeights } from '../../../lib/textIndex.js'
+import { SEARCH_FIELDS } from '../../search/application/hits.js'
 import { photoField } from '../../../lib/validators.js'
 
 /**
@@ -45,6 +47,10 @@ const eventSchema = new Schema({
   committee: { type: String, default: '', trim: true },
 })
 eventSchema.plugin(contentPlugin)
+eventSchema.index(textIndex(SEARCH_FIELDS.event), {
+  name: 'search',
+  weights: textWeights(SEARCH_FIELDS.event),
+})
 eventSchema.index({ series: 1, dayNumber: 1 })
 
 eventSchema.pre(
