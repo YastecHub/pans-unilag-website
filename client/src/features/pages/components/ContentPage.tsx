@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import type { NavSection } from '../../../app/siteMap.ts'
 import { Markdown } from '../../../components/ui/Markdown.tsx'
 import { Placeholder } from '../../../components/ui/Placeholder.tsx'
@@ -14,13 +15,17 @@ type Props = {
   /** Shown while loading and if the page is missing; the API's title replaces it once loaded. */
   title: string
   section: NavSection
+  /** Shown above the sections once the page has loaded, e.g. a download card. */
+  before?: ReactNode
+  /** Shown after the sections, e.g. links to related pages. */
+  after?: ReactNode
 }
 
 /**
  * A constitution-derived page (About, Governance…): each section is a heading, sanitised Markdown,
  * and the articles it comes from, so readers can check the constitution.
  */
-export function ContentPage({ slug, title, section }: Props) {
+export function ContentPage({ slug, title, section, before, after }: Props) {
   const query = usePage(slug)
   const page = query.data
 
@@ -45,6 +50,7 @@ export function ContentPage({ slug, title, section }: Props) {
       ) : (
         <>
           {page?.isPlaceholder && <Placeholder note={page.placeholderNote} />}
+          {before}
           {page?.sections.map((s) => (
             <section
               key={s.heading}
@@ -58,6 +64,7 @@ export function ContentPage({ slug, title, section }: Props) {
               <ArticleRefs refs={s.articleRefs} />
             </section>
           ))}
+          {after}
         </>
       )}
     </InnerPageLayout>
