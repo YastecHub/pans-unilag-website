@@ -713,6 +713,7 @@ All responses are JSON. Errors always have the same shape:
 | 413 | `PAYLOAD_TOO_LARGE` | Request body over 100 KB |
 | 429 | `RATE_LIMITED` | Rate limit reached (`Retry-After` header set) |
 | 500 | `INTERNAL_ERROR` | Unexpected error; logged with the request id |
+| 503 | `SERVICE_UNAVAILABLE` | A feature's outside service isn't configured (e.g. image uploads without Cloudinary keys) |
 
 Unexpected crashes outside a request (an unhandled promise rejection or exception) are logged and the process exits with code 1, so the host restarts it cleanly.
 
@@ -751,6 +752,8 @@ Dashboard API (live, all behind `requireAdmin`, 401 without a session):
 - `GET /api/admin/submissions/feedback?status=new|read|resolved`, `PATCH /api/admin/submissions/feedback/:id` (`{ status }`), `GET /api/admin/submissions/alumni`, `DELETE /api/admin/submissions/alumni/:id` (removal requests).
 
 Add a resource to the dashboard by adding it to `ADMIN_RESOURCES` in `server/src/modules/admin/application/adminResources.ts`.
+
+Uploads (live): `POST /api/admin/media/signature` (signed-in only) takes `{ folder, publicId? }` and returns `{ uploadUrl, cloudName, apiKey, params, signature, expiresAt }`; the dashboard then posts the file straight to Cloudinary with `file`, `api_key`, `signature` and every field in `params`. `folder` is relative to `pans-unilag/` and must be one of the folders under [Images and Cloudinary](#images-and-cloudinary) (`brand`, `executives/<session>`, `senate/<session>`, `committees/<slug>`, `events/<series>[/<day>]`, `publications/<series>`); anything else is a 400. Only JPG, PNG and WebP are accepted, a `publicId` replaces the file of that name, and signatures expire after one hour. The API secret never leaves the server; without the three `CLOUDINARY_*` variables the endpoint returns 503 `SERVICE_UNAVAILABLE`.
 
 Public (read-only unless noted):
 

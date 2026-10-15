@@ -40,7 +40,17 @@ async function main() {
     docsEnabled,
     logger,
     logRequests: env.NODE_ENV !== 'test',
-    auth: { jwtSecret: env.JWT_SECRET },
+    auth: {
+      jwtSecret: env.JWT_SECRET,
+      media:
+        env.CLOUDINARY_CLOUD_NAME && env.CLOUDINARY_API_KEY && env.CLOUDINARY_API_SECRET
+          ? {
+              cloudName: env.CLOUDINARY_CLOUD_NAME,
+              apiKey: env.CLOUDINARY_API_KEY,
+              apiSecret: env.CLOUDINARY_API_SECRET,
+            }
+          : undefined,
+    },
   })
   const server = app.listen(env.PORT, () => {
     logger.info(`PANS UNILAG API listening on http://localhost:${env.PORT} (${env.NODE_ENV})`)

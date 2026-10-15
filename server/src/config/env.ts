@@ -38,6 +38,10 @@ const envSchema = z.object({
       .min(32, 'JWT_SECRET must be at least 32 characters (a long random string)')
       .optional(),
   ),
+  /** Cloudinary, for signing dashboard uploads (all three, or none: uploads are then switched off). */
+  CLOUDINARY_CLOUD_NAME: z.string().optional(),
+  CLOUDINARY_API_KEY: z.string().optional(),
+  CLOUDINARY_API_SECRET: z.string().optional(),
 })
 
 export type Env = z.infer<typeof envSchema>

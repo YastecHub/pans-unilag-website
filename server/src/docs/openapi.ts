@@ -10,6 +10,7 @@ import { eventsPaths } from '../modules/events/http/events.openapi.js'
 import { executivesPaths } from '../modules/executives/http/executives.openapi.js'
 import { opportunitiesPaths } from '../modules/opportunities/http/opportunities.openapi.js'
 import { gradingPaths } from '../modules/grading/http/grading.openapi.js'
+import { mediaPaths } from '../modules/media/http/media.openapi.js'
 import { pagesPaths } from '../modules/pages/http/pages.openapi.js'
 import { patronsPaths } from '../modules/patrons/http/patrons.openapi.js'
 import { publicationsPaths } from '../modules/publications/http/publications.openapi.js'
@@ -81,6 +82,7 @@ export function buildOpenApiDocument() {
       ...searchPaths,
       ...authPaths,
       ...adminPaths,
+      ...mediaPaths,
     },
   })
 }
