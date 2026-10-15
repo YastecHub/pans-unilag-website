@@ -73,6 +73,10 @@ Photo sources (Google Drive folders for Pharmalympics 2026 and PANS Health Week 
 | Postal address | c/o The Dean's Office, Faculty of Pharmacy, College of Medicine Campus, University of Lagos, P.M.B. 12003, Lagos |
 | Location | Faculty of Pharmacy, Lagos University Teaching Hospital, off Ishaga Road, Idi-Araba, Lagos |
 | Correspondence | Directed to the **Secretary General**, through the postal address above |
+| Instagram | [instagram.com/pans_unilag](https://www.instagram.com/pans_unilag/) |
+| X | [x.com/PANS_Unilag](https://x.com/PANS_Unilag) |
+| YouTube | [youtube.com/@pansunilag3998](https://www.youtube.com/@pansunilag3998) |
+| LinkedIn | [linkedin.com/company/pharmaceutical-association-of-nigerian-students-pans-unilag](https://www.linkedin.com/company/pharmaceutical-association-of-nigerian-students-pans-unilag/) |
 
 > **Name rule:** the constitution says "Nigeria Students". The brand deck's logo lockup and the PRD say "Nigerian Students"; **the constitution wins**. The Design Committee should update the lockup artwork to "Nigeria".
 
@@ -176,7 +180,7 @@ Home
 │                      Finance & accountability
 │                      Meetings & procedures
 │                      Constitution                    [PDF download (file received)]
-├── Events ─────────── Upcoming                        [empty state until events are added]
+├── Events ─────────── Upcoming                        [4 events for 2026/27; venues and registration links: placeholders]
 │                      Past events (Health Week 2026, Pharmalympics 2026)
 │                      Gallery
 ├── Opportunities ──── Hub (run by CPD & CBC)          [empty state until listings are added]
@@ -188,7 +192,7 @@ Home
 └── Connect ────────── Feedback & suggestions (to the Secretary General)
                        Alumni network (Alumni Network Committee)
                        Contact · Privacy notice
-Header: search · light/dark toggle         Footer: name, motto, address, socials [placeholder], privacy
+Header: search · light/dark toggle         Footer: name, motto, address, socials, privacy
 /admin (not linked publicly): sign-in · content · placeholders to fill · submissions
 ```
 
@@ -224,20 +228,21 @@ Header: search · light/dark toggle         Footer: name, motto, address, social
 | Committees 2026/27: names and leads (11) | ✅ Ready | President's announcement |
 | Committee descriptions: ADMAP, PPHT, SDG, Research Club, CPD & CBC, Alumni Network, IPSF | ✅ Ready | Committees write-ups |
 | Committee descriptions: Content, Media, Design, Academics | 🟨 Placeholder | Write-ups needed |
-| President | 🟨 Partial | Name known (Abigail Moejoh). Short bio to come from the President; official photo after the photoshoot (by 31 Oct 2026) |
-| Other 13 executive officers | 🟨 Placeholder | Names and short bios to come from the President; official photos after the photoshoot (by 31 Oct 2026) |
+| President | 🟨 Partial | Name known (Abigail Moejoh). Bio to come in the President's Exco document; official photo after the photoshoot (by 31 Oct 2026) |
+| Other 13 executive officers | 🟨 Placeholder | The President is compiling one document with every officer's name, role and short bio; official photos after the photoshoot (by 31 Oct 2026) |
 | Senate principal officers (4) | 🟨 Placeholder | The Senate election has not been held yet. Only the four principal officers are shown, as placeholders |
 | Patrons (Dean of the Faculty + four others) | 🟨 Placeholder | Names needed |
 | History & milestones (first Pharmalympics, first Pharmathon, etc.) | 🟨 Placeholder | Verified dates and facts needed |
 | Impact (numbers, outcomes) | 🟨 Placeholder | Figures needed |
 | Full constitution PDF | ✅ Received | 55 pages, 7.1 MB (Canva export). The last page shows three handwritten signatures: confirm with the President that it may be published as is |
-| Upcoming events | 🟨 Empty state | Event details needed |
+| Upcoming events 2026/27 | 🟨 Partial | Four events with dates (see *Upcoming events*); venues and registration links needed. Updated regularly through the dashboard |
 | Past events: Health Week 2026, Pharmalympics 2026 | 🟨 Partial | Photos ready; descriptions and dates needed |
 | Opportunities | 🟨 Empty state | Listings from CPD & CBC |
 | Recipharm, newspaper, Substack | 🟨 Placeholder | Editions and links needed |
 | Academic resources | 🟨 Placeholder | Vetted links from Academics Committee |
 | CGPA calculator and academic standing | ✅ Ready | Faculty of Pharmacy handbook §3.5 and §3.7 |
-| Official email and social handles | 🟨 Placeholder | Needed. Never use personal emails or phone numbers |
+| Social media handles | ✅ Ready | Instagram, X, YouTube, LinkedIn (see *Identity and naming*) |
+| Official email address | 🟨 Placeholder | Needed. Never use personal emails or phone numbers |
 | High-resolution logo | 🟨 Placeholder | SVG or ≥ 1000 px needed |
 
 ## Placeholder rules
@@ -325,6 +330,25 @@ The *Content to Include* PDF is the copy source for these pages; each section ci
 - **Patrons:** the Dean of the Faculty of Pharmacy and four others.
 
 ## Events and gallery
+
+### Upcoming events (2026/27)
+
+Supplied by the PANS leadership on 15 Oct. The list changes often, so after launch the executives keep it up to date in the dashboard (issue #38). The seed only provides the starting list.
+
+| Event | When | Precision | Venue | Registration |
+| --- | --- | --- | --- | --- |
+| **Freshers' Week** | Mon 30 Nov – Fri 4 Dec 2026 | Exact dates | *Placeholder* | *Placeholder* |
+| **Pharmalympics 2027** | April – May 2027 | Months only | *Placeholder* | *Placeholder* |
+| **PANS Health Week 2027** | Mon 7 – Fri 11 June 2027 | Exact dates | *Placeholder* | *Placeholder* |
+| **PANS Dinner** | September 2027 | Month only | *Placeholder* | *Placeholder* |
+
+- The years are inferred from the 2026/27 session. Both exact ranges fall Monday to Friday.
+- **Months-only dates** are stored with `datePrecision: "month"`:
+  - `startsAt` is the first day of the first month and `endsAt` the last day of the last month (Africa/Lagos).
+  - They're shown as "April – May 2027" or "September 2027", never as a made-up day.
+  - When the exact days are confirmed, an admin sets the real dates and switches the precision to `"day"`.
+- Each event stays a placeholder (`isPlaceholder: true`, note "Venue and registration link to be confirmed") until those details arrive. Event cards show "Venue to be announced" and no Register button.
+- Calendar export (.ics) is offered only for events with exact dates.
 
 ### Past events with photos ready
 
@@ -524,11 +548,11 @@ pans-unilag-website/
 | `committees.json` | President's announcement + write-ups | 4 descriptions, all photos |
 | `patrons.json` | Constitution Art. 4 | All names |
 | `milestones.json` | To be supplied | All |
-| `events.json` | Health Week 2026 (9), Pharmalympics 2026 (9) | Dates and descriptions |
+| `events.json` | Past: Health Week 2026 (9), Pharmalympics 2026 (9). Upcoming: Freshers' Week, Pharmalympics 2027, Health Week 2027, PANS Dinner | Past: dates and descriptions. Upcoming: venues, registration links, descriptions |
 | `albums.json` | Drive folders (curated) | None once photos are uploaded |
 | `publications.json` | To be supplied | Recipharm, newspaper, Substack |
 | `grading.json` | Faculty handbook §3.5: grades, Pass/Fail bands, 1–3 units | None |
-| `settings.json` | Constitution contact address | Email, social handles |
+| `settings.json` | Constitution contact address; social links (Instagram, X, YouTube, LinkedIn) | Official email |
 
 ## Architecture rules
 
@@ -607,7 +631,7 @@ All collections share `isPlaceholder` (boolean), `placeholderNote` (string), `cr
 | `committees` | name, shortName, slug (unique), description, activities[], achievements[], plans[], motto, officers[{ title, name, level }], session, order | 11 for 2026/27 |
 | `patrons` | name, title, isDean, order | |
 | `milestones` | year, title, description, verifiedBy | `verifiedBy` required unless placeholder |
-| `events` | title, slug (unique), series, dayNumber, startsAt, endsAt, venue, description, coverImage, registrationUrl, committeeRef | Upcoming vs past by `endsAt`; text index |
+| `events` | title, slug (unique), series, dayNumber, startsAt, endsAt, datePrecision (`day` \| `month`), venue, description, coverImage, registrationUrl, committeeRef | Upcoming vs past by `endsAt`; text index |
 | `albums` | title, slug, eventRef, series, date, cover, photos[{ publicId, alt, caption }], sourceFolderUrl, consentConfirmed | Grouped by series and year |
 | `announcements` | title, body, publishAt, expiresAt, pinned | Hidden after `expiresAt` |
 | `opportunities` | title, slug, type, eligibility, deadline, applyUrl, lastCheckedAt | Hidden after `deadline` |
@@ -615,7 +639,7 @@ All collections share `isPlaceholder` (boolean), `placeholderNote` (string), `cr
 | `documents` | title, version, approvedOn, approvedBy, fileUrl | Constitution adopted 9 July 2026 |
 | `resources` | title, level, semester, course, url, verifiedBy | |
 | `gradingscales` | grades[{ letter, min, max, point }], bands[{ name, min, max }] (Pass/Fail), passMark (2.40), units { min: 1, max: 3 }, active, source | One active scale |
-| `settings` | contactEmail, socialLinks, quickLinks, homeBanner, postalAddress, location | Single document |
+| `settings` | contactEmail, socialLinks[{ platform, url }], quickLinks, homeBanner, postalAddress, location | Single document |
 | `feedback` | category (`suggestion`, `complaint`, `welfare`, `other`), message, contactEmail?, status, createdAt | Admin-only; deleted after 12 months |
 | `alumni` | name, graduationYear, email, phone?, interests[], consentAt | Admin-only; kept until opt-out |
 | `admins` | name, email (unique), passwordHash, role (`admin`, `editor`), lastLoginAt | Never public |
@@ -876,6 +900,8 @@ Work flows top to bottom; items in the same row can run in parallel.
 | 15 Oct | Senate page shows only the four principal officers, as placeholders until the Senate election |
 | 15 Oct | Executive cards show office, name, short bio and photo; names and bios to come from the President; photos after the October photoshoot (by 31 Oct) |
 | 15 Oct | Full constitution PDF received (55 pp., 7.1 MB) |
+| 15 Oct | Four upcoming events for 2026/27 added (Freshers' Week, Pharmalympics 2027, Health Week 2027, PANS Dinner); events gain `datePrecision` so months-only dates show honestly; venues and links are placeholders |
+| 15 Oct | Official social links added (Instagram, X, YouTube, LinkedIn); Exco names and bios will come as one document from the President |
 
 ## Using the AI agent prompts (`.agent/`)
 
