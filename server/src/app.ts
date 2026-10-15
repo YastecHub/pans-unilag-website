@@ -4,6 +4,7 @@ import express, { type Express } from 'express'
 import helmet from 'helmet'
 import { docsRouter } from './docs/docs.routes.js'
 import { type Logger, silentLogger } from './lib/logger.js'
+import { type AuthGuard, createAuthGuard } from './middleware/requireAdmin.js'
 import { createErrorHandler } from './middleware/errorHandler.js'
 import { notFound } from './middleware/notFound.js'
 import { requestId } from './middleware/requestId.js'
@@ -27,6 +28,9 @@ import { mongoPublicationReader } from './modules/publications/infrastructure/pu
 import type { ResourceReader } from './modules/resources/application/resourceView.js'
 import { resourcesRouter } from './modules/resources/http/resources.routes.js'
 import { mongoResourceReader } from './modules/resources/infrastructure/resource.repository.js'
+import type { AdminStore } from './modules/auth/application/adminView.js'
+import { authRouter } from './modules/auth/http/auth.routes.js'
+import { mongoAdminStore } from './modules/auth/infrastructure/admin.store.js'
 import type { CommitteeReader } from './modules/committees/application/committeeView.js'
 import { committeesRouter } from './modules/committees/http/committees.routes.js'
 import { mongoCommitteeReader } from './modules/committees/infrastructure/committee.repository.js'
@@ -79,6 +83,17 @@ export type AppOptions = {
   submissions?: SubmissionStore
   /** Per-IP limit for each form (default 5 per hour). */
   formRateLimit?: FormRateLimit
+  /** Admin sign-in. Without it the /api/auth routes are not mounted (tests of public routes). */
+  auth?: AuthOptions
+}
+
+export type AuthOptions = {
+  /** Signs session tokens. At least 32 characters (JWT_SECRET). */
+  jwtSecret: string
+  /** Defaults to MongoDB; tests pass an in-memory store. */
+  admins?: AdminStore
+  sessionHours?: number
+  loginRateLimit?: { windowMs: number; limit: number }
 }
 
 export type Readers = {
@@ -131,6 +146,7 @@ export function createApp({
   now = () => new Date(),
   submissions = mongoSubmissionStore,
   formRateLimit,
+  auth,
 }: AppOptions): Express {
   const app = express()
   const readers = { ...mongoReaders, ...readerOverrides }
@@ -173,6 +189,23 @@ export function createApp({
   app.use('/api/settings', settingsRouter(readers.settings))
   app.use('/api/search', searchRouter(readers.search, now))
   app.use('/api', submissionsRouter(submissions, now, formRateLimit))
+
+  if (auth) {
+    const admins = auth.admins ?? mongoAdminStore
+    const guard: AuthGuard = createAuthGuard(admins, auth.jwtSecret, now)
+    app.use(
+      '/api/auth',
+      authRouter({
+        store: admins,
+        guard,
+        secret: auth.jwtSecret,
+        isProduction,
+        now,
+        sessionHours: auth.sessionHours,
+        loginRateLimit: auth.loginRateLimit,
+      }),
+    )
+  }
 
   app.use(notFound)
   app.use(createErrorHandler({ isProduction, logger }))

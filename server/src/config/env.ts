@@ -30,6 +30,14 @@ const envSchema = z.object({
       .optional()
       .transform((value) => (value === undefined ? undefined : value === 'true')),
   ),
+  /** Signs admin session tokens. Required to start the API (see server.ts); scripts don't need it. */
+  JWT_SECRET: z.preprocess(
+    (value) => (value === '' ? undefined : value),
+    z
+      .string()
+      .min(32, 'JWT_SECRET must be at least 32 characters (a long random string)')
+      .optional(),
+  ),
 })
 
 export type Env = z.infer<typeof envSchema>

@@ -22,6 +22,12 @@ async function main() {
   if (existsSync('.env')) process.loadEnvFile('.env')
 
   const env = loadEnv()
+  if (!env.JWT_SECRET) {
+    throw new EnvError(
+      '  - JWT_SECRET: required to sign admin sessions. Generate one with:\n' +
+        "      node -e \"console.log(require('crypto').randomBytes(48).toString('base64url'))\"",
+    )
+  }
   const isProduction = env.NODE_ENV === 'production'
   logger = createLogger({ json: isProduction })
 
@@ -34,6 +40,7 @@ async function main() {
     docsEnabled,
     logger,
     logRequests: env.NODE_ENV !== 'test',
+    auth: { jwtSecret: env.JWT_SECRET },
   })
   const server = app.listen(env.PORT, () => {
     logger.info(`PANS UNILAG API listening on http://localhost:${env.PORT} (${env.NODE_ENV})`)

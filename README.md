@@ -732,6 +732,18 @@ Forms (live): `POST /api/feedback` (`category`, `message` 10–2000 characters, 
 
 Search (live): `GET /api/search?q=&type=&limit=` returns `{ query, results: [{ type, title, summary, url, externalUrl?, score }] }`, best match first (default 20, at most 50). It covers events, open opportunities, publications, resources and committees through one MongoDB text index per collection (title weighted ×10; whole words, so "pharm" does not match "pharmacy"). **Placeholders are never returned**, so most events and all publications appear only once their real content is in. `q` must be 2–100 characters (400 otherwise); quotes and minus signs are treated as ordinary text. `url` is the page on the site; resources also give `externalUrl`.
 
+Admin auth (live): `POST /api/auth/login` (`{ email, password }`, 10 attempts per 15 minutes per IP) sets the session cookie `pans_admin_session`: a JWT (HS256, signed with `JWT_SECRET`, 8 hours) in an `httpOnly`, `SameSite=Lax` cookie on path `/api`, `Secure` in production. A wrong email and a wrong password give the same 401. `GET /api/auth/me` returns `{ admin: { id, name, email, role } }` or 401; `POST /api/auth/logout` clears the cookie. The admin is looked up on every request, so **removing an admin or resetting their password signs them out everywhere**. The password hash is never selected by default and never leaves the server. Routes use `requireAdmin` and `requireRole('admin')` from `middleware/requireAdmin.ts`. Because the cookie is `SameSite=Lax`, **the site must reach the API on its own domain in production** (an `/api/*` rewrite on the static host to the Render URL); in development Vite's proxy does this.
+
+Admins are managed from the command line; there is no sign-up page:
+
+```bash
+npm run create-admin -w server -- --email secretary@example.com --name "Full Name" --role admin
+npm run create-admin -w server -- --email secretary@example.com --reset-password
+npm run create-admin -w server -- --email secretary@example.com --remove
+```
+
+A new or reset password (24 random characters) is printed once; share it privately. Roles: `admin` (everything) and `editor` (content only).
+
 Public (read-only unless noted):
 
 | Method | Path | Purpose |
@@ -794,6 +806,7 @@ The API needs a `MONGODB_URI` in `server/.env` (a free personal Atlas cluster or
 | `npm run seed -w server` | Loads `server/seed/*.json` into MongoDB. Adds missing documents only, so it is safe to re-run; `-- --update` overwrites, `-- --reset` empties first (development only). See [`server/seed/README.md`](server/seed/README.md) |
 | `npm run seed:check -w server` | Validates the seed files without a database |
 | `npm run content:status -w server` | Prints what is still a placeholder in the seed files, as a checklist for the content tracking issue (#14) |
+| `npm run create-admin -w server -- --email <email> --name "<name>" [--role admin\|editor]` | Creates a dashboard admin and prints a generated password once; `--reset-password` and `--remove` manage existing ones |
 | `npm run upload-album -w server -- --event <slug> --dir <folder> --consent-confirmed` | Resizes (≤ 2500 px, metadata stripped) and uploads one event's curated photos to Cloudinary, then records them in `albums.json`. See [`server/seed/README.md`](server/seed/README.md#albumsjson) |
 
 ## Environment variables
