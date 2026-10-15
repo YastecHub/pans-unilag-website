@@ -1,4 +1,5 @@
 import { Link } from 'react-router'
+import { cardLink } from '../../../components/ui/Card.tsx'
 import { Badge } from '../../../components/ui/Badge.tsx'
 import { SkeletonCard } from '../../../components/ui/Skeleton.tsx'
 import { EmptyState, ErrorState, LoadingState } from '../../../components/ui/States.tsx'
@@ -8,7 +9,7 @@ import {
   type Opportunity,
   useOpportunities,
 } from '../../opportunities/api/opportunities.ts'
-import { CardGrid, cardLink, HomeSection } from './HomeSection.tsx'
+import { CardGrid, HomeSection } from './HomeSection.tsx'
 
 const SHOWN = 3
 

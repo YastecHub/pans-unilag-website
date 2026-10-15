@@ -16,3 +16,7 @@ export function Card({ children, tone = 'outlined', as: Tag = 'div', className =
     <Tag className={`flex flex-col gap-2 rounded-xl p-5 ${toneClass} ${className}`}>{children}</Tag>
   )
 }
+
+/** A card that is one big link, filling its grid cell (event, committee and opportunity cards). */
+export const cardLink =
+  'flex h-full flex-col gap-2 rounded-xl border border-border bg-surface p-5 text-text no-underline transition-colors hover:border-border-strong'

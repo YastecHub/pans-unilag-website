@@ -32,8 +32,7 @@ const components: Components = {
       <Link to={href}>{children}</Link>
     ) : (
       <a href={href} target="_blank" rel="noopener noreferrer">
-        {children}
-        <span className="sr-only"> (opens in a new tab)</span>
+        {children} <span className="sr-only">(opens in a new tab)</span>
       </a>
     ),
 }

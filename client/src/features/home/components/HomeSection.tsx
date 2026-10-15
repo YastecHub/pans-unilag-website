@@ -58,7 +58,3 @@ export function CardGrid({
       : 'grid-cols-[repeat(auto-fill,minmax(18rem,1fr))]'
   return <Tag className={`grid gap-4 ${cols}`}>{children}</Tag>
 }
-
-/** Card-style link filling its grid cell. */
-export const cardLink =
-  'flex h-full flex-col gap-2 rounded-xl border border-border bg-surface p-5 text-text no-underline transition-colors hover:border-border-strong'
