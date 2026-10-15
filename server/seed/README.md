@@ -178,9 +178,9 @@ One album per event (key `slug`, same as the event's slug). Albums start as plac
 **Uploading an album (Media Committee + one developer):**
 
 1. Choose 20–40 photos for the event from the Drive folder. Only use photos where the people pictured agreed to publication; remove any photo on request.
-2. Copy them into a folder on your computer, named in the order they should appear (e.g. `01.jpg`, `02.jpg`).
+2. Copy them into `photos/<event-slug>/` in the repo (ignored by git), named in the order they should appear (e.g. `01.jpg`, `02.jpg`).
 3. Put the Cloudinary keys from the web lead in `server/.env` (`CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`).
-4. Preview: `npm run upload-album -w server -- --event health-week-2026-day-3 --dir "C:\photos\hw-day-3" --dry-run`
+4. Preview, from the repo root: `npm run upload-album -w server -- --event health-week-2026-day-3 --dir photos/health-week-2026-day-3 --dry-run`. In PowerShell write the `--` as `'--'`, or PowerShell removes it and npm swallows the options.
 5. Upload: the same command with `--consent-confirmed` instead of `--dry-run` (add `--cover 5` to make photo 5 the cover).
 6. The script resizes each photo to at most 2500 px on the long edge and **strips location and camera data**. It uploads to `pans-unilag/events/<series>/<day>/photo-NN` and records the photos in `albums.json` with a starting alt text.
 7. **Replace each starting alt text** with what the photo shows, e.g. "Students checking a resident's blood pressure at the outreach". Add captions if useful.

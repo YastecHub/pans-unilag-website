@@ -44,3 +44,5 @@ dump/
 Thumbs.db
 .idea/
 *.swp
+# event photos downloaded for upload (never commit originals)
+photos/

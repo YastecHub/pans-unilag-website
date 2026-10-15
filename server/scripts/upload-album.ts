@@ -1,7 +1,9 @@
 /**
  * Uploads a curated folder of photos for one event to Cloudinary and records them in seed/albums.json.
  *
- *   npm run upload-album -w server -- --event health-week-2026-day-3 --dir "C:\photos\hw-day-3" --consent-confirmed
+ *   npm run upload-album -w server -- --event health-week-2026-day-3 --dir photos/health-week-2026-day-3 --consent-confirmed
+ *   (PowerShell drops a bare --, so type it as '--' there.)
+ *   --dir is relative to the folder you run npm from (usually the repo root).
  *   options: --cover 5 (which photo is the album cover, default 1)   --dry-run (resize and report only)
  *
  * Needs CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY and CLOUDINARY_API_SECRET in server/.env.
@@ -38,12 +40,17 @@ function fail(message: string): never {
 
 async function main() {
   const eventSlug = arg('--event')
-  const dir = arg('--dir')
+  const dirArg = arg('--dir')
+  // npm runs this from server/, so resolve --dir from where npm was started (INIT_CWD).
+  const dir = dirArg && path.resolve(process.env.INIT_CWD ?? process.cwd(), dirArg)
   const dryRun = process.argv.includes('--dry-run')
   const coverIndex = Number(arg('--cover') ?? '1') - 1
   if (!eventSlug || !dir)
     fail(
-      'Usage: npm run upload-album -w server -- --event <event-slug> --dir <folder> --consent-confirmed [--cover N] [--dry-run]',
+      [
+        'Usage: npm run upload-album -w server -- --event <event-slug> --dir <folder> --consent-confirmed [--cover N] [--dry-run]',
+        "In PowerShell, quote the --:  npm run upload-album -w server '--' --event ... --dir ...",
+      ].join('\n'),
     )
   if (!dryRun && !process.argv.includes('--consent-confirmed')) {
     fail(
