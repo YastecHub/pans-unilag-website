@@ -1,6 +1,4 @@
-import { AdvancedImage, lazyload } from '@cloudinary/react'
-import { Cloudinary } from '@cloudinary/url-gen'
-import { fill } from '@cloudinary/url-gen/actions/resize'
+import { cloudinaryUrl } from '../../lib/cloudinary.ts'
 import { PlaceholderImage } from './Placeholder.tsx'
 
 type Props = {
@@ -20,31 +18,26 @@ type Props = {
 }
 
 /**
- * Every Cloudinary image goes through here: cropped to size, automatic format (WebP/AVIF) and
- * quality, lazy-loaded, with width and height set so the page doesn't jump while it loads.
+ * A single Cloudinary image: cropped to size, automatic format (WebP/AVIF) and quality, natively
+ * lazy-loaded, with width and height set so the page doesn't jump while it loads. For photos shown
+ * at several sizes (the gallery), use features/gallery/components/Photo, which adds a srcset.
  */
 export function Img({ publicId, alt, width, height, lazy = true, className = '' }: Props) {
-  const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
-  if (!cloudName) {
+  const src = cloudinaryUrl(publicId, width, { crop: 'fill', aspectRatio: width / height })
+  if (!src) {
     // No Cloudinary configured (e.g. a fresh clone): show the standard photo placeholder.
     return (
       <PlaceholderImage kind="badge" aspectRatio={`${width} / ${height}`} className={className} />
     )
   }
-
-  const image = new Cloudinary({ cloud: { cloudName } })
-    .image(publicId)
-    .resize(fill().width(width).height(height))
-    .format('auto')
-    .quality('auto')
-
   return (
-    <AdvancedImage
-      cldImg={image}
-      plugins={lazy ? [lazyload()] : []}
+    <img
+      src={src}
       alt={alt}
       width={width}
       height={height}
+      loading={lazy ? 'lazy' : 'eager'}
+      decoding="async"
       className={`h-auto max-w-full ${className}`}
     />
   )

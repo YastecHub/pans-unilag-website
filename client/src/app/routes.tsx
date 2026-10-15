@@ -5,6 +5,8 @@ import {
   MembershipPage,
   WhoWeArePage,
 } from '../features/about/pages/AboutPages.tsx'
+import { AlbumPage } from '../features/gallery/pages/AlbumPage.tsx'
+import { GalleryPage } from '../features/gallery/pages/GalleryPage.tsx'
 import { EventPage } from '../features/events/pages/EventPage.tsx'
 import { PastEventsPage } from '../features/events/pages/PastEventsPage.tsx'
 import { UpcomingEventsPage } from '../features/events/pages/UpcomingEventsPage.tsx'
@@ -56,6 +58,8 @@ export const routes: RouteObject[] = [
       { path: '/events', element: <UpcomingEventsPage /> },
       { path: '/events/past', element: <PastEventsPage /> },
       { path: '/events/:slug', element: <EventPage /> },
+      { path: '/gallery', element: <GalleryPage /> },
+      { path: '/gallery/:slug', element: <AlbumPage /> },
       ...OVERVIEW_SECTIONS.map((section) => ({
         path: section.to,
         element: <SectionOverviewPage section={section} />,

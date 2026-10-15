@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router'
 import { afterEach, describe, expect, it, vi } from 'vitest'
@@ -131,10 +131,7 @@ describe('Img', () => {
     )
 
     const img = screen.getByRole('img', { name: 'PANS UNILAG badge' }) as HTMLImageElement
-    // AdvancedImage sets src once it has mounted.
-    await waitFor(() =>
-      expect(img.src).toContain('https://res.cloudinary.com/pans-demo/image/upload/'),
-    )
+    expect(img.src).toContain('https://res.cloudinary.com/pans-demo/image/upload/')
     expect(img.src).toContain('c_fill,h_400,w_640')
     expect(img.src).toContain('f_auto')
     expect(img.src).toContain('q_auto')
