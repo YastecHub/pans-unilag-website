@@ -9,7 +9,9 @@
     "start": "node dist/server.js",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run --passWithNoTests"
+    "test": "vitest run --passWithNoTests",
+    "seed": "tsx scripts/seed.ts",
+    "seed:check": "tsx scripts/seed.ts --check"
   },
   "dependencies": {
     "cookie-parser": "^1.4.7",

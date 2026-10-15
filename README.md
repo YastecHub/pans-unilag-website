@@ -252,7 +252,7 @@ Missing content must be **visible as missing**, so nobody mistakes a placeholder
 1. **Never invent content.** No fake names, dates, numbers or "Lorem ipsum". A placeholder states what will appear there: *"Photo and bio coming soon"*, *"Recipharm 2026 edition coming soon"*, *"Date to be announced"*.
 2. **Structure is real, details are pending.** For example, all 14 executive offices are shown with their constitutional duties; each officer card shows "Name to be announced" until filled.
 3. **One look for every placeholder:** a `Placeholder` component with a dashed border in `#4a5a50`, a `#e1e8db` background, an icon and the text "Coming soon". Image placeholders use a neutral silhouette (people) or the PANS badge on pale grey (events and publications) with the label "Photo coming soon".
-4. **Data flag:** every content document has `isPlaceholder: boolean` and `placeholderNote: string`. The seed script creates placeholders; saving real content in the dashboard clears the flag.
+4. **Data flag:** every content document has `isPlaceholder: boolean` and `placeholderNote: string` (added by `contentPlugin`; a note is required when `isPlaceholder` is true). The seed script creates placeholders; saving real content in the dashboard clears the flag. Re-running the seed never overwrites content edited in the dashboard.
 5. **Admin to-do list:** the dashboard has a **Placeholders** screen listing every item still marked `isPlaceholder`, grouped by page, so the team can work through them.
 6. **Empty lists are not placeholders.** Upcoming events and opportunities show a friendly empty state ("No upcoming events yet. Check back soon.") rather than fake entries.
 7. **Search ignores placeholders**, and link previews never use placeholder images.
@@ -502,7 +502,8 @@ pans-unilag-website/
 │   │   ├── server.ts                # connects to MongoDB and listens
 │   │   ├── config/                  # env.ts (Zod-validated), db.ts, cloudinary.ts
 │   │   ├── docs/                    # OpenAPI document + Swagger UI (/api/docs)
-│   │   ├── lib/                     # httpError (error codes), logger
+│   │   ├── lib/                     # httpError (error codes), logger, contentPlugin
+│   │   ├── seed/                    # registry.ts (which file fills which model), runSeed.ts
 │   │   ├── middleware/              # requestId, requestLogger, validate, rateLimit, errorHandler, notFound, requireAdmin
 │   │   └── modules/
 │   │       ├── pages/               # constitution-derived page sections
@@ -540,6 +541,8 @@ pans-unilag-website/
 
 ### Seed files (`server/seed/`)
 
+How seeding works, the rules for each file and their JSON shapes: [`server/seed/README.md`](server/seed/README.md).
+
 | File | Built from | Placeholders inside |
 | --- | --- | --- |
 | `pages.json` | Content to Include PDF (sections 1–14) | None |
@@ -576,6 +579,8 @@ The API skeleton (issue #3) provides these building blocks. Use them instead of 
 | Return an error from a route or service | `throw HttpError.notFound('Event not found')` (also `badRequest`, `validation`, `unauthorized`, `forbidden`, `conflict`, `tooManyRequests`) | `server/src/lib/httpError.ts` |
 | Handle Mongoose / MongoDB errors | Nothing: bad ObjectIds, schema validation and duplicate keys are mapped automatically (see *Error codes*) | `server/src/middleware/errorHandler.ts` |
 | Log something | `logger.info/warn/error(message, { requestId: req.id, ... })`. Never log secrets or personal data | `server/src/lib/logger.ts` |
+| Define a content model | `schema.plugin(contentPlugin)`: adds `isPlaceholder`, `placeholderNote`, timestamps, rejects unknown fields, JSON with `id`. Give the seed key a unique index | `server/src/lib/contentPlugin.ts` |
+| Seed a collection | Add the model to `SEED_TARGETS` and its JSON to `server/seed/` | `server/src/seed/registry.ts` |
 | Limit abuse on a route (login, forms) | `createRateLimiter({ windowMs, limit })` | `server/src/middleware/rateLimit.ts` |
 | Add a new environment variable | Add it to the Zod schema in `config/env.ts` **and** to `server/.env.example` | `server/src/config/env.ts` |
 | Add a feature | `modules/<feature>/http/<feature>.routes.ts` exporting a router, mounted under `/api/<feature>` in `app.ts` | `server/src/modules/` |
@@ -763,8 +768,8 @@ The API needs a `MONGODB_URI` in `server/.env` (a free personal Atlas cluster or
 | `npm run test` | Vitest in both workspaces |
 | `npm run format` / `npm run format:check` | Prettier for code files |
 | `npm run <script> -w client` or `-w server` | Run a script in one workspace only |
-
-The seed command (`npm run seed -w server`) arrives with issue #8.
+| `npm run seed -w server` | Loads `server/seed/*.json` into MongoDB. Adds missing documents only, so it is safe to re-run; `-- --update` overwrites, `-- --reset` empties first (development only). See [`server/seed/README.md`](server/seed/README.md) |
+| `npm run seed:check -w server` | Validates the seed files without a database |
 
 ## Environment variables
 
