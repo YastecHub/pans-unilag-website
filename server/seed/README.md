@@ -171,6 +171,25 @@ Eleven pages built from _Content to Include_ (sections 2–14): who-we-are, memb
 ]
 ```
 
+### `albums.json`
+
+One album per event (key `slug`, same as the event's slug). Albums start as placeholders with no photos. **Don't edit photos by hand:** the upload script fills them in.
+
+**Uploading an album (Media Committee + one developer):**
+
+1. Choose 20–40 photos for the event from the Drive folder. Only use photos where the people pictured agreed to publication; remove any photo on request.
+2. Copy them into `photos/<event-slug>/` in the repo (ignored by git), named in the order they should appear (e.g. `01.jpg`, `02.jpg`).
+3. Put the Cloudinary keys from the web lead in `server/.env` (`CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`).
+4. Preview, from the repo root: `npm run upload-album -w server -- --event health-week-2026-day-3 --dir photos/health-week-2026-day-3 --dry-run`. In PowerShell write the `--` as `'--'`, or PowerShell removes it and npm swallows the options.
+5. Upload: the same command with `--consent-confirmed` instead of `--dry-run` (add `--cover 5` to make photo 5 the cover).
+6. The script resizes each photo to at most 2500 px on the long edge and **strips location and camera data**. It uploads to `pans-unilag/events/<series>/<day>/photo-NN` and records the photos in `albums.json` with a starting alt text.
+7. **Replace each starting alt text** with what the photo shows, e.g. "Students checking a resident's blood pressure at the outreach". Add captions if useful.
+8. Run `npm run seed:check -w server`, then open a PR.
+
+Re-running for the same event replaces its photos and keeps alt text you already improved. The Drive folder link goes in the dashboard (`sourceFolderUrl`), never in this repository.
+
+**Free plan:** at roughly 0.5–1 MB per resized photo, 18 albums × 40 photos is about 0.4–0.7 GB of storage, well within Cloudinary's free plan.
+
 ### `grading.json`
 
 ```json

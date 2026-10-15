@@ -664,7 +664,7 @@ All collections share `isPlaceholder` (boolean), `placeholderNote` (string), `cr
 | `patrons` | name, title, isDean, order | |
 | `milestones` | year, title, description, verifiedBy | `verifiedBy` required unless placeholder |
 | `events` | title, slug (unique), series, dayNumber, startsAt, endsAt, datePrecision (`day` \| `month` \| `unknown`), committee (slug), venue, description, coverImage, registrationUrl, committeeRef | Upcoming vs past by `endsAt`; `unknown` dates count as past |
-| `albums` | title, slug, eventRef, series, date, cover, photos[{ publicId, alt, caption }], sourceFolderUrl, consentConfirmed | Grouped by series and year |
+| `albums` | slug (= event slug), title, event (slug), series, cover, photos[{ publicId, alt, caption }], sourceFolderUrl, consentConfirmed | ≤ 40 photos; photos need confirmed consent and alt text |
 | `announcements` | title, body, publishAt, expiresAt, pinned | Hidden after `expiresAt` |
 | `opportunities` | title, slug, type, eligibility, deadline, applyUrl, lastCheckedAt | Hidden after `deadline` |
 | `publications` | title, series (`recipharm`, `newspaper`, `substack`), edition, date, cover, fileUrl or link | |
@@ -778,6 +778,7 @@ The API needs a `MONGODB_URI` in `server/.env` (a free personal Atlas cluster or
 | `npm run <script> -w client` or `-w server` | Run a script in one workspace only |
 | `npm run seed -w server` | Loads `server/seed/*.json` into MongoDB. Adds missing documents only, so it is safe to re-run; `-- --update` overwrites, `-- --reset` empties first (development only). See [`server/seed/README.md`](server/seed/README.md) |
 | `npm run seed:check -w server` | Validates the seed files without a database |
+| `npm run upload-album -w server -- --event <slug> --dir <folder> --consent-confirmed` | Resizes (≤ 2500 px, metadata stripped) and uploads one event's curated photos to Cloudinary, then records them in `albums.json`. See [`server/seed/README.md`](server/seed/README.md#albumsjson) |
 
 ## Environment variables
 
