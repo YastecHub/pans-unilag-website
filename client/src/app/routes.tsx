@@ -1,4 +1,10 @@
 import type { RouteObject } from 'react-router'
+import {
+  HistoryPage,
+  ImpactPage,
+  MembershipPage,
+  WhoWeArePage,
+} from '../features/about/pages/AboutPages.tsx'
 import { HomePage } from '../features/home/pages/HomePage.tsx'
 import { PublicLayout } from './layouts/PublicLayout.tsx'
 import { NotFoundPage } from './pages/NotFoundPage.tsx'
@@ -18,6 +24,10 @@ export const routes: RouteObject[] = [
     errorElement: <RouteErrorPage />,
     children: [
       { index: true, element: <HomePage /> },
+      { path: '/about', element: <WhoWeArePage /> },
+      { path: '/about/membership', element: <MembershipPage /> },
+      { path: '/about/history', element: <HistoryPage /> },
+      { path: '/about/impact', element: <ImpactPage /> },
       ...OVERVIEW_SECTIONS.map((section) => ({
         path: section.to,
         element: <SectionOverviewPage section={section} />,

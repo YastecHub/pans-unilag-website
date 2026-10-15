@@ -1,6 +1,7 @@
 import { Link } from 'react-router'
 import { Badge } from '../../../components/ui/Badge.tsx'
 import { Card } from '../../../components/ui/Card.tsx'
+import { Markdown } from '../../../components/ui/Markdown.tsx'
 import { Skeleton } from '../../../components/ui/Skeleton.tsx'
 import { ErrorState, LoadingState } from '../../../components/ui/States.tsx'
 import { formatDate } from '../../../lib/dates.ts'
@@ -53,8 +54,7 @@ function AnnouncementCard({ announcement: a }: { announcement: Announcement }) {
         </time>
       </div>
       <h3>{a.title}</h3>
-      {/* Short text; Markdown rendering arrives with the sanitised renderer in the About pages issue. */}
-      <p className="whitespace-pre-line">{a.body}</p>
+      <Markdown>{a.body}</Markdown>
       {a.link &&
         (a.link.startsWith('/') ? (
           <Link to={a.link} className="font-medium">
