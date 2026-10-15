@@ -726,6 +726,8 @@ Events (live): `GET /api/events?status=upcoming|past&series=&month=YYYY-MM&page=
 
 Other content (live): `GET /api/announcements` returns `{ announcements }` that are active now (`publishAt` reached, `expiresAt` not), pinned first, then newest. `GET /api/opportunities?type=` returns `{ opportunities }` that are still open (until the end of the deadline day in Lagos; no deadline = rolling, listed last), closing soonest first; `GET /api/opportunities/:slug` returns 404 once the deadline has passed, so old links never show a closed listing. `GET /api/publications?series=recipharm|newspaper|substack` returns `{ publications }`, newest first. `GET /api/documents` returns `{ documents }` with the latest approved version of each (the constitution until its PDF is uploaded is a placeholder). `GET /api/resources?level=&semester=` returns `{ resources }` by level, semester and course. Empty lists are normal results: the pages show their empty states.
 
+Academics and site (live): `GET /api/grading-scale` returns the active scale `{ slug, source, grades, bands, passMark, units }` (best grade first, Pass first), matching the tables in [CGPA calculator](#cgpa-calculator); 404 if no scale is active. `GET /api/settings` returns `{ postalAddress, location, contactEmail, socialLinks, quickLinks, homeBanner }` (`homeBanner` is null when empty; `contactEmail` stays empty, flagged as a placeholder, until the official email is supplied); 404 before seeding.
+
 Public (read-only unless noted):
 
 | Method | Path | Purpose |

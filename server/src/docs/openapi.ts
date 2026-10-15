@@ -7,11 +7,13 @@ import { documentsPaths } from '../modules/documents/http/documents.openapi.js'
 import { eventsPaths } from '../modules/events/http/events.openapi.js'
 import { executivesPaths } from '../modules/executives/http/executives.openapi.js'
 import { opportunitiesPaths } from '../modules/opportunities/http/opportunities.openapi.js'
+import { gradingPaths } from '../modules/grading/http/grading.openapi.js'
 import { pagesPaths } from '../modules/pages/http/pages.openapi.js'
 import { patronsPaths } from '../modules/patrons/http/patrons.openapi.js'
 import { publicationsPaths } from '../modules/publications/http/publications.openapi.js'
 import { resourcesPaths } from '../modules/resources/http/resources.openapi.js'
 import { senatePaths } from '../modules/senate/http/senate.openapi.js'
+import { settingsPaths } from '../modules/settings/http/settings.openapi.js'
 
 /**
  * Builds the OpenAPI 3.1 document from each module's `<feature>.openapi.ts`.
@@ -42,6 +44,8 @@ export function buildOpenApiDocument() {
         name: 'Content',
         description: 'Announcements, opportunities, publications, documents and academic resources',
       },
+      { name: 'Academics', description: 'CGPA calculator grading scale' },
+      { name: 'Site', description: 'Contact details, social links and the site banner' },
     ],
     paths: {
       ...healthPaths,
@@ -57,6 +61,8 @@ export function buildOpenApiDocument() {
       ...publicationsPaths,
       ...documentsPaths,
       ...resourcesPaths,
+      ...gradingPaths,
+      ...settingsPaths,
     },
   })
 }
