@@ -1,8 +1,11 @@
 import { screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { THEME_STORAGE_KEY } from '../../lib/theme.ts'
+import { mockApi } from '../../test/mockApi.ts'
 import { renderRoute } from '../../test/renderRoute.tsx'
+
+afterEach(() => vi.unstubAllGlobals())
 
 async function desktopNav() {
   return within(await screen.findByRole('navigation', { name: 'Main' }))
@@ -46,6 +49,9 @@ describe('desktop navigation', () => {
   })
 
   it('can be used with the keyboard alone to reach a page', async () => {
+    mockApi({
+      '/api/executives': { session: '2026/2027', sessions: ['2026/2027'], executives: [] },
+    })
     const user = userEvent.setup()
     renderRoute('/')
     const nav = await desktopNav()
