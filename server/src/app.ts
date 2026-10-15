@@ -9,9 +9,15 @@ import { notFound } from './middleware/notFound.js'
 import { requestId } from './middleware/requestId.js'
 import { createRequestLogger } from './middleware/requestLogger.js'
 import { healthRouter } from './modules/health/http/health.routes.js'
+import type { AlbumReader } from './modules/albums/application/albumView.js'
+import { albumsRouter } from './modules/albums/http/albums.routes.js'
+import { mongoAlbumReader } from './modules/albums/infrastructure/album.repository.js'
 import type { CommitteeReader } from './modules/committees/application/committeeView.js'
 import { committeesRouter } from './modules/committees/http/committees.routes.js'
 import { mongoCommitteeReader } from './modules/committees/infrastructure/committee.repository.js'
+import type { EventReader } from './modules/events/application/eventView.js'
+import { eventsRouter } from './modules/events/http/events.routes.js'
+import { mongoEventReader } from './modules/events/infrastructure/event.repository.js'
 import type { ExecutiveReader } from './modules/executives/application/executiveView.js'
 import { executivesRouter } from './modules/executives/http/executives.routes.js'
 import { mongoExecutiveReader } from './modules/executives/infrastructure/executive.repository.js'
@@ -37,6 +43,8 @@ export type AppOptions = {
   logRequests?: boolean
   /** Where each module reads its data. Defaults to MongoDB; tests pass in-memory readers. */
   readers?: Partial<Readers>
+  /** The current time, for upcoming/past events. Tests pass a fixed time. */
+  now?: () => Date
 }
 
 export type Readers = {
@@ -45,6 +53,8 @@ export type Readers = {
   senate: SenatorReader
   committees: CommitteeReader
   patrons: PatronReader
+  events: EventReader
+  albums: AlbumReader
 }
 
 const mongoReaders: Readers = {
@@ -53,6 +63,8 @@ const mongoReaders: Readers = {
   senate: mongoSenatorReader,
   committees: mongoCommitteeReader,
   patrons: mongoPatronReader,
+  events: mongoEventReader,
+  albums: mongoAlbumReader,
 }
 
 /**
@@ -66,6 +78,7 @@ export function createApp({
   logger = silentLogger,
   logRequests = false,
   readers: readerOverrides,
+  now = () => new Date(),
 }: AppOptions): Express {
   const app = express()
   const readers = { ...mongoReaders, ...readerOverrides }
@@ -97,6 +110,8 @@ export function createApp({
   app.use('/api/senate', senateRouter(readers.senate))
   app.use('/api/committees', committeesRouter(readers.committees))
   app.use('/api/patrons', patronsRouter(readers.patrons))
+  app.use('/api/events', eventsRouter(readers.events, now))
+  app.use('/api/albums', albumsRouter(readers.albums))
 
   app.use(notFound)
   app.use(createErrorHandler({ isProduction, logger }))

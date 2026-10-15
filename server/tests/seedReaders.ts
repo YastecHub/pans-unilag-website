@@ -2,8 +2,12 @@ import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import type { Model } from 'mongoose'
 import type { Readers } from '../src/app.js'
+import type { StoredAlbum } from '../src/modules/albums/application/albumView.js'
+import { AlbumModel } from '../src/modules/albums/infrastructure/album.model.js'
 import { toCommitteeView } from '../src/modules/committees/application/committeeView.js'
 import { CommitteeModel } from '../src/modules/committees/infrastructure/committee.model.js'
+import type { StoredEvent } from '../src/modules/events/application/eventView.js'
+import { EventModel } from '../src/modules/events/infrastructure/event.model.js'
 import { toExecutiveView } from '../src/modules/executives/application/executiveView.js'
 import { ExecutiveModel } from '../src/modules/executives/infrastructure/executive.model.js'
 import { toPageView } from '../src/modules/pages/application/pageView.js'
@@ -41,6 +45,10 @@ export function seedReaders(): Readers {
     CommitteeModel,
   )
   const patrons = storedSeed<Parameters<typeof toPatronView>[0]>('patrons.json', PatronModel)
+  const events = storedSeed<StoredEvent>('events.json', EventModel)
+  const albums = storedSeed<StoredAlbum>('albums.json', AlbumModel)
+  const bySeries = <T extends { series?: string }>(items: T[], series?: string) =>
+    series ? items.filter((i) => i.series === series) : items
 
   const sessionReader = <S extends { session: string; order: number }, V>(
     items: S[],
@@ -68,5 +76,13 @@ export function seedReaders(): Readers {
       },
     },
     patrons: { list: async () => byOrder(patrons).map(toPatronView) },
+    events: {
+      list: async ({ series }) => bySeries(events, series),
+      findBySlug: async (slug) => events.find((e) => e.slug === slug) ?? null,
+    },
+    albums: {
+      list: async ({ series }) => bySeries(albums, series),
+      findBySlug: async (slug) => albums.find((a) => a.slug === slug) ?? null,
+    },
   }
 }
