@@ -89,7 +89,7 @@ From the Brand Guidelines deck, with accessibility rules added after contrast ch
 | `--color-navy` | `#003463` | Navy, primary | Footer, hero overlays, secondary buttons. White text: **12.6:1** ✅ |
 | `--color-surface` | `#ffffff` | White, secondary | Page background |
 | `--color-surface-alt` | `#e1e8db` | Pale green-grey, secondary | Alternate section backgrounds, cards, placeholders. Dark green text on it: **5.8:1** ✅ |
-| `--color-accent` | `#ffbd04` | Yellow, accent | Highlights, badges, focus rings, "New" labels. Only on navy (7.5:1) or dark green (4.3:1, large text only), or **behind black/dark text** (12.5:1). **Never as text on white** (1.7:1) |
+| `--color-accent` | `#ffbd04` | Yellow, accent | Highlights, badges, "New" labels, focus rings in dark mode. Only on navy (7.5:1) or dark green (4.3:1, large text only), or **behind black/dark text** (12.5:1). **Never as text on white** (1.7:1) |
 | `--color-text` | `#1f2a24` | Body text (derived) | 14.8:1 on white |
 | `--color-text-muted` | `#4a5a50` | Secondary text (derived) | 7.3:1 on white, 5.8:1 on `#e1e8db` |
 
@@ -104,6 +104,34 @@ From the Brand Guidelines deck, with accessibility rules added after contrast ch
 | Links | `#5cc98a` | 8.7:1 on background |
 | Accent | `#ffbd04` | 10.7:1 on background |
 | Buttons | `#0e6434` with white text and a `#5cc98a` border | 7.3:1 text; the border keeps the button visible on the dark background |
+
+### Using the tokens in code (issue #4)
+
+All tokens live in **`client/src/styles/tokens.css`**; base styles are in `client/src/styles/globals.css`. Tailwind (v4) generates a class for each token. Tailwind's default palette (`red-500` etc.) is switched off. Raw hex colours in `client/src` fail `npm run lint`.
+
+| Need | Class (or `var(--…)`) | Light → dark |
+| --- | --- | --- |
+| Page / card background | `bg-surface` / `bg-surface-alt` | `#ffffff` → `#0b1a12` / `#e1e8db` → `#132a1d` |
+| Text / secondary text | `text-text` / `text-text-muted` | `#1f2a24` → `#e1e8db` / `#4a5a50` → `#b8c4b2` |
+| **Green text** (motto, eyebrows) | `text-text-brand` (**not** `text-primary`, which disappears in dark mode) | `#0e6434` → `#5cc98a` |
+| Links | `text-link` (applied to `<a>` by default) | `#0e6434` → `#5cc98a` |
+| Primary button | `bg-primary text-on-primary border-primary-border` | border `#0e6434` → `#5cc98a` |
+| Secondary button / footer | `bg-navy text-on-primary` | same in both |
+| Badge / highlight | `bg-accent text-on-accent` | same in both |
+| Dividers / form-field borders | `border-border` (decorative) / `border-border-strong` (≥ 3:1) | `#c9d3c4` → `#2a4434` / `#6b7a70` → `#7f9888` |
+| Errors | `text-danger` | `#b42318` → `#ff8a80` |
+| Focus ring | automatic on `:focus-visible` (`--color-focus`) | navy `#003463` → yellow `#ffbd04` |
+| Fonts | `font-heading` (Poppins), `font-sans` (Inter, the default) | |
+| Type scale | `text-h1`, `text-h2`, `text-h3`, `text-body`, `text-small` (`h1`–`h3` are styled by default) | |
+
+- **Focus ring:** yellow is only 1.7:1 on white, below the 3:1 a focus indicator needs, so light mode uses navy.
+- **Contrast is tested:** `tokens.test.ts` checks every text/background pair above against WCAG AA in both themes, and that the type scale hits the sizes below at 375 px and 1280 px.
+- **Theme:** `client/src/lib/theme.ts` provides `getThemePreference`, `setThemePreference('light' | 'dark' | 'system')` and `watchSystemTheme`.
+  - A tiny script in `index.html` sets `data-theme` on `<html>` before the first paint, so there's no flash of the wrong theme.
+  - The choice is saved in `localStorage` (`pans-theme`).
+  - Tailwind's `dark:` variant follows `data-theme`.
+  - The toggle UI arrives with the header in issue #6.
+- **Fonts** are self-hosted with `@fontsource` (no Google Fonts request), imported in `main.tsx`, with `font-display: swap`. Browsers download only the character subsets a page uses.
 
 ### Typography
 
@@ -391,7 +419,7 @@ Calculator behaviour:
 | Frontend | **React** + TypeScript, **Vite**, **React Router** | Decided (Vite and React Router proposed) |
 | Images | **Cloudinary**: `cloudinary` SDK on the server; `@cloudinary/react` + `@cloudinary/url-gen` on the client | Decided |
 | Validation | **Zod** at every API entry point | Proposed |
-| Styling | Tailwind CSS with the brand tokens above as CSS variables | Proposed |
+| Styling | **Tailwind CSS v4** with the brand tokens above as CSS variables (`client/src/styles/tokens.css`) | Decided |
 | Server state on the client | TanStack Query | Proposed |
 | Admin auth | Email + password (argon2), session JWT in an `httpOnly`, `Secure`, `SameSite=Lax` cookie | Proposed |
 | Markdown rendering | For constitution-derived page sections (sanitised) | Proposed |
