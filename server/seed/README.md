@@ -142,6 +142,8 @@ Eleven pages built from _Content to Include_ (sections 2–14): who-we-are, memb
 
 ### `events.json`
 
+`datePrecision`: `day` (exact dates), `month` (only the month is known: first day of the first month to last day of the last, Lagos time) or `unknown` (already happened, dates not recorded: no `startsAt`/`endsAt`, must be a placeholder, listed as past). `committee` is a committee slug.
+
 ```json
 [
   {
@@ -161,6 +163,8 @@ Eleven pages built from _Content to Include_ (sections 2–14): who-we-are, memb
     "title": "Medical Outreach 2026",
     "series": "PANS Health Week 2026: Redefine+",
     "dayNumber": 3,
+    "datePrecision": "unknown",
+    "committee": "ppht",
     "isPlaceholder": true,
     "placeholderNote": "Date and description needed"
   }
