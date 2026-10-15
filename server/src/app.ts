@@ -36,6 +36,9 @@ import { mongoEventReader } from './modules/events/infrastructure/event.reposito
 import type { ExecutiveReader } from './modules/executives/application/executiveView.js'
 import { executivesRouter } from './modules/executives/http/executives.routes.js'
 import { mongoExecutiveReader } from './modules/executives/infrastructure/executive.repository.js'
+import type { GradingScaleReader } from './modules/grading/application/gradingView.js'
+import { gradingRouter } from './modules/grading/http/grading.routes.js'
+import { mongoGradingScaleReader } from './modules/grading/infrastructure/gradingScale.repository.js'
 import type { PageReader } from './modules/pages/application/pageView.js'
 import { pagesRouter } from './modules/pages/http/pages.routes.js'
 import { mongoPageReader } from './modules/pages/infrastructure/page.repository.js'
@@ -45,6 +48,9 @@ import { mongoPatronReader } from './modules/patrons/infrastructure/patron.repos
 import type { SenatorReader } from './modules/senate/application/senatorView.js'
 import { senateRouter } from './modules/senate/http/senate.routes.js'
 import { mongoSenatorReader } from './modules/senate/infrastructure/senator.repository.js'
+import type { SettingsReader } from './modules/settings/application/settingsView.js'
+import { settingsRouter } from './modules/settings/http/settings.routes.js'
+import { mongoSettingsReader } from './modules/settings/infrastructure/settings.repository.js'
 
 export type AppOptions = {
   /** Browser origins allowed to call the API (CORS). */
@@ -75,6 +81,8 @@ export type Readers = {
   publications: PublicationReader
   documents: DocumentReader
   resources: ResourceReader
+  gradingScale: GradingScaleReader
+  settings: SettingsReader
 }
 
 const mongoReaders: Readers = {
@@ -90,6 +98,8 @@ const mongoReaders: Readers = {
   publications: mongoPublicationReader,
   documents: mongoDocumentReader,
   resources: mongoResourceReader,
+  gradingScale: mongoGradingScaleReader,
+  settings: mongoSettingsReader,
 }
 
 /**
@@ -142,6 +152,8 @@ export function createApp({
   app.use('/api/publications', publicationsRouter(readers.publications))
   app.use('/api/documents', documentsRouter(readers.documents))
   app.use('/api/resources', resourcesRouter(readers.resources))
+  app.use('/api/grading-scale', gradingRouter(readers.gradingScale))
+  app.use('/api/settings', settingsRouter(readers.settings))
 
   app.use(notFound)
   app.use(createErrorHandler({ isProduction, logger }))

@@ -12,12 +12,16 @@ import type { StoredDocument } from '../src/modules/documents/application/docume
 import { DocumentModel } from '../src/modules/documents/infrastructure/document.model.js'
 import { toExecutiveView } from '../src/modules/executives/application/executiveView.js'
 import { ExecutiveModel } from '../src/modules/executives/infrastructure/executive.model.js'
+import type { StoredGradingScale } from '../src/modules/grading/application/gradingView.js'
+import { GradingScaleModel } from '../src/modules/grading/infrastructure/gradingScale.model.js'
 import { toPageView } from '../src/modules/pages/application/pageView.js'
 import { PageModel } from '../src/modules/pages/infrastructure/page.model.js'
 import { toPatronView } from '../src/modules/patrons/application/patronView.js'
 import { PatronModel } from '../src/modules/patrons/infrastructure/patron.model.js'
 import type { StoredPublication } from '../src/modules/publications/application/publicationView.js'
 import { PublicationModel } from '../src/modules/publications/infrastructure/publication.model.js'
+import type { StoredSettings } from '../src/modules/settings/application/settingsView.js'
+import { SettingsModel } from '../src/modules/settings/infrastructure/settings.model.js'
 import { toSenatorView } from '../src/modules/senate/application/senatorView.js'
 import { SenatorModel } from '../src/modules/senate/infrastructure/senator.model.js'
 
@@ -53,6 +57,11 @@ export function seedReaders(): Readers {
   const albums = storedSeed<StoredAlbum>('albums.json', AlbumModel)
   const publications = storedSeed<StoredPublication>('publications.json', PublicationModel)
   const documents = storedSeed<StoredDocument>('documents.json', DocumentModel)
+  const scales = storedSeed<StoredGradingScale & { active: boolean }>(
+    'grading.json',
+    GradingScaleModel,
+  )
+  const [settings] = storedSeed<StoredSettings>('settings.json', SettingsModel)
   const bySeries = <T extends { series?: string }>(items: T[], series?: string) =>
     series ? items.filter((i) => i.series === series) : items
 
@@ -96,5 +105,7 @@ export function seedReaders(): Readers {
     announcements: { list: async () => [] },
     opportunities: { list: async () => [], findBySlug: async () => null },
     resources: { list: async () => [] },
+    gradingScale: { findActive: async () => scales.find((s) => s.active) ?? null },
+    settings: { find: async () => settings ?? null },
   }
 }
