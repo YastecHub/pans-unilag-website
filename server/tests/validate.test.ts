@@ -2,6 +2,7 @@ import express from 'express'
 import request from 'supertest'
 import { describe, expect, it } from 'vitest'
 import { z } from 'zod'
+import { silentLogger } from '../src/lib/logger.js'
 import { createErrorHandler } from '../src/middleware/errorHandler.js'
 import { validate } from '../src/middleware/validate.js'
 
@@ -19,7 +20,7 @@ function appWithRoute() {
       res.json({ params: req.params, query: req.query, body: req.body })
     },
   )
-  app.use(createErrorHandler({ isProduction: true, log: () => {} }))
+  app.use(createErrorHandler({ isProduction: true, logger: silentLogger }))
   return app
 }
 

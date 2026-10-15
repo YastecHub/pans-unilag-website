@@ -1,5 +1,7 @@
 import type { RequestHandler } from 'express'
+import { HttpError } from '../lib/httpError.js'
 
-export const notFound: RequestHandler = (req, res) => {
-  res.status(404).json({ error: { message: `Not found: ${req.method} ${req.path}` } })
+/** Unknown routes become a NOT_FOUND error, formatted by the error handler like every other error. */
+export const notFound: RequestHandler = (req, _res, next) => {
+  next(HttpError.notFound(`Not found: ${req.method} ${req.path}`))
 }

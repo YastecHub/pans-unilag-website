@@ -1,6 +1,6 @@
 import type { RequestHandler } from 'express'
 import type { z } from 'zod'
-import { HttpError } from '../lib/httpError.js'
+import { type FieldIssue, HttpError } from '../lib/httpError.js'
 
 type Schemas = {
   body?: z.ZodType
@@ -16,7 +16,7 @@ type Schemas = {
  */
 export function validate(schemas: Schemas): RequestHandler {
   return (req, _res, next) => {
-    const issues: { location: string; path: string; message: string }[] = []
+    const issues: FieldIssue[] = []
 
     for (const location of ['params', 'query', 'body'] as const) {
       const schema = schemas[location]
@@ -37,7 +37,7 @@ export function validate(schemas: Schemas): RequestHandler {
     }
 
     if (issues.length > 0) {
-      next(new HttpError(400, 'Invalid request', issues))
+      next(HttpError.validation(issues))
       return
     }
     next()

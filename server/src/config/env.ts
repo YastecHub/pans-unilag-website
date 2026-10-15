@@ -22,6 +22,14 @@ const envSchema = z.object({
         .map((origin) => origin.trim())
         .filter(Boolean),
     ),
+  /** Swagger UI at /api/docs. Unset: on outside production, off in production. */
+  API_DOCS_ENABLED: z.preprocess(
+    (value) => (value === '' ? undefined : value),
+    z
+      .enum(['true', 'false'], { error: 'API_DOCS_ENABLED must be true or false' })
+      .optional()
+      .transform((value) => (value === undefined ? undefined : value === 'true')),
+  ),
 })
 
 export type Env = z.infer<typeof envSchema>

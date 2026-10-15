@@ -32,4 +32,11 @@ describe('loadEnv', () => {
   it('rejects an invalid PORT', () => {
     expect(() => loadEnv({ ...valid, PORT: 'abc' })).toThrow(/PORT/)
   })
+
+  it('reads API_DOCS_ENABLED as a boolean and treats empty as unset', () => {
+    expect(loadEnv({ ...valid, API_DOCS_ENABLED: 'true' }).API_DOCS_ENABLED).toBe(true)
+    expect(loadEnv({ ...valid, API_DOCS_ENABLED: 'false' }).API_DOCS_ENABLED).toBe(false)
+    expect(loadEnv({ ...valid, API_DOCS_ENABLED: '' }).API_DOCS_ENABLED).toBeUndefined()
+    expect(() => loadEnv({ ...valid, API_DOCS_ENABLED: 'yes' })).toThrow(/true or false/)
+  })
 })

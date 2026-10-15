@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 
-const STATES = ['disconnected', 'connected', 'connecting', 'disconnecting'] as const
-export type DbStatus = (typeof STATES)[number] | 'unknown'
+export const DB_STATES = ['disconnected', 'connected', 'connecting', 'disconnecting'] as const
+export type DbStatus = (typeof DB_STATES)[number] | 'unknown'
 
 /** Connects to MongoDB. Fails within ~10 s instead of hanging if the database is unreachable. */
 export async function connectDb(uri: string): Promise<void> {
@@ -27,5 +27,5 @@ export async function disconnectDb(): Promise<void> {
 export function dbStatus(): DbStatus {
   // readyState can also be 99 (uninitialized), which maps to 'unknown'.
   const state: number = mongoose.connection.readyState
-  return STATES[state] ?? 'unknown'
+  return DB_STATES[state] ?? 'unknown'
 }
