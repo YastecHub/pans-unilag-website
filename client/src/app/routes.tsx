@@ -11,6 +11,10 @@ import { PublicationsPage } from '../features/publications/pages/PublicationsPag
 import { CgpaCalculatorPage } from '../features/academics/pages/CgpaCalculatorPage.tsx'
 import { ResourcesPage } from '../features/academics/pages/ResourcesPage.tsx'
 import { StudentSupportPage } from '../features/academics/pages/StudentSupportPage.tsx'
+import { AlumniPage } from '../features/connect/pages/AlumniPage.tsx'
+import { ContactPage } from '../features/connect/pages/ContactPage.tsx'
+import { FeedbackPage } from '../features/connect/pages/FeedbackPage.tsx'
+import { PrivacyPage } from '../features/connect/pages/PrivacyPage.tsx'
 import { AlbumPage } from '../features/gallery/pages/AlbumPage.tsx'
 import { GalleryPage } from '../features/gallery/pages/GalleryPage.tsx'
 import { EventPage } from '../features/events/pages/EventPage.tsx'
@@ -72,6 +76,10 @@ export const routes: RouteObject[] = [
       { path: '/academics/cgpa-calculator', element: <CgpaCalculatorPage /> },
       { path: '/academics/resources', element: <ResourcesPage /> },
       { path: '/academics/student-support', element: <StudentSupportPage /> },
+      { path: '/connect/feedback', element: <FeedbackPage /> },
+      { path: '/connect/alumni', element: <AlumniPage /> },
+      { path: '/connect/contact', element: <ContactPage /> },
+      { path: '/connect/privacy', element: <PrivacyPage /> },
       ...OVERVIEW_SECTIONS.map((section) => ({
         path: section.to,
         element: <SectionOverviewPage section={section} />,
