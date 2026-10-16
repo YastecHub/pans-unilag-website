@@ -2,6 +2,7 @@ import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 import type { Plugin } from 'vite'
 import { defineConfig } from 'vitest/config'
+import { pwa } from './pwa/plugin.ts'
 import { buildSiteUrl, DEV_SITE_URL, robotsTxt, sitemapXml } from './src/app/seo.ts'
 
 /**
@@ -32,7 +33,7 @@ function seo(): Plugin {
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss(), seo()],
+  plugins: [react(), tailwindcss(), seo(), pwa()],
   server: {
     port: 5173,
     // In development, send /api requests to the Express server.

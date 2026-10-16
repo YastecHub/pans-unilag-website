@@ -119,6 +119,8 @@ Remove-Item Env:MONGODB_URI   # forget the production connection string in this 
 - [ ] A photo upload in the dashboard works (Cloudinary variables).
 - [ ] The feedback form sends, and the message appears under **Admin → Feedback**.
 - [ ] `/robots.txt` and `/sitemap.xml` use the live address.
+- [ ] On an Android phone, Chrome offers **Install app**; once installed, open a page, turn on
+      airplane mode, and reopen it: it still shows, with the "You're offline" notice.
 - [ ] Paste the address into [Facebook's Sharing Debugger](https://developers.facebook.com/tools/debug/):
       it shows the title, motto and badge, as WhatsApp will.
 - [ ] Paste an event's address (e.g. `/events/<slug>`) into the same debugger: it shows that event's
@@ -149,6 +151,19 @@ Remove-Item Env:MONGODB_URI   # forget the production connection string in this 
   (`server/src/lib/linkPreview.ts`). Everyone else, Google included, gets the normal app. Crawlers
   cache previews for days: after fixing an event's details, click **Scrape again** in the Sharing
   Debugger.
+- **Install and offline reading:** the build writes `sw.js` (see README → Install and offline
+  reading); `vercel.json` serves it with `Cache-Control: no-cache`, so phones check for a new version
+  on every visit. If it ever misbehaves, replace `client/pwa/sw.js` with one that clears itself and
+  redeploy; every phone drops it on its next visit:
+
+  ```js
+  self.addEventListener('install', () => self.skipWaiting())
+  self.addEventListener('activate', async () => {
+    for (const key of await caches.keys()) await caches.delete(key)
+    await self.registration.unregister()
+  })
+  ```
+
 - A long-running server still works for other hosts: `npm run build -w server && npm start -w server`.
 
 ## Backups

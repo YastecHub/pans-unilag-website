@@ -66,7 +66,7 @@ describe('Feedback form', () => {
     expect(screen.queryByLabelText('Your email')).toBeNull()
     await user.click(screen.getByRole('button', { name: 'Send message' }))
 
-    const status = await screen.findByRole('status')
+    const status = await within(screen.getByRole('main')).findByRole('status')
     expect(within(status).getByRole('heading', { name: /your message was sent/ })).toBe(
       document.activeElement,
     )
@@ -96,7 +96,7 @@ describe('Feedback form', () => {
     await user.clear(screen.getByLabelText('Your email'))
     await user.type(screen.getByLabelText('Your email'), 'tolu@example.com')
     await user.click(screen.getByRole('button', { name: 'Send message' }))
-    await screen.findByRole('status')
+    await within(screen.getByRole('main')).findByRole('status')
     expect(posted(fetchMock, '/api/feedback')[0]).toEqual({
       category: 'suggestion',
       message: 'Share Pharmathon results online.',
@@ -185,7 +185,7 @@ describe('Alumni form', () => {
     await user.click(screen.getByRole('checkbox', { name: /I agree/ }))
     await user.click(screen.getByRole('button', { name: 'Join the network' }))
 
-    const status = await screen.findByRole('status')
+    const status = await within(screen.getByRole('main')).findByRole('status')
     expect(within(status).getByText(/Thank you, Ada\./)).toBeTruthy()
     expect(posted(fetchMock, '/api/alumni')).toEqual([
       {

@@ -874,6 +874,12 @@ pans-unilag/
 - Icons: `favicon.ico` (16, 32, 48 px), `apple-touch-icon.png`, and `icon-192`, `icon-512` and a maskable icon in `site.webmanifest`. All are made from the badge by `client/scripts/make-brand-images.py`; the badge in the repo is only 200 px, so **run it again with a larger badge** (512 px or more, transparent) when the Media Committee supplies one.
 - Check a preview after deploying with [Facebook's Sharing Debugger](https://developers.facebook.com/tools/debug/) (WhatsApp reads the same tags); it also refreshes a cached preview.
 
+**Install and offline reading (#46):** the site installs to a phone's home screen (Chrome: menu → **Install app** or **Add to Home screen**; iPhone Safari: Share → **Add to Home Screen**) and opens full-screen like an app. A service worker (`client/pwa/sw.js`, written into the build with its file list by `client/pwa/plugin.ts`) keeps pages a student has opened readable offline or on a very slow connection, the CGPA calculator included; a notice says when the phone is offline.
+
+- Pages and data always come from the network first, so a new deploy shows straight away; the saved copy is only used offline or after 4 seconds without an answer.
+- It saves about 800 KB on install (the public site's code, CSS, badge and Latin fonts, mostly already downloaded by the first visit), plus the public data of pages that are opened (at most 150 responses). The dashboard, sign-in, search, forms and Cloudinary photos are never saved.
+- It only runs in production builds (`npm run dev` never registers it). To check it: Chrome DevTools → **Application → Service workers / Cache storage**, or the **Offline** box under **Network**.
+
 ## Deployment
 
 | Part | Host | Notes |
