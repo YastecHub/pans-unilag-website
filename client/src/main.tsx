@@ -8,8 +8,8 @@ import '@fontsource/poppins/500.css'
 import '@fontsource/poppins/600.css'
 import { AppProviders } from './app/providers.tsx'
 import { router } from './app/router.tsx'
+import { registerServiceWorker } from './lib/serviceWorker.ts'
 import { applyTheme, getThemePreference, resolveTheme, watchSystemTheme } from './lib/theme.ts'
-import { registerServiceWorker } from './lib/registerServiceWorker.ts'
 import './styles/globals.css'
 
 // index.html already set data-theme before paint; this also syncs the browser bar colour.

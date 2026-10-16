@@ -2,9 +2,10 @@ import { useEffect, useRef } from 'react'
 import { Outlet, ScrollRestoration, useLocation } from 'react-router'
 import { Footer } from '../../components/layout/Footer.tsx'
 import { Header } from '../../components/layout/Header.tsx'
+import { OfflineNotice } from '../../components/layout/OfflineNotice.tsx'
 import { SkipLink } from '../../components/layout/SkipLink.tsx'
 
-/** Layout for every public page: skip link, header, main content, footer. */
+/** Layout for every public page: skip link, header, offline notice, main content, footer. */
 export function PublicLayout() {
   const mainRef = useRef<HTMLElement>(null)
   const { pathname } = useLocation()
@@ -24,6 +25,7 @@ export function PublicLayout() {
     <div className="flex min-h-dvh flex-col">
       <SkipLink />
       <Header />
+      <OfflineNotice />
       <main id="main" ref={mainRef} tabIndex={-1} className="flex-1 outline-none">
         <Outlet />
       </main>

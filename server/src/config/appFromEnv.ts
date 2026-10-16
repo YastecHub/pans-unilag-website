@@ -33,6 +33,8 @@ export function appFromEnv(env: Env, logger: Logger): { app: Express; docsEnable
     logger,
     logRequests: env.NODE_ENV !== 'test',
     rateLimitStores: isProduction ? mongoRateLimitStores : undefined,
+    // Link previews name the site by its first allowed origin and show Cloudinary covers.
+    previews: { cloudName: env.CLOUDINARY_CLOUD_NAME },
     auth: {
       jwtSecret: env.JWT_SECRET,
       media:

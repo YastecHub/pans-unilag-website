@@ -74,12 +74,11 @@ export function OverviewPage() {
           <li key={card.to}>
             <Link
               to={card.to}
-              aria-label={`${card.value} ${card.label}`}
               className="flex h-full flex-col gap-1 rounded-xl border border-border p-5 text-text no-underline hover:border-border-strong"
             >
               <span className="font-heading text-h2 font-semibold text-text-brand">
                 {card.value}
-              </span>
+              </span>{' '}
               <span>{card.label}</span>
             </Link>
           </li>

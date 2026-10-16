@@ -11,10 +11,19 @@ type Handler = (req: IncomingMessage, res: ServerResponse) => Promise<void>
  * The address the visitor asked for. vercel.json rewrites /api/* to this one function; the
  * function normally sees the original path, but if the rewrite arrives as "/api?path=events&…"
  * it's turned back into "/api/events?…" so Express's routes match.
+ *
+ * vercel.json also sends link-preview crawlers asking for /events/:slug or /opportunities/:slug
+ * here ("/api?preview=events&slug=…"); either form becomes "/api/previews/events/…".
  */
 export function originalUrl(url = '/'): string {
+  const page = /^\/(events|opportunities)\/([^/?#]+)\/?(?:[?#]|$)/.exec(url)
+  if (page) return `/api/previews/${page[1]}/${page[2]}`
   if (!/^\/api\/?\?/.test(url)) return url
   const query = new URLSearchParams(url.slice(url.indexOf('?') + 1))
+  const preview = query.get('preview')
+  const slug = query.get('slug')
+  if ((preview === 'events' || preview === 'opportunities') && slug)
+    return `/api/previews/${preview}/${encodeURIComponent(slug)}`
   const path = query.get('path')
   if (path === null) return url
   query.delete('path')

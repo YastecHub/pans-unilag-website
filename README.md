@@ -812,6 +812,7 @@ The API needs a `MONGODB_URI` in `server/.env` (a free personal Atlas cluster or
 | `npm run lint` | ESLint across the whole repo (one shared config: `eslint.config.js`) |
 | `npm run typecheck` | TypeScript checks in both workspaces |
 | `npm run test` | Vitest in both workspaces |
+| `npm run e2e -w client` | Launch smoke tests in a real browser (Playwright, desktop and phone): the main journeys, WCAG checks (axe) in light and dark, keyboard and reflow, and every link. Runs the built site with the real API on seed data, no database needed; run `npx playwright install chromium` once first. `E2E_BASE_URL=https://…` runs the read-only tests against the live site. Results and the launch checklist: [docs/launch-qa.md](docs/launch-qa.md) |
 | `npm run format` / `npm run format:check` | Prettier for code files |
 | `npm run <script> -w client` or `-w server` | Run a script in one workspace only |
 | `npm run seed -w server` | Loads `server/seed/*.json` into MongoDB. Adds missing documents only, so it is safe to re-run; `-- --update` overwrites, `-- --reset` empties first (development only). See [`server/seed/README.md`](server/seed/README.md) |
@@ -866,12 +867,18 @@ pans-unilag/
 | Fonts | Poppins 500/600 and Inter 400/500 only |
 | Real-device check | Mid-range Android on throttled 3G/4G |
 
-**Link previews:** a React SPA renders in the browser, and WhatsApp and most crawlers don't run JavaScript. For v1, `client/index.html` has site-wide Open Graph and X tags: the title "PANS UNILAG: Service to Humanity", the full name and motto, and `og-default.png` (the badge on pale green, 1200 × 630). After launch, add per-page previews for events and opportunities via Express or pre-rendering.
+**Link previews:** a React SPA renders in the browser, and WhatsApp and most crawlers don't run JavaScript. For v1, `client/index.html` has site-wide Open Graph and X tags: the title "PANS UNILAG: Service to Humanity", the full name and motto, and `og-default.png` (the badge on pale green, 1200 × 630). Event and opportunity pages have their own previews (#45): `vercel.json` sends link-preview crawlers (WhatsApp, Facebook, X, LinkedIn, Telegram…, recognised by `User-Agent`) to the API, which answers with that page's title, dates or deadline, a short description and the event's cover photo (`server/src/lib/linkPreview.ts`). People and search engines still get the normal app; placeholder images are never used.
 
 - **Set `VITE_SITE_URL` to the live `https://` address in the client's build settings.** Previews need absolute image addresses, so the build writes it into the tags (`__SITE_URL__` in `index.html`), `robots.txt` and `sitemap.xml` (the `pans-seo` plugin in `client/vite.config.ts`). Without it the build warns and uses `http://localhost:5173`.
 - `sitemap.xml` lists the home page and every menu page (`client/src/app/siteMap.ts`); `robots.txt` keeps crawlers out of `/admin` and points to the sitemap. Pages with their own address (events, committees, albums) aren't listed yet.
 - Icons: `favicon.ico` (16, 32, 48 px), `apple-touch-icon.png`, and `icon-192`, `icon-512` and a maskable icon in `site.webmanifest`. All are made from the badge by `client/scripts/make-brand-images.py`; the badge in the repo is only 200 px, so **run it again with a larger badge** (512 px or more, transparent) when the Media Committee supplies one.
 - Check a preview after deploying with [Facebook's Sharing Debugger](https://developers.facebook.com/tools/debug/) (WhatsApp reads the same tags); it also refreshes a cached preview.
+
+**Install and offline reading (#46):** the site installs to a phone's home screen (Chrome: menu → **Install app** or **Add to Home screen**; iPhone Safari: Share → **Add to Home Screen**) and opens full-screen like an app. A service worker (`client/pwa/sw.js`, written into the build with its file list by `client/pwa/plugin.ts`) keeps pages a student has opened readable offline or on a very slow connection, the CGPA calculator included; a notice says when the phone is offline.
+
+- Pages and data always come from the network first, so a new deploy shows straight away; the saved copy is only used offline or after 4 seconds without an answer.
+- It saves about 800 KB on install (the public site's code, CSS, badge and Latin fonts, mostly already downloaded by the first visit), plus the public data of pages that are opened (at most 150 responses). The dashboard, sign-in, search, forms and Cloudinary photos are never saved.
+- It only runs in production builds (`npm run dev` never registers it). To check it: Chrome DevTools → **Application → Service workers / Cache storage**, or the **Offline** box under **Network**.
 
 ## Deployment
 
