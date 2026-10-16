@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { useLocation } from 'react-router'
 import type { NavSection } from '../../../app/siteMap.ts'
 import { Container } from '../../../components/layout/Container.tsx'
 import { type Crumb, PageHeader } from '../../../components/layout/PageHeader.tsx'
@@ -32,13 +33,19 @@ export function InnerPageLayout({
   children,
 }: Props) {
   usePageTitle(title)
+  const { pathname } = useLocation()
   return (
     <>
       <PageHeader
         title={title}
         intro={intro}
         eyebrow={eyebrow}
-        breadcrumbs={[{ label: section.label, to: section.to }, ...trail]}
+        breadcrumbs={
+          // A one-page section's own page (Publications) doesn't repeat itself in the breadcrumb.
+          !section.children && pathname === section.to
+            ? trail
+            : [{ label: section.label, to: section.to }, ...trail]
+        }
       />
       <Container
         className={`grid gap-10 py-10 lg:gap-16 ${aside ? 'lg:grid-cols-[minmax(0,1fr)_20rem]' : 'lg:grid-cols-[minmax(0,1fr)_14rem]'}`}
