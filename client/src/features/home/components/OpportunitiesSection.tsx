@@ -3,12 +3,12 @@ import { cardLink } from '../../../components/ui/Card.tsx'
 import { Badge } from '../../../components/ui/Badge.tsx'
 import { SkeletonCard } from '../../../components/ui/Skeleton.tsx'
 import { EmptyState, ErrorState, LoadingState } from '../../../components/ui/States.tsx'
-import { formatDate } from '../../../lib/dates.ts'
 import {
   OPPORTUNITY_TYPE_LABELS,
   type Opportunity,
   useOpportunities,
 } from '../../opportunities/api/opportunities.ts'
+import { Deadline } from '../../opportunities/components/Deadline.tsx'
 import { CardGrid, HomeSection } from './HomeSection.tsx'
 
 const SHOWN = 3
@@ -61,13 +61,7 @@ function OpportunityCard({ opportunity: o }: { opportunity: Opportunity }) {
       <h3 className="text-[1.25rem]">{o.title}</h3>
       {o.organisation && <span className="text-small text-text-muted">{o.organisation}</span>}
       <span className="mt-auto pt-2 text-small font-medium text-text-brand">
-        {o.deadline ? (
-          <>
-            Closes <time dateTime={o.deadline}>{formatDate(o.deadline)}</time>
-          </>
-        ) : (
-          'Open: apply any time'
-        )}
+        <Deadline opportunity={o} />
       </span>
     </Link>
   )
