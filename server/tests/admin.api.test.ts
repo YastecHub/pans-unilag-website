@@ -31,7 +31,9 @@ const admins: AdminStore = {
   findById: async (id) =>
     id === 'ed1'
       ? { id, name: 'Editor', email: 'ed@example.com', role: 'editor', tokenVersion: 0 }
-      : null,
+      : id === 'ad1'
+        ? { id, name: 'Admin', email: 'ad@example.com', role: 'admin', tokenVersion: 0 }
+        : null,
   recordLogin: async () => undefined,
 }
 
@@ -133,8 +135,8 @@ function setup() {
   return { app, collections, feedback, alumni }
 }
 
-async function signedIn(app: ReturnType<typeof setup>['app']) {
-  const cookie = `${SESSION_COOKIE}=${await signSessionToken({ adminId: 'ed1', tokenVersion: 0 }, SECRET, 8, NOW)}`
+async function signedIn(app: ReturnType<typeof setup>['app'], adminId = 'ed1') {
+  const cookie = `${SESSION_COOKIE}=${await signSessionToken({ adminId, tokenVersion: 0 }, SECRET, 8, NOW)}`
   const withCookie = <T extends { set(name: string, value: string): T }>(r: T) =>
     r.set('Cookie', cookie)
   return {
@@ -350,9 +352,27 @@ describe('GET /api/admin/placeholders', () => {
 })
 
 describe('submissions', () => {
+  it('are personal data: editors get 403 on every submissions route and change nothing', async () => {
+    const { app, feedback, alumni } = setup()
+    const editor = await signedIn(app, 'ed1')
+    for (const res of [
+      await editor.get('/api/admin/submissions/feedback'),
+      await editor.patch('/api/admin/submissions/feedback/f1', { status: 'resolved' }),
+      await editor.get('/api/admin/submissions/alumni'),
+      await editor.del('/api/admin/submissions/alumni/a1'),
+    ]) {
+      expect(res.status).toBe(403)
+      expect(res.body.error.code).toBe('FORBIDDEN')
+    }
+    expect(feedback[0]?.status).toBe('new')
+    expect(alumni).toHaveLength(1)
+    // Editors still manage content.
+    expect((await editor.get('/api/admin/announcements')).status).toBe(200)
+  })
+
   it('lists feedback newest first, filters by status and updates status', async () => {
     const { app, feedback } = setup()
-    const as = await signedIn(app)
+    const as = await signedIn(app, 'ad1')
 
     expect(
       (await as.get('/api/admin/submissions/feedback')).body.items.map((f: FeedbackRecord) => f.id),
@@ -372,7 +392,7 @@ describe('submissions', () => {
 
   it('lists alumni and removes an entry on request', async () => {
     const { app, alumni } = setup()
-    const as = await signedIn(app)
+    const as = await signedIn(app, 'ad1')
 
     expect((await as.get('/api/admin/submissions/alumni')).body.total).toBe(1)
     expect((await as.del('/api/admin/submissions/alumni/a1')).status).toBe(204)

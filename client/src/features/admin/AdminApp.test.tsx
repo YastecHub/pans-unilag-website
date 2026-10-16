@@ -89,10 +89,11 @@ const ALUMNI = {
 }
 
 /** A fake API with a session that sign-in starts and sign-out ends. */
-function adminApi({ signedIn = false } = {}) {
+function adminApi({ signedIn = false, role = 'admin' } = {}) {
   let session = signedIn
+  const me = { ...ADA, role }
   return mockApi({
-    '/api/auth/me': () => (session ? jsonResponse(200, { admin: ADA }) : unauthorized()),
+    '/api/auth/me': () => (session ? jsonResponse(200, { admin: me }) : unauthorized()),
     '/api/auth/login': () => {
       // The body is checked in the test; here any call with the right password signs in.
       session = true
@@ -227,6 +228,27 @@ describe('the dashboard', () => {
     expect(await screen.findByRole('link', { name: '3 placeholders to fill' })).toBeTruthy()
     expect(await screen.findByRole('link', { name: '30 new feedback messages' })).toBeTruthy()
     expect(await screen.findByRole('link', { name: '1 alumni signed up' })).toBeTruthy()
+  })
+
+  it('keeps feedback and alumni details from editors, who manage content only', async () => {
+    const fetchMock = adminApi({ signedIn: true, role: 'editor' })
+    const router = renderRoute('/admin')
+    expect(await screen.findByRole('heading', { level: 1, name: 'Welcome, Ada' })).toBeTruthy()
+    const nav = screen.getByRole('navigation', { name: 'Admin' })
+    expect(
+      within(nav)
+        .getAllByRole('link')
+        .map((a) => a.textContent),
+    ).toEqual(['Overview', 'Content', 'Placeholders'])
+    expect(await screen.findByRole('link', { name: '3 placeholders to fill' })).toBeTruthy()
+    expect(screen.queryByRole('link', { name: /feedback messages|alumni signed up/ })).toBeNull()
+
+    await router.navigate('/admin/alumni')
+    expect(await screen.findByRole('heading', { level: 1, name: 'Alumni sign-ups' })).toBeTruthy()
+    expect(screen.getByText(/Only admins can see alumni sign-ups/)).toBeTruthy()
+    await router.navigate('/admin/feedback')
+    expect(await screen.findByText(/Only admins can see feedback/)).toBeTruthy()
+    expect(calls(fetchMock).filter((c) => c.path.includes('/submissions/'))).toEqual([])
   })
 
   it('lists placeholders grouped by page, skipping pages with none', async () => {

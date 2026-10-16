@@ -238,11 +238,16 @@ export function createApp({
         auth.adminCollections?.[r.name] ?? mongoAdminCollection(r.model),
       ]),
     ) as Record<AdminResourceName, AdminCollection>
-    app.use('/api/admin/media', guard.requireAdmin, mediaRouter(auth.media, now))
+    app.use(
+      '/api/admin/media',
+      guard.requireAdmin,
+      mediaRouter(auth.media, now, guard.requireRole('admin')),
+    )
     app.use(
       '/api/admin',
       guard.requireAdmin,
       adminRouter({
+        adminOnly: guard.requireRole('admin'),
         collections,
         placeholders: auth.placeholderSources ?? mongoPlaceholderSources,
         submissions: auth.submissionAdmin ?? mongoSubmissionAdminStore,

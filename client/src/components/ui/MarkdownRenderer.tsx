@@ -27,8 +27,9 @@ const components: Components = {
   h2: ({ children }) => <h3>{children}</h3>,
   h3: ({ children }) => <h3>{children}</h3>,
   h4: ({ children }) => <h4 className="font-heading font-medium">{children}</h4>,
+  // "/events" is a page on this site; "//elsewhere.com" is another site, so it opens like one.
   a: ({ href = '', children }) =>
-    href.startsWith('/') ? (
+    href.startsWith('/') && !href.startsWith('//') ? (
       <Link to={href}>{children}</Link>
     ) : (
       <a href={href} target="_blank" rel="noopener noreferrer">

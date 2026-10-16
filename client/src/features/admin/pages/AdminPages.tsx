@@ -8,6 +8,7 @@ import {
   type FeedbackStatus,
   PAGE_SIZE,
   useAlumni,
+  useCanReadSubmissions,
   useFeedback,
   useMe,
   usePlaceholders,
@@ -40,8 +41,9 @@ export function OverviewPage() {
   usePageTitle('Admin')
   const me = useMe()
   const placeholders = usePlaceholders()
-  const newFeedback = useFeedback({ status: 'new', page: 1 })
-  const alumni = useAlumni(1)
+  const canReadSubmissions = useCanReadSubmissions()
+  const newFeedback = useFeedback({ status: 'new', page: 1 }, canReadSubmissions)
+  const alumni = useAlumni(1, canReadSubmissions)
   const count = (n: number | undefined) => (n === undefined ? '…' : String(n))
 
   return (
@@ -54,12 +56,20 @@ export function OverviewPage() {
             value: count(placeholders.data?.total),
             label: 'placeholders to fill',
           },
-          {
-            to: '/admin/feedback?status=new',
-            value: count(newFeedback.data?.total),
-            label: 'new feedback messages',
-          },
-          { to: '/admin/alumni', value: count(alumni.data?.total), label: 'alumni signed up' },
+          ...(canReadSubmissions
+            ? [
+                {
+                  to: '/admin/feedback?status=new',
+                  value: count(newFeedback.data?.total),
+                  label: 'new feedback messages',
+                },
+                {
+                  to: '/admin/alumni',
+                  value: count(alumni.data?.total),
+                  label: 'alumni signed up',
+                },
+              ]
+            : []),
         ].map((card) => (
           <li key={card.to}>
             <Link
@@ -164,7 +174,28 @@ export function PlaceholdersPage() {
 }
 
 /** /admin/feedback?status=new&page=2: messages from the feedback form, newest first (read-only). */
+/** Shown instead of feedback or alumni details to editors (the API refuses them too). */
+function AdminsOnly({ what }: { what: string }) {
+  usePageTitle(`${what} · Admin`)
+  return (
+    <>
+      <h1 className="text-h2">{what}</h1>
+      <p className="max-w-2xl">
+        Only admins can see {what.toLowerCase()}, because it includes people’s personal details. Ask
+        an admin if you need something from it.
+      </p>
+      <p>
+        <Link to="/admin">Back to the overview</Link>
+      </p>
+    </>
+  )
+}
+
 export function FeedbackPage() {
+  return useCanReadSubmissions() ? <FeedbackList /> : <AdminsOnly what="Feedback" />
+}
+
+function FeedbackList() {
   usePageTitle('Feedback · Admin')
   const [params] = useSearchParams()
   const requested = params.get('status')
@@ -254,6 +285,10 @@ export function FeedbackPage() {
 
 /** /admin/alumni?page=2: the alumni network sign-ups (read-only; never published). */
 export function AlumniPage() {
+  return useCanReadSubmissions() ? <AlumniList /> : <AdminsOnly what="Alumni sign-ups" />
+}
+
+function AlumniList() {
   usePageTitle('Alumni · Admin')
   const [params] = useSearchParams()
   const page = pageNumber(params.get('page'))

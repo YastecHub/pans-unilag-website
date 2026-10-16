@@ -19,6 +19,14 @@ export function useMe() {
   })
 }
 
+/**
+ * Feedback and alumni sign-ups are personal data: only the "admin" role reads them (the API
+ * refuses editors with 403). Editors manage content only.
+ */
+export function useCanReadSubmissions(): boolean {
+  return useMe().data?.role === 'admin'
+}
+
 export function useSignIn() {
   const client = useQueryClient()
   return useMutation({
@@ -70,9 +78,10 @@ export type FeedbackRecord = {
 
 export const PAGE_SIZE = 25
 
-export function useFeedback(filter: { status?: FeedbackStatus; page: number }) {
+export function useFeedback(filter: { status?: FeedbackStatus; page: number }, enabled = true) {
   return useQuery({
     queryKey: ['admin', 'feedback', filter],
+    enabled,
     queryFn: ({ signal }) => {
       const params = new URLSearchParams({ page: String(filter.page), pageSize: String(PAGE_SIZE) })
       if (filter.status) params.set('status', filter.status)
@@ -93,9 +102,10 @@ export type AlumnusRecord = {
   updatedAt: string
 }
 
-export function useAlumni(page: number) {
+export function useAlumni(page: number, enabled = true) {
   return useQuery({
     queryKey: ['admin', 'alumni', page],
+    enabled,
     queryFn: ({ signal }) =>
       api.get<Paged<AlumnusRecord>>(
         `/api/admin/submissions/alumni?page=${page}&pageSize=${PAGE_SIZE}`,

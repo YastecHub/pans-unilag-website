@@ -22,7 +22,9 @@ const admins: AdminStore = {
   findById: async (id) =>
     id === 'ed1'
       ? { id, name: 'Editor', email: 'ed@example.com', role: 'editor', tokenVersion: 0 }
-      : null,
+      : id === 'ad1'
+        ? { id, name: 'Admin', email: 'ad@example.com', role: 'admin', tokenVersion: 0 }
+        : null,
   recordLogin: async () => undefined,
 }
 
@@ -35,13 +37,13 @@ function app(withMedia = true) {
   })
 }
 
-const cookie = async () =>
-  `${SESSION_COOKIE}=${await signSessionToken({ adminId: 'ed1', tokenVersion: 0 }, SECRET, 8, NOW)}`
+const cookie = async (adminId = 'ad1') =>
+  `${SESSION_COOKIE}=${await signSessionToken({ adminId, tokenVersion: 0 }, SECRET, 8, NOW)}`
 
-const sign = async (body: object, server = app()) =>
+const sign = async (body: object, server = app(), adminId = 'ad1') =>
   request(server)
     .post('/api/admin/media/signature')
-    .set('Cookie', await cookie())
+    .set('Cookie', await cookie(adminId))
     .send(body)
 
 /** Cloudinary's documented scheme: sorted key=value pairs joined by &, then the secret, SHA-1. */
@@ -103,6 +105,14 @@ describe('POST /api/admin/media/signature', () => {
       expect(res.status, JSON.stringify(body)).toBe(400)
       expect(res.body.error.code).toBe('VALIDATION_ERROR')
     }
+  })
+
+  it('lets editors upload content photos, but only admins replace brand images', async () => {
+    expect((await sign({ folder: 'committees/admap' }, app(), 'ed1')).status).toBe(200)
+    const editorBrand = await sign({ folder: 'brand', publicId: 'pans-badge' }, app(), 'ed1')
+    expect(editorBrand.status).toBe(403)
+    expect(editorBrand.body.error.code).toBe('FORBIDDEN')
+    expect((await sign({ folder: 'brand', publicId: 'pans-badge' })).status).toBe(200)
   })
 
   it('returns 503 when Cloudinary is not configured', async () => {

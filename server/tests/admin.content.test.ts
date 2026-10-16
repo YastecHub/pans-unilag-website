@@ -325,6 +325,20 @@ describe('every page’s placeholders can be cleared from the dashboard', () => 
       socialLinks: [{ platform: 'Instagram', url: 'http://instagram.com/pans' }],
     })
     expect(http.status).toBe(400)
+    for (const url of ['javascript:alert(1)', '//evil.example/x', 'http://example.org']) {
+      const quick = await api.patch(`/api/admin/settings/${id}`, {
+        quickLinks: [{ label: 'Bad', url }],
+      })
+      expect(quick.status, url).toBe(400)
+      const banner = await api.patch(`/api/admin/settings/${id}`, {
+        homeBanner: { text: 'Bad', url },
+      })
+      expect(banner.status, url).toBe(400)
+    }
+    const banner = await api.patch(`/api/admin/settings/${id}`, {
+      homeBanner: { text: 'Freshers’ Week', url: '/events/freshers-week-2026' },
+    })
+    expect(banner.status).toBe(200)
     expect((await api.post('/api/admin/settings', { postalAddress: 'x' })).status).toBe(404)
     expect((await api.del(`/api/admin/settings/${id}`)).status).toBe(404)
   })

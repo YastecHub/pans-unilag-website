@@ -144,11 +144,6 @@ Remove-Item Env:MONGODB_URI   # forget the production connection string in this 
 
 ## Backups
 
-Atlas M0 has no automatic backups. Weekly, and before big changes, run from a trusted computer:
-
-```powershell
-mongodump --uri "$env:MONGODB_URI" --out "backups/$(Get-Date -Format yyyy-MM-dd)"
-```
-
-Keep backups out of the repository (they contain alumni details) and test a restore with
-`mongorestore` into a scratch cluster before relying on them.
+Atlas M0 has no automatic backups. Back up weekly and before big changes, and test that a backup
+restores: step-by-step in [backup-restore.md](backup-restore.md) (`mongodump`, a scratch restore
+and `npm run backup:verify -w server`).
