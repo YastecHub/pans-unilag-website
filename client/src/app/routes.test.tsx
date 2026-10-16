@@ -2,6 +2,7 @@ import { cleanup, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { SITE } from '../lib/site.ts'
+import { apiError, jsonResponse, mockApi } from '../test/mockApi.ts'
 import { renderRoute } from '../test/renderRoute.tsx'
 import { MAIN_NAV, OVERVIEW_SECTIONS, STUB_PAGES } from './siteMap.ts'
 
@@ -52,8 +53,9 @@ describe('routes', () => {
   })
 
   it('loads the admin area on demand, without the public header', async () => {
+    mockApi({ '/api/auth/me': () => jsonResponse(401, apiError('UNAUTHORIZED', 'Sign in')) })
     renderRoute('/admin')
-    expect(await screen.findByRole('heading', { level: 1, name: 'Admin' })).toBeTruthy()
+    expect(await screen.findByRole('heading', { level: 1, name: 'Sign in' })).toBeTruthy()
     expect(screen.queryByRole('navigation', { name: 'Main' })).toBeNull()
   })
 

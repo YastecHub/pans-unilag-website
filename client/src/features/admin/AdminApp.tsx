@@ -1,27 +1,42 @@
-import { Link } from 'react-router'
-import { Placeholder } from '../../components/ui/Placeholder.tsx'
-import { usePageTitle } from '../../lib/usePageTitle.ts'
+import { useEffect } from 'react'
+import { Route, Routes } from 'react-router'
+import { AdminLayout } from './components/AdminLayout.tsx'
+import { RequireAdmin } from './components/RequireAdmin.tsx'
+import {
+  AdminNotFoundPage,
+  AlumniPage,
+  FeedbackPage,
+  OverviewPage,
+  PlaceholdersPage,
+} from './pages/AdminPages.tsx'
+import { SignInPage } from './pages/SignInPage.tsx'
 
 /**
- * Admin area. Loaded only when someone visits /admin, so public visitors never download it.
- * Sign-in, layout and editors arrive in issues #37–#39.
+ * The admin area at /admin. Loaded only when someone visits /admin (routes.tsx imports it
+ * lazily), so public visitors never download it. Everything except sign-in needs a session.
  */
 export function AdminApp() {
-  usePageTitle('Admin')
+  // Keep the dashboard out of search engines.
+  useEffect(() => {
+    const meta = document.createElement('meta')
+    meta.name = 'robots'
+    meta.content = 'noindex, nofollow'
+    document.head.append(meta)
+    return () => meta.remove()
+  }, [])
+
   return (
-    <div className="flex min-h-dvh flex-col">
-      <header className="bg-navy text-on-primary [--color-focus:var(--color-accent)]">
-        <div className="flex min-h-13 items-center px-4 sm:px-8">
-          <p className="font-heading text-[17px] font-semibold">PANS UNILAG Admin</p>
-        </div>
-      </header>
-      <main id="main" className="mx-auto flex w-full max-w-3xl flex-col gap-4 px-4 py-12">
-        <h1 className="text-h2">Admin</h1>
-        <Placeholder note="Admin sign-in and editors are being built (issues #37 to #39)." />
-        <p>
-          <Link to="/">Back to the website</Link>
-        </p>
-      </main>
-    </div>
+    <Routes>
+      <Route path="sign-in" element={<SignInPage />} />
+      <Route element={<RequireAdmin />}>
+        <Route element={<AdminLayout />}>
+          <Route index element={<OverviewPage />} />
+          <Route path="placeholders" element={<PlaceholdersPage />} />
+          <Route path="feedback" element={<FeedbackPage />} />
+          <Route path="alumni" element={<AlumniPage />} />
+          <Route path="*" element={<AdminNotFoundPage />} />
+        </Route>
+      </Route>
+    </Routes>
   )
 }
