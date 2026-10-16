@@ -102,7 +102,7 @@ site:
 2. Check: the page is readable within a few seconds; the menu opens and closes; text is readable
    without zooming; nothing scrolls sideways; buttons are easy to tap.
 3. Try: an event page and "Add to calendar"; the CGPA calculator with two courses; the feedback
-   form (one real message, then mark it resolved in the dashboard).
+   form (one real message, then find it under Feedback in the dashboard).
 4. Note the phone model, Android version and network in the issue.
 
 ## Definition of done (README), status
@@ -114,7 +114,7 @@ Copy this into issue #43 and tick what's done.
 - [x] Navigation, links and forms tested. *(80 pages crawled, no broken links; feedback form end to end; sign-in; keyboard and phone menu)*
 - [ ] Content reviewed for accuracy, spelling, permissions; name and motto exactly as in the constitution. *(name and motto checked by the smoke test; **the rest needs a human read-through** by the Content Committee)*
 - [x] CGPA calculator passes its boundary tests. *(28 unit tests, plus the browser smoke test)*
-- [ ] Named administrators and an admin guide exist. *(admin guide: #44; **name the two admins** and create them with `create-admin`)*
+- [ ] Named administrators and an admin guide exist. *(admin guide: `docs/admin-guide.md`; **name the two admins** and create them with `create-admin`)*
 - [x] Admin auth, validation, rate limits, CORS in place; secrets only in server env vars. *(#42: `docs/security-review.md`)*
 - [ ] A backup has been taken and restored once. *(tooling ready in #42; **run `docs/backup-restore.md` against production**)*
 - [x] Performance and accessibility targets met. *(Lighthouse mobile ≥ 90 on three pages; axe clean in both themes; keyboard and reflow checks; **re-run Lighthouse on the live site** and do the TalkBack pass)*
