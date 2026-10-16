@@ -15,7 +15,8 @@
     "content:status": "tsx scripts/content-status.ts",
     "upload-album": "tsx scripts/upload-album.ts",
     "create-admin": "tsx scripts/create-admin.ts",
-    "backup:verify": "tsx scripts/verify-restore.ts"
+    "backup:verify": "tsx scripts/verify-restore.ts",
+    "e2e:server": "tsx scripts/e2e-server.ts"
   },
   "dependencies": {
     "argon2": "^0.45.1",

@@ -43,6 +43,8 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
+    // Playwright's browser tests (npm run e2e) live in e2e/.
+    exclude: ['**/node_modules/**', 'e2e/**'],
     // Vitest blanks CSS by default; tokens.test.ts reads tokens.css to check contrast.
     css: { include: [/tokens\.css/] },
   },

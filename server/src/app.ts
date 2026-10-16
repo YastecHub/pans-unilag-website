@@ -3,6 +3,7 @@ import cors from 'cors'
 import express, { type Express } from 'express'
 import helmet from 'helmet'
 import { docsRouter } from './docs/docs.routes.js'
+import { previewFor, previewHtml, type PreviewOptions, sitePreview } from './lib/linkPreview.js'
 import { type Logger, silentLogger } from './lib/logger.js'
 import type { RateLimitStores } from './middleware/rateLimit.js'
 import { type AuthGuard, createAuthGuard } from './middleware/requireAdmin.js'
@@ -104,6 +105,11 @@ export type AppOptions = {
   rateLimitStores?: RateLimitStores
   /** Admin sign-in. Without it the /api/auth routes are not mounted (tests of public routes). */
   auth?: AuthOptions
+  /**
+   * Link previews for crawlers (lib/linkPreview.ts). The site address defaults to the first
+   * client origin; production passes it with the Cloudinary cloud for cover images.
+   */
+  previews?: Partial<PreviewOptions>
 }
 
 export type AuthOptions = {
@@ -173,6 +179,7 @@ export function createApp({
   formRateLimit,
   rateLimitStores,
   auth,
+  previews,
 }: AppOptions): Express {
   const app = express()
   const readers = { ...mongoReaders, ...readerOverrides }
@@ -216,48 +223,28 @@ export function createApp({
   app.use('/api/search', searchRouter(readers.search, now))
   app.use('/api', submissionsRouter(submissions, now, formRateLimit, rateLimitStores))
 
-  app.get(['/previews', '/previews/*'], async (req, res, next) => {
+  // vercel.json sends link-preview crawlers here for /events/:slug and /opportunities/:slug.
+  const previewOptions: PreviewOptions = {
+    siteUrl: (previews?.siteUrl ?? clientOrigins[0] ?? '').replace(/\/+$/, ''),
+    cloudName: previews?.cloudName,
+  }
+  app.get('/api/previews/:kind/:slug', async (req, res, next) => {
+    const { kind, slug } = req.params
+    if (kind !== 'events' && kind !== 'opportunities') return next()
     try {
-      const targetPath = (req.query.path as string) || req.path.replace(/^\/previews/, '')
-      const { getPreviewMeta } = await import('./lib/linkPreview.js')
-      const meta = await getPreviewMeta(targetPath, {
-        events: readers.events,
-        opportunities: readers.opportunities,
-      })
-
-      if (!meta) {
-        res
-          .status(404)
-          .json({ error: { code: 'NOT_FOUND', message: 'No preview available for path' } })
-        return
-      }
-
-      // Return JSON metadata or rendered preview HTML tags
-      if (req.accepts('html')) {
-        const minimalHtml = `<!doctype html>
-<html>
-<head>
-  <title>${meta.title}</title>
-  <meta property="og:title" content="${meta.title}" />
-  <meta property="og:description" content="${meta.description}" />
-  <meta property="og:url" content="${meta.url}" />
-  <meta property="og:image" content="${meta.image || ''}" />
-  <meta property="og:image:alt" content="${meta.imageAlt || meta.title}" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="${meta.title}" />
-  <meta name="twitter:description" content="${meta.description}" />
-  <meta name="twitter:image" content="${meta.image || ''}" />
-</head>
-<body><p>Redirecting to <a href="${meta.url}">${meta.title}</a>...</p></body>
-</html>`
-        res.setHeader('Content-Type', 'text/html; charset=utf-8')
-        res.send(minimalHtml)
-        return
-      }
-
-      res.json(meta)
-    } catch (err) {
-      next(err)
+      const preview = await previewFor(kind, slug, readers, previewOptions, now())
+      res
+        .status(preview ? 200 : 404)
+        .type('html')
+        // Crawlers fetch each link once; the CDN keeps it briefly so a burst of shares is cheap.
+        .set('Cache-Control', 'public, max-age=0, s-maxage=300')
+        .send(
+          previewHtml(
+            preview ?? sitePreview(`/${kind}/${encodeURIComponent(slug)}`, previewOptions),
+          ),
+        )
+    } catch (error) {
+      next(error)
     }
   })
 

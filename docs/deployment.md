@@ -60,7 +60,7 @@ Sign in to the PANS Cloudinary account. On the dashboard, note the **cloud name*
    | `NODE_ENV` | `production` | no |
    | `MONGODB_URI` | the connection string from step 1 | **yes** |
    | `JWT_SECRET` | 48 random bytes: `node -e "console.log(require('crypto').randomBytes(48).toString('base64url'))"` | **yes** |
-   | `CLIENT_ORIGIN` | the site's address, e.g. `https://pans-unilag.vercel.app` (comma-separate several) | no |
+   | `CLIENT_ORIGIN` | the site's address, e.g. `https://pans-unilag.vercel.app` (comma-separate several; link previews use the first) | no |
    | `CLOUDINARY_CLOUD_NAME` | from step 2 | no |
    | `CLOUDINARY_API_KEY` | from step 2 | no |
    | `CLOUDINARY_API_SECRET` | from step 2 | **yes** |
@@ -121,13 +121,16 @@ Remove-Item Env:MONGODB_URI   # forget the production connection string in this 
 - [ ] `/robots.txt` and `/sitemap.xml` use the live address.
 - [ ] Paste the address into [Facebook's Sharing Debugger](https://developers.facebook.com/tools/debug/):
       it shows the title, motto and badge, as WhatsApp will.
+- [ ] Paste an event's address (e.g. `/events/<slug>`) into the same debugger: it shows that event's
+      title, dates and venue, not the site-wide card. Then send it to yourself on WhatsApp.
 
 ## 7. Custom domain (when it's ready)
 
 1. In Vercel, **Settings → Domains → Add** the domain (e.g. `pansunilag.org`), and add the DNS
    records Vercel shows at the domain registrar. HTTPS is set up automatically.
-2. Set `CLIENT_ORIGIN` to `https://pansunilag.org` (keep the `.vercel.app` address too, separated by
-   a comma, while both are in use) and `VITE_SITE_URL` to `https://pansunilag.org`.
+2. Set `CLIENT_ORIGIN` to `https://pansunilag.org,https://pans-unilag.vercel.app` (the new address
+   **first**: event and opportunity link previews use it; drop the second once it's no longer used)
+   and `VITE_SITE_URL` to `https://pansunilag.org`.
 3. **Redeploy** so link previews and the sitemap use the new address.
 
 ## How the API runs on Vercel
@@ -140,6 +143,12 @@ Remove-Item Env:MONGODB_URI   # forget the production connection string in this 
   itself. If the database is briefly unreachable, requests are let through rather than blocked.
 - Requests are limited to about 4.5 MB, which is fine: photos upload straight from the browser to
   Cloudinary.
+- **Link previews:** WhatsApp, Facebook, X, LinkedIn, Telegram and similar crawlers don't run
+  JavaScript, so `vercel.json` sends them (by `User-Agent`) to the function for `/events/:slug` and
+  `/opportunities/:slug`; it answers with tags for that event or opportunity
+  (`server/src/lib/linkPreview.ts`). Everyone else, Google included, gets the normal app. Crawlers
+  cache previews for days: after fixing an event's details, click **Scrape again** in the Sharing
+  Debugger.
 - A long-running server still works for other hosts: `npm run build -w server && npm start -w server`.
 
 ## Backups

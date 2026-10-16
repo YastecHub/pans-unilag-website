@@ -11,7 +11,6 @@ import { formatDate } from '../../../lib/dates.ts'
 import { ApiError } from '../../../lib/http.ts'
 import { InnerPageLayout } from '../../pages/components/InnerPageLayout.tsx'
 import { isOpen, OPPORTUNITY_TYPE_LABELS, useOpportunity } from '../api/opportunities.ts'
-import { usePageMeta } from '../../../lib/usePageMeta.ts'
 import { Deadline } from '../components/Deadline.tsx'
 import { HubAside } from '../components/HubAside.tsx'
 
@@ -30,24 +29,12 @@ const host = (url: string) => {
 export function OpportunityPage() {
   const { slug = '' } = useParams()
   const query = useOpportunity(slug)
-  const o = query.data
-
-  usePageMeta({
-    title: o?.title,
-    description: o?.description
-      ? o.description.slice(0, 160).trim().replace(/\n+/g, ' ')
-      : o
-        ? `${o.title} · PANS UNILAG`
-        : undefined,
-    url: typeof window !== 'undefined' ? window.location.href : undefined,
-  })
-
   // The API returns 404 for closed listings; a page left open past midnight is closed too.
   const closed =
     (query.error instanceof ApiError && query.error.code === 'NOT_FOUND') ||
-    (query.isSuccess && (!o || !isOpen(o)))
+    (query.isSuccess && !isOpen(query.data))
 
-  if (query.isPending || query.isError || closed || !o) {
+  if (query.isPending || query.isError || closed) {
     return (
       <InnerPageLayout
         title={closed ? 'Opportunity closed' : 'Opportunity'}
@@ -73,6 +60,7 @@ export function OpportunityPage() {
     )
   }
 
+  const o = query.data
   return (
     <InnerPageLayout
       title={o.title}

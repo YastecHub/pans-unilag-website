@@ -13,7 +13,6 @@ import { useCommittees } from '../../committees/api/committees.ts'
 import { useAlbums } from '../../gallery/api/albums.ts'
 import { InnerPageLayout } from '../../pages/components/InnerPageLayout.tsx'
 import { type EventItem, eventDateLabel, useEvent, useEvents } from '../api/events.ts'
-import { usePageMeta } from '../../../lib/usePageMeta.ts'
 import { AddToCalendar, RegisterButton } from '../components/AddToCalendar.tsx'
 import { eventTiming } from '../lib/ics.ts'
 
@@ -23,23 +22,9 @@ const events = () => navSection('Events')
 export function EventPage() {
   const { slug = '' } = useParams()
   const query = useEvent(slug)
-  const e = query.data
 
-  usePageMeta({
-    title: e?.title,
-    description: e?.description
-      ? e.description.slice(0, 160).trim().replace(/\n+/g, ' ')
-      : e
-        ? `${e.title} · PANS UNILAG`
-        : undefined,
-    image: e?.coverImage,
-    url: typeof window !== 'undefined' ? window.location.href : undefined,
-  })
-
-  if (query.isPending || query.isError || !e) {
-    const notFound =
-      (query.error instanceof ApiError && query.error.code === 'NOT_FOUND') ||
-      (!query.isPending && !e)
+  if (query.isPending || query.isError) {
+    const notFound = query.error instanceof ApiError && query.error.code === 'NOT_FOUND'
     return (
       <InnerPageLayout title={notFound ? 'Event not found' : 'Event'} section={events()}>
         {query.isPending ? (
@@ -66,6 +51,7 @@ export function EventPage() {
     )
   }
 
+  const e = query.data
   const past = e.status === 'past'
   const eyebrow = [e.series && e.series !== e.title ? e.series : '', dayLabel(e)]
     .filter(Boolean)
