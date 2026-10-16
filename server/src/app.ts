@@ -3,6 +3,7 @@ import cors from 'cors'
 import express, { type Express } from 'express'
 import helmet from 'helmet'
 import { docsRouter } from './docs/docs.routes.js'
+import { previewFor, previewHtml, type PreviewOptions, sitePreview } from './lib/linkPreview.js'
 import { type Logger, silentLogger } from './lib/logger.js'
 import type { RateLimitStores } from './middleware/rateLimit.js'
 import { type AuthGuard, createAuthGuard } from './middleware/requireAdmin.js'
@@ -104,6 +105,11 @@ export type AppOptions = {
   rateLimitStores?: RateLimitStores
   /** Admin sign-in. Without it the /api/auth routes are not mounted (tests of public routes). */
   auth?: AuthOptions
+  /**
+   * Link previews for crawlers (lib/linkPreview.ts). The site address defaults to the first
+   * client origin; production passes it with the Cloudinary cloud for cover images.
+   */
+  previews?: Partial<PreviewOptions>
 }
 
 export type AuthOptions = {
@@ -173,6 +179,7 @@ export function createApp({
   formRateLimit,
   rateLimitStores,
   auth,
+  previews,
 }: AppOptions): Express {
   const app = express()
   const readers = { ...mongoReaders, ...readerOverrides }
@@ -215,6 +222,31 @@ export function createApp({
   app.use('/api/settings', settingsRouter(readers.settings))
   app.use('/api/search', searchRouter(readers.search, now))
   app.use('/api', submissionsRouter(submissions, now, formRateLimit, rateLimitStores))
+
+  // vercel.json sends link-preview crawlers here for /events/:slug and /opportunities/:slug.
+  const previewOptions: PreviewOptions = {
+    siteUrl: (previews?.siteUrl ?? clientOrigins[0] ?? '').replace(/\/+$/, ''),
+    cloudName: previews?.cloudName,
+  }
+  app.get('/api/previews/:kind/:slug', async (req, res, next) => {
+    const { kind, slug } = req.params
+    if (kind !== 'events' && kind !== 'opportunities') return next()
+    try {
+      const preview = await previewFor(kind, slug, readers, previewOptions, now())
+      res
+        .status(preview ? 200 : 404)
+        .type('html')
+        // Crawlers fetch each link once; the CDN keeps it briefly so a burst of shares is cheap.
+        .set('Cache-Control', 'public, max-age=0, s-maxage=300')
+        .send(
+          previewHtml(
+            preview ?? sitePreview(`/${kind}/${encodeURIComponent(slug)}`, previewOptions),
+          ),
+        )
+    } catch (error) {
+      next(error)
+    }
+  })
 
   if (auth) {
     const admins = auth.admins ?? mongoAdminStore

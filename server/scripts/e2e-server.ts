@@ -5,6 +5,8 @@
  * - the built client (client/dist) with the response headers from vercel.json (CSP and the rest),
  *   gzip like Vercel's CDN (so Lighthouse measures realistic transfer sizes), and the SPA fallback
  *   to index.html;
+ * - vercel.json's link-preview rewrites: crawlers (by User-Agent) asking for an event or
+ *   opportunity get the API's preview page instead of the app;
  * - the real Express API at /api, reading the seed files from memory, with an in-memory form
  *   store, dashboard and one test admin.
  *
@@ -29,6 +31,7 @@ import type {
 import type { AdminStore } from '../src/modules/auth/application/adminView.js'
 import { hashPassword } from '../src/modules/auth/application/passwords.js'
 import type { SubmissionStore } from '../src/modules/submissions/application/submissionRules.js'
+import { originalUrl } from '../src/vercel.js'
 import { memoryAdminCollection } from '../tests/memoryAdmin.js'
 import { seedReaders } from '../tests/seedReaders.js'
 
@@ -47,12 +50,31 @@ if (!existsSync(`${dist}/index.html`)) {
 
 /** vercel.json "headers": a source like "/assets/(.*)" becomes a regular expression. */
 type HeaderRule = { source: string; headers: { key: string; value: string }[] }
-const rules = (JSON.parse(readFileSync(root('vercel.json'), 'utf8')) as { headers: HeaderRule[] })
-  .headers
-const matchers = rules.map((rule) => ({
+type Rewrite = {
+  source: string
+  destination: string
+  has?: { type: string; key: string; value: string }[]
+}
+const vercel = JSON.parse(readFileSync(root('vercel.json'), 'utf8')) as {
+  headers: HeaderRule[]
+  rewrites: Rewrite[]
+}
+const matchers = vercel.headers.map((rule) => ({
   test: new RegExp(`^${rule.source.replace(/\(\.\*\)/g, '.*')}$`),
   headers: rule.headers,
 }))
+/** The rewrites that depend on the User-Agent (link previews), e.g. "/events/:slug". */
+const botRewrites = vercel.rewrites.flatMap((rule) => {
+  const agent = rule.has?.find((h) => h.type === 'header' && h.key === 'user-agent')
+  if (!agent) return []
+  return [
+    {
+      path: new RegExp(`^${rule.source.replace(/:(\w+)/g, '(?<$1>[^/]+)')}$`),
+      agent: new RegExp(`^${agent.value}$`),
+      destination: rule.destination,
+    },
+  ]
+})
 
 async function main() {
   // Everything a visitor or admin does is kept in memory and forgotten when the server stops.
@@ -172,6 +194,19 @@ async function main() {
   site.use((req, res, next) => {
     for (const m of matchers)
       if (m.test.test(req.path)) for (const h of m.headers) res.setHeader(h.key, h.value)
+    next()
+  })
+  // Link-preview crawlers: the destination goes to the function, as on Vercel.
+  site.use((req, _res, next) => {
+    for (const rule of botRewrites) {
+      const match = rule.path.exec(req.path)
+      if (match && rule.agent.test(req.get('user-agent') ?? '')) {
+        req.url = originalUrl(
+          rule.destination.replace(/:(\w+)/g, (_, key: string) => match.groups?.[key] ?? ''),
+        )
+        break
+      }
+    }
     next()
   })
   // The API answers /api/* (its own 404s included); everything else is the site.

@@ -17,6 +17,28 @@
       "destination": "/api"
     },
     {
+      "source": "/events/:slug",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*(WhatsApp|facebookexternalhit|Facebot|Twitterbot|LinkedInBot|Slackbot|TelegramBot|Discordbot|SkypeUriPreview|redditbot|Pinterestbot|Mastodon|Bluesky|Embedly|Iframely|vkShare).*"
+        }
+      ],
+      "destination": "/api?preview=events&slug=:slug"
+    },
+    {
+      "source": "/opportunities/:slug",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": ".*(WhatsApp|facebookexternalhit|Facebot|Twitterbot|LinkedInBot|Slackbot|TelegramBot|Discordbot|SkypeUriPreview|redditbot|Pinterestbot|Mastodon|Bluesky|Embedly|Iframely|vkShare).*"
+        }
+      ],
+      "destination": "/api?preview=opportunities&slug=:slug"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
