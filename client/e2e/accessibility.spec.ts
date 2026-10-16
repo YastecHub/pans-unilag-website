@@ -58,6 +58,7 @@ for (const scheme of ['light', 'dark'] as const) {
         '/admin/events',
         '/admin/committees',
         '/admin/feedback',
+        '/admin/accounts',
       ])
         problems.push(...(await audit(page, path)))
       // An editor with its row lists and photo fields.

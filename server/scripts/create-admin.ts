@@ -1,7 +1,7 @@
 /**
  * Manages dashboard admins. There is no public sign-up: admins are created here by the web lead.
  *
- *   npm run create-admin -w server -- --email secretary@example.com --name "Ada Okafor" [--role admin|editor]
+ *   npm run create-admin -w server -- --email secretary@example.com --name "Ada Okafor" [--role developer|admin|editor]
  *   npm run create-admin -w server -- --email secretary@example.com --reset-password
  *   npm run create-admin -w server -- --email secretary@example.com --remove
  *
@@ -19,7 +19,7 @@ import { generatePassword, hashPassword } from '../src/modules/auth/application/
 import { AdminModel } from '../src/modules/auth/infrastructure/admin.model.js'
 
 const USAGE = `Usage:
-  npm run create-admin -w server -- --email <email> --name "<full name>" [--role admin|editor]
+  npm run create-admin -w server -- --email <email> --name "<full name>" [--role developer|admin|editor]
   npm run create-admin -w server -- --email <email> --reset-password
   npm run create-admin -w server -- --email <email> --remove
 (In PowerShell write the -- as '--'.)`

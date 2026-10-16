@@ -1,5 +1,5 @@
 import { Link, Outlet, useLocation, useNavigate } from 'react-router'
-import { useCanReadSubmissions, useMe, useSignOut } from '../api.ts'
+import { useCanReadSubmissions, useIsDeveloper, useMe, useSignOut } from '../api.ts'
 import { EDITORS } from '../editors/editors.ts'
 
 const under = (pathname: string, path: string) =>
@@ -10,8 +10,10 @@ const NAV: {
   to: string
   label: string
   current: (pathname: string) => boolean
-  /** Personal data: shown to the "admin" role only. */
+  /** Personal data: shown to admins and developers only. */
   adminOnly?: boolean
+  /** Creating and removing accounts: the developer role only. */
+  developerOnly?: boolean
 }[] = [
   { to: '/admin', label: 'Overview', current: (p) => p === '/admin' || p === '/admin/' },
   {
@@ -36,6 +38,12 @@ const NAV: {
     current: (p) => under(p, '/admin/alumni'),
     adminOnly: true,
   },
+  {
+    to: '/admin/accounts',
+    label: 'Accounts',
+    current: (p) => under(p, '/admin/accounts'),
+    developerOnly: true,
+  },
 ]
 
 /** Header (who's signed in, sign out), section links, then the page. Separate from the public site. */
@@ -46,6 +54,7 @@ export function AdminLayout() {
   const admin = me.data
   const { pathname } = useLocation()
   const canReadSubmissions = useCanReadSubmissions()
+  const isDeveloper = useIsDeveloper()
 
   const onSignOut = () =>
     signOut.mutate(undefined, {
@@ -86,7 +95,10 @@ export function AdminLayout() {
         </div>
         <nav aria-label="Admin" className="border-t border-white/15">
           <ul className="mx-auto flex w-full max-w-6xl gap-1 overflow-x-auto px-2 sm:px-6">
-            {NAV.filter((item) => !item.adminOnly || canReadSubmissions).map((item) => {
+            {NAV.filter(
+              (item) =>
+                (!item.adminOnly || canReadSubmissions) && (!item.developerOnly || isDeveloper),
+            ).map((item) => {
               const current = item.current(pathname)
               return (
                 <li key={item.to}>

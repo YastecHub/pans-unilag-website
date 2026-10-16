@@ -43,9 +43,11 @@ import { mongoPlaceholderSources } from './modules/admin/infrastructure/placehol
 import { mongoSubmissionAdminStore } from './modules/admin/infrastructure/submissionsAdmin.store.js'
 import type { MediaConfig } from './modules/media/application/mediaFolders.js'
 import { mediaRouter } from './modules/media/http/media.routes.js'
+import { type AccountStore, accountService } from './modules/auth/application/accounts.js'
 import type { AdminStore } from './modules/auth/application/adminView.js'
+import { accountsRouter } from './modules/auth/http/accounts.routes.js'
 import { authRouter } from './modules/auth/http/auth.routes.js'
-import { mongoAdminStore } from './modules/auth/infrastructure/admin.store.js'
+import { mongoAccountStore, mongoAdminStore } from './modules/auth/infrastructure/admin.store.js'
 import type { CommitteeReader } from './modules/committees/application/committeeView.js'
 import { committeesRouter } from './modules/committees/http/committees.routes.js'
 import { mongoCommitteeReader } from './modules/committees/infrastructure/committee.repository.js'
@@ -125,6 +127,8 @@ export type AuthOptions = {
   submissionAdmin?: SubmissionAdminStore
   /** Cloudinary credentials for signing dashboard uploads. Without them, signing returns 503. */
   media?: MediaConfig
+  /** The Accounts page's store. Defaults to MongoDB; tests pass an in-memory one. */
+  accounts?: AccountStore
 }
 
 export type Readers = {
@@ -274,6 +278,12 @@ export function createApp({
       '/api/admin/media',
       guard.requireAdmin,
       mediaRouter(auth.media, now, guard.requireRole('admin')),
+    )
+    app.use(
+      '/api/admin/accounts',
+      guard.requireAdmin,
+      guard.requireRole('developer'),
+      accountsRouter(accountService(auth.accounts ?? mongoAccountStore), logger),
     )
     app.use(
       '/api/admin',

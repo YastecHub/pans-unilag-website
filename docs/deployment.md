@@ -57,7 +57,6 @@ Sign in to the PANS Cloudinary account. On the dashboard, note the **cloud name*
 
    | Variable | Value | Secret? |
    | --- | --- | --- |
-   | `NODE_ENV` | `production` | no |
    | `MONGODB_URI` | the connection string from step 1 | **yes** |
    | `JWT_SECRET` | 48 random bytes: `node -e "console.log(require('crypto').randomBytes(48).toString('base64url'))"` | **yes** |
    | `CLIENT_ORIGIN` | the site's address, e.g. `https://pans-unilag.vercel.app` (comma-separate several; link previews use the first) | no |
@@ -67,7 +66,9 @@ Sign in to the PANS Cloudinary account. On the dashboard, note the **cloud name*
    | `VITE_CLOUDINARY_CLOUD_NAME` | the same cloud name (the browser builds image links with it) | no |
    | `VITE_SITE_URL` | optional: leave unset until there's a custom domain | no |
 
-   `VITE_API_URL` stays unset: the site calls `/api` on its own address. Without `VITE_SITE_URL`,
+   Don't set `NODE_ENV`: on Vercel the API always runs in production mode, and `NODE_ENV=production`
+   during the build makes `npm ci` skip the build tools, so the build fails. `VITE_API_URL` stays
+   unset: the site calls `/api` on its own address. Without `VITE_SITE_URL`,
    the build uses Vercel's production address for link previews, `robots.txt` and `sitemap.xml`.
 
 5. **Deploy.** The build runs `npm ci`, compiles the server to `server/dist` and builds the client.
@@ -98,14 +99,17 @@ editing:** they overwrite the dashboard's changes with the seed files.
 
 ## 5. Admins
 
-Create the two dashboard admins (at least two people should always be able to sign in):
+Create the web lead's **developer** account (it can then add and remove admins and editors from
+the dashboard's **Accounts** page), plus a second developer for whoever takes over:
 
 ```powershell
-npm run create-admin -w server -- --email secretary@example.com --name "Full Name" --role admin
+npm run create-admin -w server -- --email <web lead email> --name "Full Name" --role developer
 ```
 
-Each command prints a generated password **once**. Give it to the person privately and ask them to
-store it in a password manager. `--reset-password` and `--remove` manage admins later. Then:
+The command prints a generated password **once**: store it in a password manager. Then sign in at
+`/admin`, open **Accounts** and add the two admins (at least two people should always be able to
+sign in). Developer accounts can only be reset or removed with this command (`--reset-password`,
+`--remove`). Then:
 
 ```powershell
 Remove-Item Env:MONGODB_URI   # forget the production connection string in this terminal

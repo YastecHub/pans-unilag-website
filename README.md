@@ -675,7 +675,7 @@ All collections share `isPlaceholder` (boolean), `placeholderNote` (string), `cr
 | `settings` | contactEmail, socialLinks[{ platform, url }], quickLinks, homeBanner, postalAddress, location | Single document |
 | `feedback` | category (`suggestion`, `complaint`, `welfare`, `other`), message, contactEmail?, status, createdAt | Admin-only; deleted after 12 months |
 | `alumni` | name, graduationYear, email, phone?, interests[], consentAt | Admin-only; kept until opt-out |
-| `admins` | name, email (unique), passwordHash, role (`admin`, `editor`), lastLoginAt | Never public |
+| `admins` | name, email (unique), passwordHash, role (`developer`, `admin`, `editor`), lastLoginAt | Never public |
 
 ## API reference (planned)
 
@@ -743,7 +743,7 @@ npm run create-admin -w server -- --email secretary@example.com --reset-password
 npm run create-admin -w server -- --email secretary@example.com --remove
 ```
 
-A new or reset password (24 random characters) is printed once; share it privately. Roles: `admin` (everything) and `editor` (content only).
+A new or reset password (24 random characters) is printed once; share it privately. Roles: `developer` (the web lead: everything, plus the dashboard's **Accounts** page), `admin` (everything else) and `editor` (content only). Developer accounts are only made with this command; the Accounts page manages admins and editors.
 
 Dashboard API (live, all behind `requireAdmin`, 401 without a session):
 
@@ -818,7 +818,7 @@ The API needs a `MONGODB_URI` in `server/.env` (a free personal Atlas cluster or
 | `npm run seed -w server` | Loads `server/seed/*.json` into MongoDB. Adds missing documents only, so it is safe to re-run; `-- --update` overwrites, `-- --reset` empties first (development only). See [`server/seed/README.md`](server/seed/README.md) |
 | `npm run seed:check -w server` | Validates the seed files without a database |
 | `npm run content:status -w server` | Prints what is still a placeholder in the seed files, as a checklist for the content tracking issue (#14) |
-| `npm run create-admin -w server -- --email <email> --name "<name>" [--role admin\|editor]` | Creates a dashboard admin and prints a generated password once; `--reset-password` and `--remove` manage existing ones |
+| `npm run create-admin -w server -- --email <email> --name "<name>" [--role developer\|admin\|editor]` | Creates a dashboard account and prints a generated password once; `--reset-password` and `--remove` manage existing ones. The only way to create a developer |
 | `npm run upload-album -w server -- --event <slug> --dir <folder> --consent-confirmed` | Resizes (≤ 2500 px, metadata stripped) and uploads one event's curated photos to Cloudinary, then records them in `albums.json`. See [`server/seed/README.md`](server/seed/README.md#albumsjson) |
 
 ## Environment variables
@@ -852,7 +852,7 @@ pans-unilag/
 - **Personal data:** never publish personal phone numbers or personal emails (including those on letterheads). Use role emails or the Secretary General's official channel.
 - **Forms:** feedback can be anonymous; alumni needs consent; only admins read submissions; the privacy notice states who reads them, retention and deletion requests.
 - **Backups:** Atlas's free tier has no automatic backups. Run `mongodump` weekly and before major changes, and test the restore: [docs/backup-restore.md](docs/backup-restore.md) (`npm run backup:verify -w server` compares the restored copy with the live database).
-- **Roles:** `admin` can do everything, including reading feedback and alumni sign-ups; `editor` manages content only (the API returns 403 for submissions and brand uploads).
+- **Roles:** `developer` (the web lead) can do everything, including the **Accounts** page, where it creates admins and editors, gives them new passwords, changes their role and removes them (`/api/admin/accounts`, 403 for everyone else). `admin` can do everything else, including reading feedback and alumni sign-ups; `editor` manages content only (the API returns 403 for submissions and brand uploads). Developer accounts can't be changed from the dashboard, only with `create-admin`, so a stolen dashboard session can't create more developers. Every account change is logged with who made it.
 - **Security review:** [docs/security-review.md](docs/security-review.md) (16 Oct, before launch): findings, fixes and accepted risks.
 - **Nigeria Data Protection Act 2023:** confirm with the Faculty or UNILAG's data protection office whether PANS needs NDPC registration. Not legal advice.
 - Run a security review with `.agent/red-team.md` on the auth and submissions modules before launch.
