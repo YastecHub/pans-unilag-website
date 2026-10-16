@@ -159,8 +159,6 @@ export type StubPage = {
 
 /** Every page that is still a stub, with the issue that replaces it. */
 export const STUB_PAGES: StubPage[] = [
-  { path: '/academics/resources', title: 'Academic resources', issue: 34 },
-  { path: '/academics/student-support', title: 'Student support', issue: 34 },
   { path: '/connect/feedback', title: 'Feedback & suggestions', issue: 35 },
   { path: '/connect/alumni', title: 'Alumni network', issue: 35 },
   { path: '/connect/contact', title: 'Contact', issue: 35 },

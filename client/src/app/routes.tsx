@@ -9,6 +9,8 @@ import { OpportunitiesPage } from '../features/opportunities/pages/Opportunities
 import { OpportunityPage } from '../features/opportunities/pages/OpportunityPage.tsx'
 import { PublicationsPage } from '../features/publications/pages/PublicationsPage.tsx'
 import { CgpaCalculatorPage } from '../features/academics/pages/CgpaCalculatorPage.tsx'
+import { ResourcesPage } from '../features/academics/pages/ResourcesPage.tsx'
+import { StudentSupportPage } from '../features/academics/pages/StudentSupportPage.tsx'
 import { AlbumPage } from '../features/gallery/pages/AlbumPage.tsx'
 import { GalleryPage } from '../features/gallery/pages/GalleryPage.tsx'
 import { EventPage } from '../features/events/pages/EventPage.tsx'
@@ -68,6 +70,8 @@ export const routes: RouteObject[] = [
       { path: '/opportunities/:slug', element: <OpportunityPage /> },
       { path: '/publications', element: <PublicationsPage /> },
       { path: '/academics/cgpa-calculator', element: <CgpaCalculatorPage /> },
+      { path: '/academics/resources', element: <ResourcesPage /> },
+      { path: '/academics/student-support', element: <StudentSupportPage /> },
       ...OVERVIEW_SECTIONS.map((section) => ({
         path: section.to,
         element: <SectionOverviewPage section={section} />,
