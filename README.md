@@ -749,7 +749,7 @@ Dashboard API (live, all behind `requireAdmin`, 401 without a session):
 
 - `GET/POST /api/admin/:resource` and `GET/PATCH/DELETE /api/admin/:resource/:id` for every content collection: `announcements`, `events`, `opportunities`, `albums`, `executives`, `senators`, `committees`, `patrons`, `publications`, `documents`, `resources` and `gradingscales`. `pages` and `settings` are a fixed set, so they have only `GET` and `PATCH`. The resource names match the collections in `GET /api/admin/placeholders`, so every placeholder can be filled from the dashboard. Bodies are validated with Zod (unknown fields rejected) **and** by the Mongoose model, including cross-field rules such as event dates, album consent and the grading scale's coverage; a duplicate slug (or office for a session, or active grading scale) returns 409. An executive's or senator's display order is set from their office. Academic resource links to known piracy sites are refused. In PATCH, `null` clears a field. **Saving clears `isPlaceholder` and `placeholderNote`** unless the body sends `isPlaceholder: true`. Lists are most recently updated first (`?page=&pageSize=`, at most 100).
 - `GET /api/admin/placeholders` returns `{ total, groups: [{ collection, page, path, items: [{ id, label, note, updatedAt }] }] }`: every placeholder on the site, grouped by the page it appears on, as the admins' to-do list.
-- `GET /api/admin/submissions/feedback?status=new|read|resolved`, `PATCH /api/admin/submissions/feedback/:id` (`{ status }`), `GET /api/admin/submissions/alumni`, `DELETE /api/admin/submissions/alumni/:id` (removal requests).
+- `GET /api/admin/submissions/feedback?status=new|read|resolved`, `PATCH /api/admin/submissions/feedback/:id` (`{ status }`), `GET /api/admin/submissions/alumni`, `DELETE /api/admin/submissions/alumni/:id` (removal requests). These are personal data: **`admin` role only** (editors get 403).
 
 Add a resource to the dashboard by adding it to `ADMIN_RESOURCES` in `server/src/modules/admin/application/adminResources.ts` (leave out `create`, or set `deletable: false`, for content the site has a fixed set of), then an editor config to `EDITORS` in `client/src/features/admin/editors/editors.ts`.
 
@@ -850,7 +850,9 @@ pans-unilag/
 - **API hardening:** `helmet`, CORS allowlist, Zod validation rejecting unknown fields, rate limits on forms and login, request size limits; never pass raw request objects into Mongoose queries.
 - **Personal data:** never publish personal phone numbers or personal emails (including those on letterheads). Use role emails or the Secretary General's official channel.
 - **Forms:** feedback can be anonymous; alumni needs consent; only admins read submissions; the privacy notice states who reads them, retention and deletion requests.
-- **Backups:** Atlas's free tier has no automatic backups. Run `mongodump` weekly and before major changes; test a restore before launch.
+- **Backups:** Atlas's free tier has no automatic backups. Run `mongodump` weekly and before major changes, and test the restore: [docs/backup-restore.md](docs/backup-restore.md) (`npm run backup:verify -w server` compares the restored copy with the live database).
+- **Roles:** `admin` can do everything, including reading feedback and alumni sign-ups; `editor` manages content only (the API returns 403 for submissions and brand uploads).
+- **Security review:** [docs/security-review.md](docs/security-review.md) (16 Oct, before launch): findings, fixes and accepted risks.
 - **Nigeria Data Protection Act 2023:** confirm with the Faculty or UNILAG's data protection office whether PANS needs NDPC registration. Not legal advice.
 - Run a security review with `.agent/red-team.md` on the auth and submissions modules before launch.
 

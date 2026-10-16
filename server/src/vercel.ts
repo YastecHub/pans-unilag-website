@@ -75,8 +75,17 @@ export function createVercelHandler({ env, connect, logger }: VercelDeps): Handl
   }
 }
 
+/**
+ * On Vercel the API is always the live site, so NODE_ENV defaults to production. Forgetting to set
+ * it would otherwise serve the API docs publicly, show stack traces, send the session cookie
+ * without Secure and key rate limits on Vercel's proxy instead of each visitor.
+ */
+export function vercelEnv(source: NodeJS.ProcessEnv = process.env): Env {
+  return loadEnv({ ...source, NODE_ENV: source.NODE_ENV || 'production' })
+}
+
 export default createVercelHandler({
-  env: () => loadEnv(),
+  env: () => vercelEnv(),
   connect: connectDb,
   logger: createLogger({ json: true }),
 })

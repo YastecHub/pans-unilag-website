@@ -1,12 +1,18 @@
 import { Link, Outlet, useLocation, useNavigate } from 'react-router'
-import { useMe, useSignOut } from '../api.ts'
+import { useCanReadSubmissions, useMe, useSignOut } from '../api.ts'
 import { EDITORS } from '../editors/editors.ts'
 
 const under = (pathname: string, path: string) =>
   pathname === path || pathname.startsWith(`${path}/`)
 
 /** "Content" covers the content index and every editor. */
-const NAV: { to: string; label: string; current: (pathname: string) => boolean }[] = [
+const NAV: {
+  to: string
+  label: string
+  current: (pathname: string) => boolean
+  /** Personal data: shown to the "admin" role only. */
+  adminOnly?: boolean
+}[] = [
   { to: '/admin', label: 'Overview', current: (p) => p === '/admin' || p === '/admin/' },
   {
     to: '/admin/content',
@@ -18,8 +24,18 @@ const NAV: { to: string; label: string; current: (pathname: string) => boolean }
     label: 'Placeholders',
     current: (p) => under(p, '/admin/placeholders'),
   },
-  { to: '/admin/feedback', label: 'Feedback', current: (p) => under(p, '/admin/feedback') },
-  { to: '/admin/alumni', label: 'Alumni', current: (p) => under(p, '/admin/alumni') },
+  {
+    to: '/admin/feedback',
+    label: 'Feedback',
+    current: (p) => under(p, '/admin/feedback'),
+    adminOnly: true,
+  },
+  {
+    to: '/admin/alumni',
+    label: 'Alumni',
+    current: (p) => under(p, '/admin/alumni'),
+    adminOnly: true,
+  },
 ]
 
 /** Header (who's signed in, sign out), section links, then the page. Separate from the public site. */
@@ -29,6 +45,7 @@ export function AdminLayout() {
   const navigate = useNavigate()
   const admin = me.data
   const { pathname } = useLocation()
+  const canReadSubmissions = useCanReadSubmissions()
 
   const onSignOut = () =>
     signOut.mutate(undefined, {
@@ -69,7 +86,7 @@ export function AdminLayout() {
         </div>
         <nav aria-label="Admin" className="border-t border-white/15">
           <ul className="mx-auto flex w-full max-w-6xl gap-1 overflow-x-auto px-2 sm:px-6">
-            {NAV.map((item) => {
+            {NAV.filter((item) => !item.adminOnly || canReadSubmissions).map((item) => {
               const current = item.current(pathname)
               return (
                 <li key={item.to}>

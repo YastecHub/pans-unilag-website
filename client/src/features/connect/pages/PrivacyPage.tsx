@@ -80,8 +80,9 @@ export function PrivacyPage() {
             public sign-up.
           </li>
           <li>
-            To stop spam, the number of forms one connection can send is limited for an hour. This
-            check is kept in memory only, never stored.
+            To stop spam and password guessing, we count the forms and admin sign-in attempts sent
+            from each internet (IP) address. The count is kept in our database for at most an hour,
+            then deleted automatically, and isn’t used for anything else.
           </li>
           <li>
             We use trusted services to run the site: website and server hosting, a database and an

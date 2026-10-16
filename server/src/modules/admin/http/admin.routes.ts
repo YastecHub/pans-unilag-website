@@ -1,4 +1,4 @@
-import { Router } from 'express'
+import { type RequestHandler, Router } from 'express'
 import { z } from 'zod'
 import { HttpError } from '../../../lib/httpError.js'
 import { validate } from '../../../middleware/validate.js'
@@ -26,6 +26,12 @@ export const feedbackStatusSchema = z.strictObject({ status: z.enum(FEEDBACK_STA
 type PageQuery = z.infer<typeof pageQuerySchema>
 
 export type AdminDeps = {
+  /**
+   * Runs before the submissions routes: feedback and alumni sign-ups are personal data, so only
+   * the "admin" role reads them (README → admin roles; the privacy notice says who reads them).
+   * Editors manage content only.
+   */
+  adminOnly: RequestHandler
   collections: Record<AdminResourceName, AdminCollection>
   placeholders: PlaceholderSource[]
   submissions: SubmissionAdminStore
@@ -35,7 +41,12 @@ export type AdminDeps = {
  * Everything under /api/admin. Mounted behind requireAdmin in app.ts, so every route needs a
  * signed-in admin (401 otherwise). Documented in admin.openapi.ts.
  */
-export function adminRouter({ collections, placeholders, submissions }: AdminDeps): Router {
+export function adminRouter({
+  adminOnly,
+  collections,
+  placeholders,
+  submissions,
+}: AdminDeps): Router {
   const router = Router()
   router.use((_req, res, next) => {
     res.set('Cache-Control', 'no-store')
@@ -45,6 +56,8 @@ export function adminRouter({ collections, placeholders, submissions }: AdminDep
   router.get('/placeholders', async (_req, res) => {
     res.json(await placeholderGroups(placeholders))
   })
+
+  router.use('/submissions', adminOnly)
 
   router.get(
     '/submissions/feedback',

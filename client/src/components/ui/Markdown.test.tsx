@@ -21,6 +21,14 @@ describe('Markdown', () => {
     expect(outside.getAttribute('rel')).toBe('noopener noreferrer')
   })
 
+  it('treats a //other-site link as another site, not a page here', async () => {
+    show('[Looks local](//elsewhere.example/page)')
+    const link = await screen.findByRole('link', { name: /Looks local/ })
+    expect(link.getAttribute('href')).toBe('//elsewhere.example/page')
+    expect(link.getAttribute('target')).toBe('_blank')
+    expect(link.getAttribute('rel')).toBe('noopener noreferrer')
+  })
+
   it('starts content headings at h3 and drops images and raw HTML', async () => {
     const { container } = show('# Big\n\n![x](https://x.org/a.png)\n\n<b onclick="x()">bold</b>')
     expect(await screen.findByRole('heading', { level: 3, name: 'Big' })).toBeTruthy()

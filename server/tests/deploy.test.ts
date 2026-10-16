@@ -13,7 +13,7 @@ import {
 } from '../src/lib/mongoRateLimitStore.js'
 import { createErrorHandler } from '../src/middleware/errorHandler.js'
 import { createRateLimiter } from '../src/middleware/rateLimit.js'
-import { createVercelHandler, originalUrl } from '../src/vercel.js'
+import { createVercelHandler, originalUrl, vercelEnv } from '../src/vercel.js'
 import { ALLOWED_ORIGIN } from './helpers.js'
 
 type Filter = { _id: string; resetAt?: { $gt?: Date; $lte?: Date }; hits?: { $gt: number } }
@@ -216,6 +216,13 @@ describe('the Vercel function', () => {
     })
     expect((await request(handler).get('/api/health')).status).toBe(503)
     expect(connect).not.toHaveBeenCalled()
+  })
+
+  it('runs in production mode on Vercel even if NODE_ENV was left out', () => {
+    const base = { MONGODB_URI: 'mongodb://localhost/pans', JWT_SECRET: 'x'.repeat(40) }
+    expect(vercelEnv(base).NODE_ENV).toBe('production')
+    expect(vercelEnv({ ...base, NODE_ENV: '' }).NODE_ENV).toBe('production')
+    expect(vercelEnv({ ...base, NODE_ENV: 'development' }).NODE_ENV).toBe('development')
   })
 
   it('restores the original path if the rewrite passes it as ?path=', () => {
