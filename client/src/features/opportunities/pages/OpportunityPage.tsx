@@ -11,6 +11,7 @@ import { formatDate } from '../../../lib/dates.ts'
 import { ApiError } from '../../../lib/http.ts'
 import { InnerPageLayout } from '../../pages/components/InnerPageLayout.tsx'
 import { isOpen, OPPORTUNITY_TYPE_LABELS, useOpportunity } from '../api/opportunities.ts'
+import { usePageMeta } from '../../../lib/usePageMeta.ts'
 import { Deadline } from '../components/Deadline.tsx'
 import { HubAside } from '../components/HubAside.tsx'
 
@@ -61,6 +62,15 @@ export function OpportunityPage() {
   }
 
   const o = query.data
+
+  usePageMeta({
+    title: o.title,
+    description: o.description
+      ? o.description.slice(0, 160).trim().replace(/\n+/g, ' ')
+      : `${o.title} · PANS UNILAG`,
+    url: window.location.href,
+  })
+
   return (
     <InnerPageLayout
       title={o.title}

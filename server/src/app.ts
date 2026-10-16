@@ -216,6 +216,51 @@ export function createApp({
   app.use('/api/search', searchRouter(readers.search, now))
   app.use('/api', submissionsRouter(submissions, now, formRateLimit, rateLimitStores))
 
+  app.get(['/previews', '/previews/*'], async (req, res, next) => {
+    try {
+      const targetPath = (req.query.path as string) || req.path.replace(/^\/previews/, '')
+      const { getPreviewMeta } = await import('./lib/linkPreview.js')
+      const meta = await getPreviewMeta(targetPath, {
+        events: readers.events,
+        opportunities: readers.opportunities,
+      })
+
+      if (!meta) {
+        res
+          .status(404)
+          .json({ error: { code: 'NOT_FOUND', message: 'No preview available for path' } })
+        return
+      }
+
+      // Return JSON metadata or rendered preview HTML tags
+      if (req.accepts('html')) {
+        const minimalHtml = `<!doctype html>
+<html>
+<head>
+  <title>${meta.title}</title>
+  <meta property="og:title" content="${meta.title}" />
+  <meta property="og:description" content="${meta.description}" />
+  <meta property="og:url" content="${meta.url}" />
+  <meta property="og:image" content="${meta.image || ''}" />
+  <meta property="og:image:alt" content="${meta.imageAlt || meta.title}" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="${meta.title}" />
+  <meta name="twitter:description" content="${meta.description}" />
+  <meta name="twitter:image" content="${meta.image || ''}" />
+</head>
+<body><p>Redirecting to <a href="${meta.url}">${meta.title}</a>...</p></body>
+</html>`
+        res.setHeader('Content-Type', 'text/html; charset=utf-8')
+        res.send(minimalHtml)
+        return
+      }
+
+      res.json(meta)
+    } catch (err) {
+      next(err)
+    }
+  })
+
   if (auth) {
     const admins = auth.admins ?? mongoAdminStore
     const guard: AuthGuard = createAuthGuard(admins, auth.jwtSecret, now)

@@ -13,6 +13,7 @@ import { useCommittees } from '../../committees/api/committees.ts'
 import { useAlbums } from '../../gallery/api/albums.ts'
 import { InnerPageLayout } from '../../pages/components/InnerPageLayout.tsx'
 import { type EventItem, eventDateLabel, useEvent, useEvents } from '../api/events.ts'
+import { usePageMeta } from '../../../lib/usePageMeta.ts'
 import { AddToCalendar, RegisterButton } from '../components/AddToCalendar.tsx'
 import { eventTiming } from '../lib/ics.ts'
 
@@ -56,6 +57,15 @@ export function EventPage() {
   const eyebrow = [e.series && e.series !== e.title ? e.series : '', dayLabel(e)]
     .filter(Boolean)
     .join(' · ')
+
+  usePageMeta({
+    title: e.title,
+    description: e.description
+      ? e.description.slice(0, 160).trim().replace(/\n+/g, ' ')
+      : `${e.title} · PANS UNILAG`,
+    image: e.coverImage,
+    url: window.location.href,
+  })
 
   return (
     <InnerPageLayout
