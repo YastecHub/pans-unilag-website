@@ -1,8 +1,14 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { ApiError, api } from '../../lib/http.ts'
 
+/**
+ * Highest first: developer (the web lead: everything, plus Accounts), admin (everything else,
+ * including feedback and alumni), editor (content only).
+ */
+export type AdminRole = 'developer' | 'admin' | 'editor'
+
 /** The signed-in admin (GET /api/auth/me). Never includes the password hash. */
-export type Admin = { id: string; name: string; email: string; role: 'admin' | 'editor' }
+export type Admin = { id: string; name: string; email: string; role: AdminRole }
 
 export const ME_KEY = ['admin', 'me'] as const
 
@@ -20,11 +26,17 @@ export function useMe() {
 }
 
 /**
- * Feedback and alumni sign-ups are personal data: only the "admin" role reads them (the API
+ * Feedback and alumni sign-ups are personal data: only admins and developers read them (the API
  * refuses editors with 403). Editors manage content only.
  */
 export function useCanReadSubmissions(): boolean {
-  return useMe().data?.role === 'admin'
+  const role = useMe().data?.role
+  return role === 'admin' || role === 'developer'
+}
+
+/** The Accounts page (creating and removing admins) is for the developer role only. */
+export function useIsDeveloper(): boolean {
+  return useMe().data?.role === 'developer'
 }
 
 export function useSignIn() {

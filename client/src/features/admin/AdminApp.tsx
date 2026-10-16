@@ -9,6 +9,7 @@ import {
   OverviewPage,
   PlaceholdersPage,
 } from './pages/AdminPages.tsx'
+import { AccountsPage } from './pages/AccountsPage.tsx'
 import { SignInPage } from './pages/SignInPage.tsx'
 import { EDITORS } from './editors/editors.ts'
 import { EditPage, ListPage } from './editors/EditorPages.tsx'
@@ -45,6 +46,7 @@ export function AdminApp() {
           <Route path="placeholders" element={<PlaceholdersPage />} />
           <Route path="feedback" element={<FeedbackPage />} />
           <Route path="alumni" element={<AlumniPage />} />
+          <Route path="accounts" element={<AccountsPage />} />
           <Route path="*" element={<AdminNotFoundPage />} />
         </Route>
       </Route>

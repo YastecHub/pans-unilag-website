@@ -28,10 +28,10 @@ import type {
   FeedbackRecord,
   SubmissionAdminStore,
 } from '../src/modules/admin/application/submissionsAdmin.js'
-import type { AdminStore } from '../src/modules/auth/application/adminView.js'
 import { hashPassword } from '../src/modules/auth/application/passwords.js'
 import type { SubmissionStore } from '../src/modules/submissions/application/submissionRules.js'
 import { originalUrl } from '../src/vercel.js'
+import { memoryAccounts } from '../tests/memoryAccounts.js'
 import { memoryAdminCollection } from '../tests/memoryAdmin.js'
 import { seedReaders } from '../tests/seedReaders.js'
 
@@ -126,20 +126,18 @@ async function main() {
     },
   }
 
-  const passwordHash = await hashPassword(E2E_ADMIN.password)
-  const admin = {
-    id: 'e2e-admin',
-    name: 'Test Admin',
-    email: E2E_ADMIN.email,
-    role: 'admin' as const,
-    tokenVersion: 0,
-  }
-  const admins: AdminStore = {
-    findByEmailWithHash: async (email) =>
-      email === admin.email ? { ...admin, passwordHash } : null,
-    findById: async (id) => (id === admin.id ? admin : null),
-    recordLogin: async () => undefined,
-  }
+  // The test admin is a developer, so every dashboard page (Accounts included) can be checked.
+  const { admins, accounts } = memoryAccounts([
+    {
+      id: 'e2e-admin',
+      name: 'Test Admin',
+      email: E2E_ADMIN.email,
+      role: 'developer',
+      tokenVersion: 0,
+      passwordHash: await hashPassword(E2E_ADMIN.password),
+      createdAt: new Date(),
+    },
+  ])
 
   const seedFile: Record<string, string> = {
     pages: 'pages.json',
@@ -177,6 +175,7 @@ async function main() {
       loginRateLimit: { windowMs: 60_000, limit: 1000 },
       jwtSecret: 'e2e-only-jwt-secret-at-least-32-characters',
       admins,
+      accounts,
       adminCollections: collections,
       placeholderSources: PLACEHOLDER_PAGES.map((p) => ({
         ...p,

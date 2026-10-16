@@ -3,6 +3,7 @@ import { healthPaths } from '../modules/health/http/health.openapi.js'
 import { albumsPaths } from '../modules/albums/http/albums.openapi.js'
 import { announcementsPaths } from '../modules/announcements/http/announcements.openapi.js'
 import { adminPaths } from '../modules/admin/http/admin.openapi.js'
+import { accountsPaths } from '../modules/auth/http/accounts.openapi.js'
 import { authPaths } from '../modules/auth/http/auth.openapi.js'
 import { committeesPaths } from '../modules/committees/http/committees.openapi.js'
 import { documentsPaths } from '../modules/documents/http/documents.openapi.js'
@@ -60,6 +61,10 @@ export function buildOpenApiDocument() {
         name: 'Admin',
         description: 'Dashboard: content, placeholders and submissions (signed-in only)',
       },
+      {
+        name: 'Admin accounts',
+        description: 'Creating and removing admins and editors (developer role only)',
+      },
       { name: 'Forms', description: 'Feedback and alumni sign-ups (write-only, rate-limited)' },
     ],
     paths: {
@@ -81,6 +86,7 @@ export function buildOpenApiDocument() {
       ...submissionsPaths,
       ...searchPaths,
       ...authPaths,
+      ...accountsPaths,
       ...adminPaths,
       ...mediaPaths,
     },

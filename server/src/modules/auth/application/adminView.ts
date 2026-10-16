@@ -1,12 +1,23 @@
-export const ADMIN_ROLES = ['admin', 'editor'] as const
+/**
+ * Highest first; each role can do everything the ones after it can.
+ * - developer: the web lead. Everything, plus the Accounts page (creating and removing admins).
+ * - admin: everything else, including feedback and alumni sign-ups (personal data).
+ * - editor: content only.
+ */
+export const ADMIN_ROLES = ['developer', 'admin', 'editor'] as const
 export type AdminRole = (typeof ADMIN_ROLES)[number]
+
+/** True if `role` can do what `atLeast` can (developer > admin > editor). */
+export function hasRole(role: AdminRole, atLeast: AdminRole): boolean {
+  return ADMIN_ROLES.indexOf(role) <= ADMIN_ROLES.indexOf(atLeast)
+}
 
 /** What the API ever says about an admin. Never includes the password hash. */
 export type AdminView = {
   id: string
   name: string
   email: string
-  /** admin: everything, including managing other admins. editor: content only. */
+  /** See ADMIN_ROLES. */
   role: AdminRole
 }
 

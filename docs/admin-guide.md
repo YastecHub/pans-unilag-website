@@ -139,7 +139,8 @@ site shows it as **"Coming soon"** or **"To be announced"** instead of guessing.
   after 12 months.
 - **Alumni:** sign-ups for the alumni network, read-only. This is personal information: don't
   copy or share it outside the executive team. If someone asks to be removed, tell the web lead.
-- Accounts with the **editor** role can edit content but can't see Feedback or Alumni.
+- Accounts with the **editor** role can edit content but can't see Feedback or Alumni. Only the
+  web lead's **developer** account sees **Accounts**.
 
 ## 8. Every new session (handover)
 
@@ -158,19 +159,25 @@ write-ups for past events, and go through the Placeholders list.
 
 ## 9. Jobs for the web lead
 
-- **Creating and removing admins** (there is no sign-up page). From the project folder, with the
-  live database settings in `server/.env`:
+- **Creating and removing admins** (there is no sign-up page). Sign in with your **developer**
+  account and open **Accounts**: **Add someone** (name, office email, Admin or Editor), **New
+  password** for someone who's forgotten theirs, the **Role** list, or **Remove**. A new password
+  is shown once on screen: give it to the person privately, not in a group chat, and ask them to
+  keep it in a password manager. A new password or removal signs the person out at once. Keep at
+  least two admins at all times.
+- **Developer accounts** (yours, and a second for whoever takes over) can't be changed from the
+  dashboard. Create, reset or remove them from the project folder, with the live database
+  settings in `server/.env` (the same commands also work for admins and editors if the dashboard
+  is down):
 
   ```powershell
-  npm run create-admin -w server -- --email <office email> --name "<full name>" --role admin
+  npm run create-admin -w server -- --email <email> --name "<full name>" --role developer
   npm run create-admin -w server -- --email <office email> --reset-password
   npm run create-admin -w server -- --email <office email> --remove
   ```
 
-  (In PowerShell type the `--` as `'--'`.) The password is printed once: give it to the person
-  privately, not in a group chat, and ask them to keep it in a password manager. Use `--role
-  editor` for someone who only edits content. Resetting or removing signs the person out
-  everywhere. Keep at least two admins at all times.
+  (In PowerShell type the `--` as `'--'`.) The password is printed once. Resetting or removing
+  signs the person out everywhere.
 - **Backups and restores:** `docs/backup-restore.md`. **Deploying:** `docs/deployment.md`.
 - **Something broken on the site?** Note the page address, what you did and what you saw (a
   screenshot helps), and send it to the web lead, who records it as an issue in the project's
