@@ -158,13 +158,7 @@ export type StubPage = {
 }
 
 /** Every page that is still a stub, with the issue that replaces it. */
-export const STUB_PAGES: StubPage[] = [
-  { path: '/connect/feedback', title: 'Feedback & suggestions', issue: 35 },
-  { path: '/connect/alumni', title: 'Alumni network', issue: 35 },
-  { path: '/connect/contact', title: 'Contact', issue: 35 },
-  { path: '/connect/privacy', title: 'Privacy notice', issue: 35 },
-  { path: '/search', title: 'Search', issue: 36 },
-]
+export const STUB_PAGES: StubPage[] = [{ path: '/search', title: 'Search', issue: 36 }]
 
 /** The menu section with this label (the About pages show its links beside them). */
 export function navSection(label: string): NavSection {

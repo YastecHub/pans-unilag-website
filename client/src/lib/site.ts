@@ -14,6 +14,9 @@ export const SITE = {
     'College of Medicine Campus, University of Lagos',
     'P.M.B. 12003, Lagos',
   ],
+  /** Where the Faculty is (for directions), not a postal address. */
+  location:
+    'Faculty of Pharmacy, Lagos University Teaching Hospital, off Ishaga Road, Idi-Araba, Lagos',
   socialLinks: [
     { platform: 'Instagram', url: 'https://www.instagram.com/pans_unilag/' },
     { platform: 'X', url: 'https://x.com/PANS_Unilag' },
