@@ -4,6 +4,7 @@ import express, { type Express } from 'express'
 import helmet from 'helmet'
 import { docsRouter } from './docs/docs.routes.js'
 import { type Logger, silentLogger } from './lib/logger.js'
+import type { RateLimitStores } from './middleware/rateLimit.js'
 import { type AuthGuard, createAuthGuard } from './middleware/requireAdmin.js'
 import { createErrorHandler } from './middleware/errorHandler.js'
 import { notFound } from './middleware/notFound.js'
@@ -96,6 +97,11 @@ export type AppOptions = {
   submissions?: SubmissionStore
   /** Per-IP limit for each form (default 5 per hour). */
   formRateLimit?: FormRateLimit
+  /**
+   * Shared rate-limit counters. Leave out to count in memory (tests, one long-running server);
+   * production passes MongoDB so every serverless instance shares the counts.
+   */
+  rateLimitStores?: RateLimitStores
   /** Admin sign-in. Without it the /api/auth routes are not mounted (tests of public routes). */
   auth?: AuthOptions
 }
@@ -165,13 +171,14 @@ export function createApp({
   now = () => new Date(),
   submissions = mongoSubmissionStore,
   formRateLimit,
+  rateLimitStores,
   auth,
 }: AppOptions): Express {
   const app = express()
   const readers = { ...mongoReaders, ...readerOverrides }
 
   app.disable('x-powered-by')
-  // Behind one proxy on the host (e.g. Render), so rate limits see the real client IP.
+  // Behind the host's proxy (Vercel), which sets X-Forwarded-For, so rate limits see the client.
   if (isProduction) app.set('trust proxy', 1)
 
   app.use(requestId)
@@ -207,7 +214,7 @@ export function createApp({
   app.use('/api/grading-scale', gradingRouter(readers.gradingScale))
   app.use('/api/settings', settingsRouter(readers.settings))
   app.use('/api/search', searchRouter(readers.search, now))
-  app.use('/api', submissionsRouter(submissions, now, formRateLimit))
+  app.use('/api', submissionsRouter(submissions, now, formRateLimit, rateLimitStores))
 
   if (auth) {
     const admins = auth.admins ?? mongoAdminStore
@@ -222,6 +229,7 @@ export function createApp({
         now,
         sessionHours: auth.sessionHours,
         loginRateLimit: auth.loginRateLimit,
+        rateLimitStores,
       }),
     )
     const collections = Object.fromEntries(

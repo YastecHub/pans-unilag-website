@@ -448,7 +448,7 @@ Calculator behaviour:
 | Admin auth | Email + password (argon2), session JWT in an `httpOnly`, `Secure`, `SameSite=Lax` cookie | Proposed |
 | Markdown rendering | For constitution-derived page sections (sanitised) | Proposed |
 | Testing | Vitest, Supertest, Playwright | Proposed |
-| Hosting | Client: static host. API: Render. DB: Atlas | Proposed |
+| Hosting | One Vercel project: static client plus the API as a function at `/api`. DB: Atlas. Images: Cloudinary | Decided 16 Oct |
 | Node.js | **22 LTS** (Vite needs 20.19+ or 22.12+) | Required |
 | Repository | npm workspaces: `client/`, `server/` | Proposed |
 
@@ -733,7 +733,7 @@ Forms (live): `POST /api/feedback` (`category`, `message` 10–2000 characters, 
 
 Search (live): `GET /api/search?q=&type=&limit=` returns `{ query, results: [{ type, title, summary, url, externalUrl?, score }] }`, best match first (default 20, at most 50). It covers events, open opportunities, publications, resources and committees through one MongoDB text index per collection (title weighted ×10; whole words, so "pharm" does not match "pharmacy"). **Placeholders are never returned**, so most events and all publications appear only once their real content is in. `q` must be 2–100 characters (400 otherwise); quotes and minus signs are treated as ordinary text. `url` is the page on the site; resources also give `externalUrl`.
 
-Admin auth (live): `POST /api/auth/login` (`{ email, password }`, 10 attempts per 15 minutes per IP) sets the session cookie `pans_admin_session`: a JWT (HS256, signed with `JWT_SECRET`, 8 hours) in an `httpOnly`, `SameSite=Lax` cookie on path `/api`, `Secure` in production. A wrong email and a wrong password give the same 401. `GET /api/auth/me` returns `{ admin: { id, name, email, role } }` or 401; `POST /api/auth/logout` clears the cookie. The admin is looked up on every request, so **removing an admin or resetting their password signs them out everywhere**. The password hash is never selected by default and never leaves the server. Routes use `requireAdmin` and `requireRole('admin')` from `middleware/requireAdmin.ts`. Because the cookie is `SameSite=Lax`, **the site must reach the API on its own domain in production** (an `/api/*` rewrite on the static host to the Render URL); in development Vite's proxy does this.
+Admin auth (live): `POST /api/auth/login` (`{ email, password }`, 10 attempts per 15 minutes per IP) sets the session cookie `pans_admin_session`: a JWT (HS256, signed with `JWT_SECRET`, 8 hours) in an `httpOnly`, `SameSite=Lax` cookie on path `/api`, `Secure` in production. A wrong email and a wrong password give the same 401. `GET /api/auth/me` returns `{ admin: { id, name, email, role } }` or 401; `POST /api/auth/logout` clears the cookie. The admin is looked up on every request, so **removing an admin or resetting their password signs them out everywhere**. The password hash is never selected by default and never leaves the server. Routes use `requireAdmin` and `requireRole('admin')` from `middleware/requireAdmin.ts`. Because the cookie is `SameSite=Lax`, **the site must reach the API on its own domain in production** (on Vercel the site and the API share one address; see [docs/deployment.md](docs/deployment.md)); in development Vite's proxy does this.
 
 Admins are managed from the command line; there is no sign-up page:
 
@@ -875,12 +875,12 @@ pans-unilag/
 
 | Part | Host | Notes |
 | --- | --- | --- |
-| Client | Vercel, Netlify or Cloudflare Pages | SPA fallback rewrite to `index.html` |
-| API | Render | Free instances sleep after 15 min idle (~1 min to wake); Starter (~$7/month) stays on |
-| Database | MongoDB Atlas M0 | 512 MB, no automatic backups |
+| Client | Vercel (static files from `client/dist`) | SPA fallback to `index.html`; hashed assets cached for a year |
+| API | Vercel function `api/index.js` (Express, Frankfurt) | Same address as the site, so the admin cookie just works; starts on demand (about a second when idle) |
+| Database | MongoDB Atlas M0 (AWS Frankfurt) | 512 MB, no automatic backups; network access open to Vercel with a strong password |
 | Images | Cloudinary | Free plan; curate albums to stay within limits |
 
-All accounts belong to the official PANS account, never a personal one.
+All accounts belong to the official PANS account, never a personal one, with two admins each. **Step-by-step setup, environment variables, seeding, admins, the custom domain and backups: [docs/deployment.md](docs/deployment.md).** Everything Vercel needs is in [`vercel.json`](vercel.json).
 
 ## Contributing and project management
 
@@ -980,6 +980,7 @@ Work flows top to bottom; items in the same row can run in parallel.
 | 15 Oct | Full constitution PDF received (55 pp., 7.1 MB) |
 | 15 Oct | Four upcoming events for 2026/27 added (Freshers' Week, Pharmalympics 2027, Health Week 2027, PANS Dinner); events gain `datePrecision` so months-only dates show honestly; venues and links are placeholders |
 | 15 Oct | Official social links added (Instagram, X, YouTube, LinkedIn); Exco names and bios will come as one document from the President |
+| 16 Oct | Client and API deploy together on Vercel (the API as a function at `/api`) instead of a static host plus Render; rate limits are counted in MongoDB so they hold across function instances |
 
 ## Using the AI agent prompts (`.agent/`)
 

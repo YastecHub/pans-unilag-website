@@ -3,7 +3,7 @@ import type { z } from 'zod'
 import { HttpError } from '../../../lib/httpError.js'
 import type { AuthGuard } from '../../../middleware/requireAdmin.js'
 import { SESSION_COOKIE } from '../../../middleware/requireAdmin.js'
-import { createRateLimiter } from '../../../middleware/rateLimit.js'
+import { createRateLimiter, type RateLimitStores } from '../../../middleware/rateLimit.js'
 import { validate } from '../../../middleware/validate.js'
 import type { AdminStore } from '../application/adminView.js'
 import { signIn } from '../application/authService.js'
@@ -18,6 +18,7 @@ export type AuthRouterOptions = {
   now: () => Date
   sessionHours?: number
   loginRateLimit?: { windowMs: number; limit: number }
+  rateLimitStores?: RateLimitStores
 }
 
 export const DEFAULT_SESSION_HOURS = 8
@@ -32,6 +33,7 @@ export function authRouter({
   now,
   sessionHours = DEFAULT_SESSION_HOURS,
   loginRateLimit = DEFAULT_LOGIN_RATE_LIMIT,
+  rateLimitStores,
 }: AuthRouterOptions): Router {
   const router = Router()
   // Lax: the cookie is not sent on cross-site POSTs, which (with JSON-only bodies) blocks CSRF.
@@ -49,7 +51,7 @@ export function authRouter({
 
   router.post(
     '/login',
-    createRateLimiter(loginRateLimit),
+    createRateLimiter({ ...loginRateLimit, store: rateLimitStores?.('login') }),
     validate({ body: loginBodySchema }),
     async (req, res) => {
       const { email, password } = req.body as z.infer<typeof loginBodySchema>
