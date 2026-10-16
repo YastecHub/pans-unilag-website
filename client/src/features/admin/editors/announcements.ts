@@ -6,6 +6,7 @@ import { AnnouncementFields } from './AnnouncementFields.tsx'
 export const announcements: ResourceConfig = {
   name: 'announcements',
   singular: 'Announcement',
+  group: 'News & events',
   plural: 'Announcements',
   intro: 'Short notices on the home page. Pinned ones show first; expired ones hide themselves.',
   empty: () => ({

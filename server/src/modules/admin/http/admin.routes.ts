@@ -6,6 +6,7 @@ import { FEEDBACK_STATUSES } from '../../submissions/infrastructure/feedback.mod
 import {
   ADMIN_RESOURCES,
   type AdminCollection,
+  type AdminResource,
   type AdminResourceName,
   withPlaceholderRule,
 } from '../application/adminResources.js'
@@ -79,8 +80,8 @@ export function adminRouter({ collections, placeholders, submissions }: AdminDep
     },
   )
 
-  for (const resource of ADMIN_RESOURCES) {
-    const collection = collections[resource.name]
+  for (const resource of ADMIN_RESOURCES as readonly AdminResource[]) {
+    const collection = collections[resource.name as AdminResourceName]
     const notFound = () => HttpError.notFound(`${resource.label} not found`)
     const path = `/${resource.name}`
 
@@ -89,9 +90,10 @@ export function adminRouter({ collections, placeholders, submissions }: AdminDep
       res.json(await collection.list(page, pageSize))
     })
 
-    router.post(path, validate({ body: resource.create }), async (req, res) => {
-      res.status(201).json(await collection.create(withPlaceholderRule(req.body)))
-    })
+    if (resource.create)
+      router.post(path, validate({ body: resource.create }), async (req, res) => {
+        res.status(201).json(await collection.create(withPlaceholderRule(req.body)))
+      })
 
     router.get(`${path}/:id`, validate({ params: idParamsSchema }), async (req, res) => {
       const record = await collection.get(req.params.id as string)
@@ -112,10 +114,11 @@ export function adminRouter({ collections, placeholders, submissions }: AdminDep
       },
     )
 
-    router.delete(`${path}/:id`, validate({ params: idParamsSchema }), async (req, res) => {
-      if (!(await collection.remove(req.params.id as string))) throw notFound()
-      res.status(204).end()
-    })
+    if (resource.deletable !== false)
+      router.delete(`${path}/:id`, validate({ params: idParamsSchema }), async (req, res) => {
+        if (!(await collection.remove(req.params.id as string))) throw notFound()
+        res.status(204).end()
+      })
   }
 
   return router

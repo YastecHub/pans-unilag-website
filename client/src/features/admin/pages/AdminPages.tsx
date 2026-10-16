@@ -13,6 +13,10 @@ import {
   usePlaceholders,
 } from '../api.ts'
 import { AdminQuery, Pager } from '../components/AdminQuery.tsx'
+import { ContentIndex } from '../editors/ContentIndex.tsx'
+import { EDITORS } from '../editors/editors.ts'
+
+const EDITABLE = new Set<string>(EDITORS.map((e) => e.name))
 
 const pageNumber = (value: string | null) => Math.max(1, Number.parseInt(value ?? '1', 10) || 1)
 
@@ -71,10 +75,12 @@ export function OverviewPage() {
           </li>
         ))}
       </ul>
-      <p className="text-small text-text-muted">
-        Editors for announcements, events and opportunities are coming next. Until then, this is
-        where to see what’s missing and what students and alumni have sent.
-      </p>
+      <section aria-labelledby="edit-heading" className="flex flex-col gap-3">
+        <h2 id="edit-heading" className="text-h3">
+          Edit the site
+        </h2>
+        <ContentIndex headingLevel={3} />
+      </section>
     </>
   )
 }
@@ -123,13 +129,26 @@ export function PlaceholdersPage() {
                     </div>
                     <ul className="flex flex-col divide-y divide-border rounded-xl border border-border">
                       {group.items.map((item) => (
-                        <li key={item.id} className="flex flex-col gap-1 p-4">
-                          <span className="font-medium">{item.label}</span>
-                          <span className="text-small">{item.note}</span>
-                          {item.updatedAt && (
-                            <span className="text-small text-text-muted">
-                              Last changed {formatDate(item.updatedAt)}
-                            </span>
+                        <li
+                          key={item.id}
+                          className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 p-4"
+                        >
+                          <div className="flex min-w-0 flex-col gap-1">
+                            <span className="font-medium">{item.label}</span>
+                            <span className="text-small">{item.note}</span>
+                            {item.updatedAt && (
+                              <span className="text-small text-text-muted">
+                                Last changed {formatDate(item.updatedAt)}
+                              </span>
+                            )}
+                          </div>
+                          {EDITABLE.has(group.collection) && item.id && (
+                            <Link
+                              to={`/admin/${group.collection}/${item.id}`}
+                              className="font-heading font-medium"
+                            >
+                              Fill in<span className="sr-only">: {item.label}</span>
+                            </Link>
                           )}
                         </li>
                       ))}

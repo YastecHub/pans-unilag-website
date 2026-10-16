@@ -1,14 +1,25 @@
-import { Link, NavLink, Outlet, useNavigate } from 'react-router'
+import { Link, Outlet, useLocation, useNavigate } from 'react-router'
 import { useMe, useSignOut } from '../api.ts'
+import { EDITORS } from '../editors/editors.ts'
 
-const NAV = [
-  { to: '/admin', label: 'Overview', end: true },
-  { to: '/admin/events', label: 'Events', end: false },
-  { to: '/admin/announcements', label: 'Announcements', end: false },
-  { to: '/admin/opportunities', label: 'Opportunities', end: false },
-  { to: '/admin/placeholders', label: 'Placeholders', end: false },
-  { to: '/admin/feedback', label: 'Feedback', end: false },
-  { to: '/admin/alumni', label: 'Alumni', end: false },
+const under = (pathname: string, path: string) =>
+  pathname === path || pathname.startsWith(`${path}/`)
+
+/** "Content" covers the content index and every editor. */
+const NAV: { to: string; label: string; current: (pathname: string) => boolean }[] = [
+  { to: '/admin', label: 'Overview', current: (p) => p === '/admin' || p === '/admin/' },
+  {
+    to: '/admin/content',
+    label: 'Content',
+    current: (p) => under(p, '/admin/content') || EDITORS.some((e) => under(p, `/admin/${e.name}`)),
+  },
+  {
+    to: '/admin/placeholders',
+    label: 'Placeholders',
+    current: (p) => under(p, '/admin/placeholders'),
+  },
+  { to: '/admin/feedback', label: 'Feedback', current: (p) => under(p, '/admin/feedback') },
+  { to: '/admin/alumni', label: 'Alumni', current: (p) => under(p, '/admin/alumni') },
 ]
 
 /** Header (who's signed in, sign out), section links, then the page. Separate from the public site. */
@@ -17,6 +28,7 @@ export function AdminLayout() {
   const signOut = useSignOut()
   const navigate = useNavigate()
   const admin = me.data
+  const { pathname } = useLocation()
 
   const onSignOut = () =>
     signOut.mutate(undefined, {
@@ -57,21 +69,22 @@ export function AdminLayout() {
         </div>
         <nav aria-label="Admin" className="border-t border-white/15">
           <ul className="mx-auto flex w-full max-w-6xl gap-1 overflow-x-auto px-2 sm:px-6">
-            {NAV.map((item) => (
-              <li key={item.to}>
-                <NavLink
-                  to={item.to}
-                  end={item.end}
-                  className={({ isActive }) =>
-                    `block border-b-4 px-3 py-3 font-heading text-small font-medium whitespace-nowrap text-on-primary no-underline ${
-                      isActive ? 'border-accent' : 'border-transparent hover:border-white/40'
-                    }`
-                  }
-                >
-                  {item.label}
-                </NavLink>
-              </li>
-            ))}
+            {NAV.map((item) => {
+              const current = item.current(pathname)
+              return (
+                <li key={item.to}>
+                  <Link
+                    to={item.to}
+                    aria-current={current ? 'page' : undefined}
+                    className={`block border-b-4 px-3 py-3 font-heading text-small font-medium whitespace-nowrap text-on-primary no-underline ${
+                      current ? 'border-accent' : 'border-transparent hover:border-white/40'
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              )
+            })}
           </ul>
         </nav>
       </header>
