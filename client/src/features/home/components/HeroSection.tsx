@@ -14,7 +14,13 @@ export function HeroSection() {
             {SITE.shortName} · Faculty of Pharmacy
           </p>
           <h1 id="hero-title">{SITE.name}</h1>
-          <p className="font-heading text-h3 font-medium text-accent">{SITE.motto}</p>
+          {/*
+            Yellow on dark green is 4.3:1, allowed only for large text (README → brand), so the
+            motto never drops below 24px, WCAG's large size for normal weight.
+          */}
+          <p className="font-heading text-[length:max(1.5rem,var(--text-h3))] leading-tight font-medium text-accent">
+            {SITE.motto}
+          </p>
           <p className="max-w-[40rem]">{SITE.purpose}</p>
           <div className="flex flex-wrap gap-3 pt-2">
             <ButtonLink to="/about" variant="accent">
