@@ -158,7 +158,8 @@ export type StubPage = {
 }
 
 /** Every page that is still a stub, with the issue that replaces it. */
-export const STUB_PAGES: StubPage[] = [{ path: '/search', title: 'Search', issue: 36 }]
+/** Pages still waiting for their issue; every launch page is now real. */
+export const STUB_PAGES: StubPage[] = []
 
 /** The menu section with this label (the About pages show its links beside them). */
 export function navSection(label: string): NavSection {
