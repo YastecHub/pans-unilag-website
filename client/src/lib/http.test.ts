@@ -31,6 +31,8 @@ describe('apiFetch', () => {
     expect(url).toBe('/api/health')
     expect(init.credentials).toBe('include')
     expect(init.method).toBe('GET')
+    // Revalidated every time, so dashboard edits show on the next load (not after 5 minutes).
+    expect(init.cache).toBe('no-cache')
   })
 
   it('prefixes VITE_API_URL without doubling slashes', async () => {

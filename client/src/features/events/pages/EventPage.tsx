@@ -68,7 +68,7 @@ export function EventPage() {
       {e.coverImage && (
         <Img
           publicId={e.coverImage}
-          alt={`${e.title}${e.series ? `, ${e.series}` : ''}`}
+          alt={e.coverImageAlt || `${e.title}${e.series ? `, ${e.series}` : ''}`}
           width={960}
           height={540}
           lazy={false}

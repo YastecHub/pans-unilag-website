@@ -664,7 +664,7 @@ All collections share `isPlaceholder` (boolean), `placeholderNote` (string), `cr
 | `committees` | name, shortName, slug (unique), description, activities[], achievements[], plans[], motto, officers[{ title, name, level }], session, order | 11 for 2026/27 |
 | `patrons` | name, title, isDean, order | |
 | `milestones` | year, title, description, verifiedBy | `verifiedBy` required unless placeholder |
-| `events` | title, slug (unique), series, dayNumber, startsAt, endsAt, datePrecision (`day` \| `month` \| `unknown`), committee (slug), venue, description, coverImage, registrationUrl, committeeRef | Upcoming vs past by `endsAt`; `unknown` dates count as past |
+| `events` | title, slug (unique), series, dayNumber, startsAt, endsAt, datePrecision (`day` \| `month` \| `unknown`), committee (slug), venue, description, coverImage, coverImageAlt, registrationUrl, committeeRef | Upcoming vs past by `endsAt`; `unknown` dates count as past; `coverImageAlt` is required whenever there is a cover |
 | `albums` | slug (= event slug), title, event (slug), series, cover, photos[{ publicId, alt, caption }], sourceFolderUrl, consentConfirmed | ≤ 40 photos; photos need confirmed consent and alt text |
 | `announcements` | title, body (≤ 1000 chars), publishAt, expiresAt, pinned, link | Shown from `publishAt` until `expiresAt` (exclusive) |
 | `opportunities` | title, slug, type (`scholarship`, `internship`, `competition`, `conference`, `training`, `job`, `other`), organisation, description, eligibility, deadline, applyUrl, lastCheckedAt | Open until the end of the deadline day (Lagos); no deadline = rolling |

@@ -15,6 +15,8 @@ export type EventItem = {
   venue: string
   description: string
   coverImage: string
+  /** Alt text for the cover photo (required by the API whenever there is one). */
+  coverImageAlt: string
   registrationUrl: string
   committee: string
   isPlaceholder: boolean

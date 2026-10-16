@@ -60,6 +60,7 @@ const eventFields = z.strictObject({
   venue: z.string().trim().max(200).optional(),
   description: z.string().trim().max(10_000).optional(),
   coverImage: z.string().trim().max(300).optional(),
+  coverImageAlt: z.string().trim().max(200).optional(),
   registrationUrl: z.string().trim().max(500).optional(),
   committee: z.string().trim().max(80).optional(),
   ...placeholderFields,

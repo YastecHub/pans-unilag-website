@@ -10,6 +10,8 @@ import {
   PlaceholdersPage,
 } from './pages/AdminPages.tsx'
 import { SignInPage } from './pages/SignInPage.tsx'
+import { EDITORS } from './editors/editors.ts'
+import { EditPage, ListPage } from './editors/EditorPages.tsx'
 
 /**
  * The admin area at /admin. Loaded only when someone visits /admin (routes.tsx imports it
@@ -31,6 +33,13 @@ export function AdminApp() {
       <Route element={<RequireAdmin />}>
         <Route element={<AdminLayout />}>
           <Route index element={<OverviewPage />} />
+          {EDITORS.map((config) => (
+            <Route key={config.name} path={config.name}>
+              <Route index element={<ListPage config={config} />} />
+              <Route path="new" element={<EditPage config={config} />} />
+              <Route path=":id" element={<EditPage config={config} />} />
+            </Route>
+          ))}
           <Route path="placeholders" element={<PlaceholdersPage />} />
           <Route path="feedback" element={<FeedbackPage />} />
           <Route path="alumni" element={<AlumniPage />} />

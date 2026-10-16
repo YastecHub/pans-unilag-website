@@ -3,6 +3,9 @@ import { useMe, useSignOut } from '../api.ts'
 
 const NAV = [
   { to: '/admin', label: 'Overview', end: true },
+  { to: '/admin/events', label: 'Events', end: false },
+  { to: '/admin/announcements', label: 'Announcements', end: false },
+  { to: '/admin/opportunities', label: 'Opportunities', end: false },
   { to: '/admin/placeholders', label: 'Placeholders', end: false },
   { to: '/admin/feedback', label: 'Feedback', end: false },
   { to: '/admin/alumni', label: 'Alumni', end: false },

@@ -16,6 +16,7 @@ const event = (overrides: Partial<EventItem>): EventItem => ({
   venue: '',
   description: '',
   coverImage: '',
+  coverImageAlt: '',
   registrationUrl: '',
   committee: '',
   isPlaceholder: false,

@@ -40,6 +40,9 @@ export const eventSchema = z
     venue: z.string(),
     description: z.string().meta({ description: 'Markdown' }),
     coverImage: z.string().meta({ description: 'Cloudinary public id; empty if none' }),
+    coverImageAlt: z
+      .string()
+      .meta({ description: 'Alt text for the cover photo; set whenever coverImage is' }),
     registrationUrl: z.string().meta({ description: 'https link; empty until registration opens' }),
     committee: z.string().meta({ description: 'Slug of the organising committee, if any' }),
     ...placeholderShape,
@@ -58,6 +61,7 @@ export const eventSchema = z
       venue: '',
       description: '',
       coverImage: '',
+      coverImageAlt: '',
       registrationUrl: '',
       committee: '',
       isPlaceholder: true,

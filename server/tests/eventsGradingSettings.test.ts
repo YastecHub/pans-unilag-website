@@ -83,6 +83,15 @@ describe('Event model date rules', () => {
       /must not have startsAt/,
     ],
     [
+      'a cover photo without alt text',
+      {
+        startsAt: '2027-06-07',
+        endsAt: '2027-06-11',
+        coverImage: 'pans-unilag/events/health-week-2027/cover',
+      },
+      /alt text/,
+    ],
+    [
       'a non-https registration link',
       { startsAt: '2027-06-07', endsAt: '2027-06-11', registrationUrl: 'http://x.com' },
       /https/,

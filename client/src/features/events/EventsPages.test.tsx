@@ -20,6 +20,7 @@ const seedEvents: EventItem[] = (JSON.parse(eventsJson) as Record<string, unknow
     venue: '',
     description: '',
     coverImage: '',
+    coverImageAlt: '',
     registrationUrl: '',
     committee: '',
     ...(e as object),
