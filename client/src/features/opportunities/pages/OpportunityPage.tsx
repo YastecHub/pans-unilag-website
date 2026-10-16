@@ -30,12 +30,24 @@ const host = (url: string) => {
 export function OpportunityPage() {
   const { slug = '' } = useParams()
   const query = useOpportunity(slug)
+  const o = query.data
+
+  usePageMeta({
+    title: o?.title,
+    description: o?.description
+      ? o.description.slice(0, 160).trim().replace(/\n+/g, ' ')
+      : o
+        ? `${o.title} · PANS UNILAG`
+        : undefined,
+    url: typeof window !== 'undefined' ? window.location.href : undefined,
+  })
+
   // The API returns 404 for closed listings; a page left open past midnight is closed too.
   const closed =
     (query.error instanceof ApiError && query.error.code === 'NOT_FOUND') ||
-    (query.isSuccess && !isOpen(query.data))
+    (query.isSuccess && (!o || !isOpen(o)))
 
-  if (query.isPending || query.isError || closed) {
+  if (query.isPending || query.isError || closed || !o) {
     return (
       <InnerPageLayout
         title={closed ? 'Opportunity closed' : 'Opportunity'}
@@ -60,16 +72,6 @@ export function OpportunityPage() {
       </InnerPageLayout>
     )
   }
-
-  const o = query.data
-
-  usePageMeta({
-    title: o.title,
-    description: o.description
-      ? o.description.slice(0, 160).trim().replace(/\n+/g, ' ')
-      : `${o.title} · PANS UNILAG`,
-    url: window.location.href,
-  })
 
   return (
     <InnerPageLayout

@@ -53,13 +53,13 @@ describe('linkPreview', () => {
     const mockEvents = {
       findBySlug: async (slug: string) =>
         slug === 'pharmalympics-2026'
-          ? ({
+          ? {
               slug: 'pharmalympics-2026',
               title: 'Pharmalympics 2026',
               description: 'Annual sports competition for pharmacy students.',
               coverImage: 'https://res.cloudinary.com/pans/image/upload/sports.jpg',
               coverImageAlt: 'Pharmalympics athletes',
-            } as any)
+            }
           : null,
       list: async () => [],
     }
@@ -93,12 +93,13 @@ describe('linkPreview', () => {
     const mockOpps = {
       findBySlug: async (slug: string) =>
         slug === 'who-internship'
-          ? ({
+          ? {
               slug: 'who-internship',
               title: 'WHO Global Health Internship',
+              type: 'internship' as const,
               organisation: 'World Health Organization',
               description: 'Paid summer internship for pharmacy students.',
-            } as any)
+            }
           : null,
       list: async () => [],
     }
