@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import type { ZodOpenApiOperationObject, ZodOpenApiPathsObject } from 'zod-openapi'
 import { errors } from '../../../docs/schemas.js'
-import { ADMIN_RESOURCES } from '../application/adminResources.js'
+import { ADMIN_RESOURCES, type AdminResource } from '../application/adminResources.js'
 import {
   feedbackQuerySchema,
   feedbackStatusSchema,
@@ -29,12 +29,13 @@ const json = (schema: z.ZodType, description: string) => ({
 const placeholderNote =
   'Saving clears `isPlaceholder` and `placeholderNote` unless the body sends `isPlaceholder: true`.'
 
-function resourcePaths(
-  name: string,
-  label: string,
-  create: z.ZodType,
-  update: z.ZodType,
-): ZodOpenApiPathsObject {
+function resourcePaths({
+  name,
+  label,
+  create,
+  update,
+  deletable,
+}: AdminResource): ZodOpenApiPathsObject {
   const op = (o: ZodOpenApiOperationObject) => ({ tags, ...o })
   return {
     [`/api/admin/${name}`]: {
@@ -45,17 +46,19 @@ function resourcePaths(
         requestParams: { query: pageQuerySchema },
         responses: { '200': json(page(anyRecord), 'One page'), ...errors.badRequest, ...signedIn },
       }),
-      post: op({
-        operationId: `adminCreate_${name}`,
-        summary: `Create ${label.toLowerCase()}`,
-        description: placeholderNote,
-        requestBody: { content: { 'application/json': { schema: create } } },
-        responses: {
-          '201': json(anyRecord, 'Created'),
-          ...errors.badRequest,
-          ...errors.conflict,
-          ...signedIn,
-        },
+      ...(create && {
+        post: op({
+          operationId: `adminCreate_${name}`,
+          summary: `Create ${label.toLowerCase()}`,
+          description: placeholderNote,
+          requestBody: { content: { 'application/json': { schema: create } } },
+          responses: {
+            '201': json(anyRecord, 'Created'),
+            ...errors.badRequest,
+            ...errors.conflict,
+            ...signedIn,
+          },
+        }),
       }),
     },
     [`/api/admin/${name}/{id}`]: {
@@ -79,11 +82,13 @@ function resourcePaths(
           ...signedIn,
         },
       }),
-      delete: op({
-        operationId: `adminDelete_${name}`,
-        summary: `Delete ${label.toLowerCase()}`,
-        requestParams: { path: idParamsSchema },
-        responses: { '204': { description: 'Deleted' }, ...errors.notFound, ...signedIn },
+      ...(deletable !== false && {
+        delete: op({
+          operationId: `adminDelete_${name}`,
+          summary: `Delete ${label.toLowerCase()}`,
+          requestParams: { path: idParamsSchema },
+          responses: { '204': { description: 'Deleted' }, ...errors.notFound, ...signedIn },
+        }),
       }),
     },
   }
@@ -109,10 +114,7 @@ const placeholderGroupsSchema = z.object({
 })
 
 export const adminPaths: ZodOpenApiPathsObject = {
-  ...Object.assign(
-    {},
-    ...ADMIN_RESOURCES.map((r) => resourcePaths(r.name, r.label, r.create, r.update)),
-  ),
+  ...Object.assign({}, ...(ADMIN_RESOURCES as readonly AdminResource[]).map(resourcePaths)),
   '/api/admin/placeholders': {
     get: {
       tags,

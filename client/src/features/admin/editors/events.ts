@@ -15,6 +15,7 @@ import { EventFields } from './EventFields.tsx'
 export const events: ResourceConfig = {
   name: 'events',
   singular: 'Event',
+  group: 'News & events',
   plural: 'Events',
   intro: 'Upcoming and past events. The public pages and calendar update as soon as you save.',
   empty: () => ({

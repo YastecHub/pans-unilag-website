@@ -9,14 +9,26 @@ export type AdminRecord = Record<string, unknown> & {
   updatedAt?: string
 }
 
-export type ResourceName = 'announcements' | 'events' | 'opportunities'
-
 /** The public queries each resource feeds, refreshed after an edit so the site is current. */
-const PUBLIC_KEYS: Record<ResourceName, string[][]> = {
+const PUBLIC_KEYS = {
   announcements: [['announcements']],
   events: [['events'], ['event']],
   opportunities: [['opportunities'], ['opportunity']],
-}
+  pages: [['pages']],
+  executives: [['executives']],
+  senators: [['senate']],
+  committees: [['committees']],
+  patrons: [['patrons']],
+  albums: [['albums'], ['album']],
+  publications: [['publications']],
+  documents: [['documents']],
+  resources: [['resources']],
+  gradingscales: [['grading-scale']],
+  settings: [['settings']],
+} satisfies Record<string, string[][]>
+
+/** Matches the collection names in GET /api/admin/placeholders, so its items link to editors. */
+export type ResourceName = keyof typeof PUBLIC_KEYS
 
 function useRefresh(name: ResourceName) {
   const client = useQueryClient()

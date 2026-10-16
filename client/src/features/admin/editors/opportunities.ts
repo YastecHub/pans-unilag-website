@@ -7,6 +7,7 @@ import { OpportunityFields } from './OpportunityFields.tsx'
 export const opportunities: ResourceConfig = {
   name: 'opportunities',
   singular: 'Opportunity',
+  group: 'News & events',
   plural: 'Opportunities',
   intro:
     'The Opportunities hub, run by CPD & CBC. Listings disappear from the site the day after their deadline.',

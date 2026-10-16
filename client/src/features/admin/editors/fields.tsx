@@ -78,13 +78,18 @@ export function Checkbox({
   hint,
   checked,
   onChange,
+  error,
 }: {
   id: string
   label: string
   hint?: ReactNode
   checked: boolean
   onChange: (checked: boolean) => void
+  error?: string
 }) {
+  const describedBy = [hint ? `${id}-hint` : '', error ? `${id}-error` : '']
+    .filter(Boolean)
+    .join(' ')
   return (
     <div className="flex flex-col gap-1">
       <label className="flex items-start gap-3">
@@ -93,7 +98,8 @@ export function Checkbox({
           type="checkbox"
           checked={checked}
           onChange={(e) => onChange(e.target.checked)}
-          aria-describedby={hint ? `${id}-hint` : undefined}
+          aria-describedby={describedBy || undefined}
+          aria-invalid={error ? true : undefined}
           className="mt-1 size-5 shrink-0 accent-primary"
         />
         <span className="font-medium">{label}</span>
@@ -103,6 +109,12 @@ export function Checkbox({
           {hint}
         </p>
       )}
+      {error && (
+        <p id={`${id}-error`} className="pl-8 text-small font-medium text-danger">
+          <span aria-hidden>! </span>
+          {error}
+        </p>
+      )}
     </div>
   )
 }
@@ -110,29 +122,42 @@ export function Checkbox({
 type UploadStatus = { busy: boolean; message: string; failed: boolean }
 
 /**
- * Cover photo: signed upload straight to Cloudinary, preview, remove, and the alt text that must
- * go with it. Disabled until the item has a web address, which names its folder.
+ * A photo: signed upload straight to Cloudinary, preview, remove, and (when the site doesn't
+ * describe it another way) the alt text that must go with it. Disabled until the item has the
+ * details that name its folder.
  */
 export function ImageField({
+  id = 'coverImage',
+  label = 'Cover photo',
   folder,
+  waitingHint = 'Add a title first: the photo is stored under the event’s web address.',
   value,
   alt,
   onChange,
   onAltChange,
   error,
   altError,
+  altId = 'coverImageAlt',
+  aspectRatio = 3 / 2,
 }: {
+  id?: string
+  label?: string
   /** e.g. "events/freshers-week-2026"; empty until the item has a web address. */
   folder: string
+  /** Why the upload is disabled while there's no folder yet. */
+  waitingHint?: string
   value: string
-  alt: string
+  alt?: string
   onChange: (publicId: string) => void
-  onAltChange: (alt: string) => void
+  /** Leave out when the site writes the alt text itself (e.g. "Cover of Recipharm 2026"). */
+  onAltChange?: (alt: string) => void
   error?: string
   altError?: string
+  altId?: string
+  aspectRatio?: number
 }) {
   const [status, setStatus] = useState<UploadStatus>({ busy: false, message: '', failed: false })
-  const preview = value ? cloudinaryUrl(value, 480, { crop: 'fill', aspectRatio: 3 / 2 }) : null
+  const preview = value ? cloudinaryUrl(value, 480, { crop: 'fill', aspectRatio }) : null
 
   const onFile = async (file: File | undefined) => {
     if (!file) return
@@ -141,7 +166,9 @@ export function ImageField({
       onChange(await uploadImage(file, folder))
       setStatus({
         busy: false,
-        message: 'Photo uploaded. Describe it below, then save.',
+        message: onAltChange
+          ? 'Photo uploaded. Describe it below, then save.'
+          : 'Photo uploaded. Save to put it on the site.',
         failed: false,
       })
     } catch (e) {
@@ -158,13 +185,13 @@ export function ImageField({
   return (
     <div className="flex flex-col gap-3">
       <Field
-        id="coverImage"
-        label="Cover photo"
+        id={id}
+        label={label}
         optional
         hint={
           folder
-            ? 'JPG, PNG or WebP, up to 10 MB. Landscape photos work best.'
-            : 'Add a title first: the photo is stored under the event’s web address.'
+            ? `JPG, PNG or WebP, up to 10 MB.${aspectRatio > 1 ? ' Landscape photos work best.' : ''}`
+            : waitingHint
         }
         error={error}
       >
@@ -196,7 +223,7 @@ export function ImageField({
                 src={preview}
                 alt=""
                 width={240}
-                height={160}
+                height={Math.round(240 / aspectRatio)}
                 className="h-auto w-60 rounded-lg"
               />
             ) : (
@@ -206,7 +233,7 @@ export function ImageField({
               type="button"
               onClick={() => {
                 onChange('')
-                onAltChange('')
+                onAltChange?.('')
                 setStatus({
                   busy: false,
                   message: 'Photo removed. Save to update the site.',
@@ -218,22 +245,24 @@ export function ImageField({
               Remove photo
             </button>
           </div>
-          <Field
-            id="coverImageAlt"
-            label="Describe the photo"
-            hint="For people who can’t see it, e.g. “Students at the Day 3 medical outreach”."
-            error={altError}
-          >
-            {(props) => (
-              <input
-                {...props}
-                className={control}
-                value={alt}
-                maxLength={200}
-                onChange={(e) => onAltChange(e.target.value)}
-              />
-            )}
-          </Field>
+          {onAltChange && (
+            <Field
+              id={altId}
+              label="Describe the photo"
+              hint="For people who can’t see it, e.g. “Students at the Day 3 medical outreach”."
+              error={altError}
+            >
+              {(props) => (
+                <input
+                  {...props}
+                  className={control}
+                  value={alt ?? ''}
+                  maxLength={200}
+                  onChange={(e) => onAltChange(e.target.value)}
+                />
+              )}
+            </Field>
+          )}
         </>
       )}
     </div>

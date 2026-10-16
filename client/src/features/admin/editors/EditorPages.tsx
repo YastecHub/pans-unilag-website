@@ -1,5 +1,5 @@
 import { type FormEvent, useEffect, useRef, useState } from 'react'
-import { Link, useLocation, useNavigate, useParams, useSearchParams } from 'react-router'
+import { Link, Navigate, useLocation, useNavigate, useParams, useSearchParams } from 'react-router'
 import { Badge } from '../../../components/ui/Badge.tsx'
 import { Button, ButtonLink } from '../../../components/ui/Button.tsx'
 import { EmptyState } from '../../../components/ui/States.tsx'
@@ -38,9 +38,11 @@ export function ListPage({ config }: { config: ResourceConfig }) {
           <h1 className="text-h2">{config.plural}</h1>
           <p className="text-text-muted">{config.intro}</p>
         </div>
-        <ButtonLink to={`/admin/${config.name}/new`}>
-          New {config.singular.toLowerCase()}
-        </ButtonLink>
+        {config.canCreate !== false && (
+          <ButtonLink to={`/admin/${config.name}/new`}>
+            New {config.singular.toLowerCase()}
+          </ButtonLink>
+        )}
       </div>
       {flash.deleted && (
         <p role="status" className="rounded-lg bg-surface-alt p-3">
@@ -49,13 +51,17 @@ export function ListPage({ config }: { config: ResourceConfig }) {
       )}
       <AdminQuery query={query} label={config.plural.toLowerCase()}>
         {(data) =>
-          data.items.length === 0 ? (
+          config.singleton && data.items[0] ? (
+            <Navigate to={`/admin/${config.name}/${data.items[0].id}`} replace />
+          ) : data.items.length === 0 ? (
             <EmptyState
               title={`No ${config.plural.toLowerCase()} yet.`}
               action={
-                <Link to={`/admin/${config.name}/new`}>
-                  Add the first {config.singular.toLowerCase()}
-                </Link>
+                config.canCreate !== false ? (
+                  <Link to={`/admin/${config.name}/new`}>
+                    Add the first {config.singular.toLowerCase()}
+                  </Link>
+                ) : undefined
               }
             />
           ) : (
@@ -101,7 +107,12 @@ export function ListPage({ config }: { config: ResourceConfig }) {
 export function EditPage({ config }: { config: ResourceConfig }) {
   const { id } = useParams()
   const item = useAdminItem(config.name, id)
-  if (!id) return <EditorForm config={config} initial={config.empty()} />
+  if (!id)
+    return config.canCreate === false ? (
+      <Navigate to={`/admin/${config.name}`} replace />
+    ) : (
+      <EditorForm config={config} initial={config.empty()} />
+    )
   return (
     <AdminQuery query={item} label={config.singular.toLowerCase()}>
       {(record) => (
@@ -167,8 +178,9 @@ function EditorForm({
           return
         }
         const fromApi: Record<string, string> = {}
+        const conflict = error instanceof ApiError && error.code === 'CONFLICT'
         for (const [path, message] of Object.entries(apiFieldErrors(error)))
-          fromApi[config.fieldFor(path, form)] = message
+          fromApi[config.fieldFor(path, form)] = (conflict && config.conflicts?.[path]) || message
         setErrors(fromApi)
         if (Object.keys(fromApi).length === 0)
           setGeneral(
@@ -183,7 +195,11 @@ function EditorForm({
   return (
     <>
       <p>
-        <Link to={`/admin/${config.name}`}>← All {config.plural.toLowerCase()}</Link>
+        {config.singleton ? (
+          <Link to="/admin/content">← All content</Link>
+        ) : (
+          <Link to={`/admin/${config.name}`}>← {config.plural}</Link>
+        )}
       </p>
       <h1 className="text-h2">
         {title}
@@ -199,11 +215,11 @@ function EditorForm({
           <Button type="submit" loading={save.isPending}>
             {isNew ? `Publish ${config.singular.toLowerCase()}` : 'Save changes'}
           </Button>
-          <Link to={`/admin/${config.name}`}>Cancel</Link>
+          <Link to={config.singleton ? '/admin/content' : `/admin/${config.name}`}>Cancel</Link>
         </div>
       </form>
 
-      {record && <DeleteSection config={config} record={record} />}
+      {record && config.canDelete !== false && <DeleteSection config={config} record={record} />}
     </>
   )
 }

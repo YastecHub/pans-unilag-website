@@ -222,15 +222,7 @@ describe('the dashboard', () => {
       within(nav)
         .getAllByRole('link')
         .map((a) => a.textContent),
-    ).toEqual([
-      'Overview',
-      'Events',
-      'Announcements',
-      'Opportunities',
-      'Placeholders',
-      'Feedback',
-      'Alumni',
-    ])
+    ).toEqual(['Overview', 'Content', 'Placeholders', 'Feedback', 'Alumni'])
     expect(within(nav).getByRole('link', { current: 'page' }).textContent).toBe('Overview')
     expect(await screen.findByRole('link', { name: '3 placeholders to fill' })).toBeTruthy()
     expect(await screen.findByRole('link', { name: '30 new feedback messages' })).toBeTruthy()
