@@ -9,11 +9,13 @@ import '@fontsource/poppins/600.css'
 import { AppProviders } from './app/providers.tsx'
 import { router } from './app/router.tsx'
 import { applyTheme, getThemePreference, resolveTheme, watchSystemTheme } from './lib/theme.ts'
+import { registerServiceWorker } from './lib/registerServiceWorker.ts'
 import './styles/globals.css'
 
 // index.html already set data-theme before paint; this also syncs the browser bar colour.
 applyTheme(resolveTheme(getThemePreference()))
 watchSystemTheme()
+registerServiceWorker()
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
