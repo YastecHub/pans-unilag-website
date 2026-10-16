@@ -1,10 +1,35 @@
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
+import type { Plugin } from 'vite'
 import { defineConfig } from 'vitest/config'
+import { DEV_SITE_URL, robotsTxt, sitemapXml, siteUrl } from './src/app/seo.ts'
+
+/**
+ * Link previews and search engines: puts the public site address (VITE_SITE_URL) into the
+ * Open Graph tags in index.html, and writes robots.txt and sitemap.xml into the build.
+ */
+function seo(): Plugin {
+  let base = DEV_SITE_URL
+  return {
+    name: 'pans-seo',
+    configResolved(config) {
+      base = siteUrl(config.env.VITE_SITE_URL as string | undefined)
+      if (config.command === 'build' && !base.startsWith('https://'))
+        config.logger.warn(
+          `\n[pans-seo] VITE_SITE_URL is ${base}. Set it to the live https address before deploying, or link previews and the sitemap will point at the wrong site.\n`,
+        )
+    },
+    transformIndexHtml: (html) => html.replaceAll('__SITE_URL__', base),
+    generateBundle() {
+      this.emitFile({ type: 'asset', fileName: 'robots.txt', source: robotsTxt(base) })
+      this.emitFile({ type: 'asset', fileName: 'sitemap.xml', source: sitemapXml(base) })
+    },
+  }
+}
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [react(), tailwindcss(), seo()],
   server: {
     port: 5173,
     // In development, send /api requests to the Express server.
