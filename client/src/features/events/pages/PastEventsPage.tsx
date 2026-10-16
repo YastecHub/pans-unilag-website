@@ -2,6 +2,7 @@ import { Link } from 'react-router'
 import { navSection } from '../../../app/siteMap.ts'
 import { SkeletonCard } from '../../../components/ui/Skeleton.tsx'
 import { EmptyState, ErrorState, LoadingState } from '../../../components/ui/States.tsx'
+import { seriesAnchor } from '../../gallery/api/albums.ts'
 import { InnerPageLayout } from '../../pages/components/InnerPageLayout.tsx'
 import { groupBySeries, type SeriesGroup, useAllEvents } from '../api/events.ts'
 import { EventCard } from '../components/EventCard.tsx'
@@ -70,7 +71,7 @@ function SeriesSection({ group }: { group: SeriesGroup }) {
           )}
         </div>
         {isSeries && (
-          <Link to="/gallery" className="font-heading font-medium">
+          <Link to={`/gallery#${seriesAnchor(group.series)}`} className="font-heading font-medium">
             Photos in the gallery <span className="sr-only">({group.series})</span>
           </Link>
         )}

@@ -3,7 +3,12 @@ import { Img } from '../../../components/ui/Img.tsx'
 import { PlaceholderImage } from '../../../components/ui/Placeholder.tsx'
 import { SkeletonCard } from '../../../components/ui/Skeleton.tsx'
 import { EmptyState, ErrorState, LoadingState } from '../../../components/ui/States.tsx'
-import { type SeriesHighlight, seriesHighlights, useAlbums } from '../../gallery/api/albums.ts'
+import {
+  type SeriesHighlight,
+  seriesAnchor,
+  seriesHighlights,
+  useAlbums,
+} from '../../gallery/api/albums.ts'
 import { CardGrid, HomeSection } from './HomeSection.tsx'
 
 /** One card per event series (Health Week 2026, Pharmalympics 2026), linking to the gallery. */
@@ -48,7 +53,7 @@ function HighlightCard({ highlight: h }: { highlight: SeriesHighlight }) {
   const days = `${h.albumCount} ${h.albumCount === 1 ? 'album' : 'albums'}`
   return (
     <Link
-      to="/gallery"
+      to={`/gallery#${seriesAnchor(h.series)}`}
       className="flex h-full flex-col overflow-hidden rounded-xl border border-border bg-surface text-text no-underline hover:border-border-strong"
     >
       {h.cover ? (

@@ -3,6 +3,7 @@ import { afterEach } from 'vitest'
 
 // jsdom doesn't implement scrolling; React Router's ScrollRestoration calls it.
 window.scrollTo = () => {}
+Element.prototype.scrollIntoView = () => {}
 
 afterEach(() => {
   cleanup()
