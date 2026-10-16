@@ -1,5 +1,5 @@
 import { existsSync } from 'node:fs'
-import { createApp } from './app.js'
+import { appFromEnv } from './config/appFromEnv.js'
 import { connectDb, disconnectDb } from './config/db.js'
 import { EnvError, loadEnv } from './config/env.js'
 import { createLogger, type Logger } from './lib/logger.js'
@@ -22,36 +22,12 @@ async function main() {
   if (existsSync('.env')) process.loadEnvFile('.env')
 
   const env = loadEnv()
-  if (!env.JWT_SECRET) {
-    throw new EnvError(
-      '  - JWT_SECRET: required to sign admin sessions. Generate one with:\n' +
-        "      node -e \"console.log(require('crypto').randomBytes(48).toString('base64url'))\"",
-    )
-  }
-  const isProduction = env.NODE_ENV === 'production'
-  logger = createLogger({ json: isProduction })
+  logger = createLogger({ json: env.NODE_ENV === 'production' })
+  // Throws EnvError without JWT_SECRET, before connecting.
+  const { app, docsEnabled } = appFromEnv(env, logger)
 
   await connectDb(env.MONGODB_URI)
 
-  const docsEnabled = env.API_DOCS_ENABLED ?? !isProduction
-  const app = createApp({
-    clientOrigins: env.CLIENT_ORIGIN,
-    isProduction,
-    docsEnabled,
-    logger,
-    logRequests: env.NODE_ENV !== 'test',
-    auth: {
-      jwtSecret: env.JWT_SECRET,
-      media:
-        env.CLOUDINARY_CLOUD_NAME && env.CLOUDINARY_API_KEY && env.CLOUDINARY_API_SECRET
-          ? {
-              cloudName: env.CLOUDINARY_CLOUD_NAME,
-              apiKey: env.CLOUDINARY_API_KEY,
-              apiSecret: env.CLOUDINARY_API_SECRET,
-            }
-          : undefined,
-    },
-  })
   const server = app.listen(env.PORT, () => {
     logger.info(`PANS UNILAG API listening on http://localhost:${env.PORT} (${env.NODE_ENV})`)
     if (docsEnabled) logger.info(`API docs at http://localhost:${env.PORT}/api/docs`)

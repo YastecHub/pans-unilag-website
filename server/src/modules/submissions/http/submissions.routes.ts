@@ -1,5 +1,5 @@
 import { type RequestHandler, Router } from 'express'
-import { createRateLimiter } from '../../../middleware/rateLimit.js'
+import { createRateLimiter, type RateLimitStores } from '../../../middleware/rateLimit.js'
 import { validate } from '../../../middleware/validate.js'
 import {
   type AlumniInput,
@@ -28,6 +28,7 @@ export function submissionsRouter(
   store: SubmissionStore,
   now: () => Date,
   rateLimit: FormRateLimit = DEFAULT_FORM_RATE_LIMIT,
+  rateLimitStores?: RateLimitStores,
 ): Router {
   const router = Router()
   const noStore: RequestHandler = (_req, res, next) => {
@@ -38,7 +39,7 @@ export function submissionsRouter(
   router.post(
     '/feedback',
     noStore,
-    createRateLimiter(rateLimit),
+    createRateLimiter({ ...rateLimit, store: rateLimitStores?.('feedback') }),
     validate({ body: feedbackInputSchema }),
     async (req, res) => {
       const input = req.body as FeedbackInput
@@ -50,7 +51,7 @@ export function submissionsRouter(
   router.post(
     '/alumni',
     noStore,
-    createRateLimiter(rateLimit),
+    createRateLimiter({ ...rateLimit, store: rateLimitStores?.('alumni') }),
     // Built per request so the latest allowed graduation year follows the calendar.
     (req, res, next) => validate({ body: alumniInputSchema(now().getFullYear()) })(req, res, next),
     async (req, res) => {

@@ -18,6 +18,20 @@ export function siteUrl(raw: string | undefined): string {
   return value
 }
 
+/**
+ * The site address for a build: VITE_SITE_URL if set, otherwise the production address Vercel
+ * provides (VERCEL_PROJECT_PRODUCTION_URL, e.g. "pans-unilag.vercel.app", or the custom domain
+ * once one is added), otherwise the local address.
+ */
+export function buildSiteUrl(env: {
+  VITE_SITE_URL?: string
+  VERCEL_PROJECT_PRODUCTION_URL?: string
+}) {
+  if (env.VITE_SITE_URL?.trim()) return siteUrl(env.VITE_SITE_URL)
+  const vercel = env.VERCEL_PROJECT_PRODUCTION_URL?.trim()
+  return vercel ? siteUrl(`https://${vercel.replace(/^https?:\/\//, '')}`) : DEV_SITE_URL
+}
+
 /** Every public page with a fixed address: the home page and the menu's pages. */
 export function sitemapPaths(): string[] {
   const paths = ['/', ...MAIN_NAV.flatMap((s) => [s.to, ...(s.children ?? []).map((c) => c.to)])]

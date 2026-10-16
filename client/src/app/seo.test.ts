@@ -2,7 +2,7 @@ import { matchRoutes } from 'react-router'
 import { describe, expect, it } from 'vitest'
 import { SITE } from '../lib/site.ts'
 import { routes } from './routes.tsx'
-import { DEV_SITE_URL, robotsTxt, sitemapPaths, sitemapXml, siteUrl } from './seo.ts'
+import { buildSiteUrl, DEV_SITE_URL, robotsTxt, sitemapPaths, sitemapXml, siteUrl } from './seo.ts'
 import html from '../../index.html?raw'
 import manifestJson from '../../public/site.webmanifest?raw'
 
@@ -72,6 +72,19 @@ describe('robots.txt and sitemap.xml', () => {
     expect(siteUrl('  ')).toBe(DEV_SITE_URL)
     expect(siteUrl(undefined)).toBe(DEV_SITE_URL)
     expect(() => siteUrl('ftp://pans.example')).toThrow(/http\(s\)/)
+  })
+
+  it('uses Vercel’s production address when VITE_SITE_URL isn’t set', () => {
+    expect(buildSiteUrl({ VERCEL_PROJECT_PRODUCTION_URL: 'pans-unilag.vercel.app' })).toBe(
+      'https://pans-unilag.vercel.app',
+    )
+    expect(
+      buildSiteUrl({
+        VITE_SITE_URL: 'https://pansunilag.org/',
+        VERCEL_PROJECT_PRODUCTION_URL: 'pans-unilag.vercel.app',
+      }),
+    ).toBe('https://pansunilag.org')
+    expect(buildSiteUrl({})).toBe(DEV_SITE_URL)
   })
 
   it('lists every public page once, each one a real route, and never the dashboard', () => {

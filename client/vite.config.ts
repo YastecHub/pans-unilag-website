@@ -2,7 +2,7 @@ import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 import type { Plugin } from 'vite'
 import { defineConfig } from 'vitest/config'
-import { DEV_SITE_URL, robotsTxt, sitemapXml, siteUrl } from './src/app/seo.ts'
+import { buildSiteUrl, DEV_SITE_URL, robotsTxt, sitemapXml } from './src/app/seo.ts'
 
 /**
  * Link previews and search engines: puts the public site address (VITE_SITE_URL) into the
@@ -13,10 +13,13 @@ function seo(): Plugin {
   return {
     name: 'pans-seo',
     configResolved(config) {
-      base = siteUrl(config.env.VITE_SITE_URL as string | undefined)
+      base = buildSiteUrl({
+        VITE_SITE_URL: config.env.VITE_SITE_URL as string | undefined,
+        VERCEL_PROJECT_PRODUCTION_URL: process.env.VERCEL_PROJECT_PRODUCTION_URL,
+      })
       if (config.command === 'build' && !base.startsWith('https://'))
         config.logger.warn(
-          `\n[pans-seo] VITE_SITE_URL is ${base}. Set it to the live https address before deploying, or link previews and the sitemap will point at the wrong site.\n`,
+          `\n[pans-seo] VITE_SITE_URL is ${base}. Set it to the live https address (on Vercel it's filled in automatically), or link previews and the sitemap will point at the wrong site.\n`,
         )
     },
     transformIndexHtml: (html) => html.replaceAll('__SITE_URL__', base),
