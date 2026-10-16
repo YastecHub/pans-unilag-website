@@ -812,6 +812,7 @@ The API needs a `MONGODB_URI` in `server/.env` (a free personal Atlas cluster or
 | `npm run lint` | ESLint across the whole repo (one shared config: `eslint.config.js`) |
 | `npm run typecheck` | TypeScript checks in both workspaces |
 | `npm run test` | Vitest in both workspaces |
+| `npm run e2e -w client` | Launch smoke tests in a real browser (Playwright, desktop and phone): the main journeys, WCAG checks (axe) in light and dark, keyboard and reflow, and every link. Runs the built site with the real API on seed data, no database needed; run `npx playwright install chromium` once first. `E2E_BASE_URL=https://…` runs the read-only tests against the live site. Results and the launch checklist: [docs/launch-qa.md](docs/launch-qa.md) |
 | `npm run format` / `npm run format:check` | Prettier for code files |
 | `npm run <script> -w client` or `-w server` | Run a script in one workspace only |
 | `npm run seed -w server` | Loads `server/seed/*.json` into MongoDB. Adds missing documents only, so it is safe to re-run; `-- --update` overwrites, `-- --reset` empties first (development only). See [`server/seed/README.md`](server/seed/README.md) |
