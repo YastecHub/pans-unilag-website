@@ -16,6 +16,7 @@ export type StoredEvent = {
   venue?: string
   description?: string
   coverImage?: string
+  coverImageAlt?: string
   registrationUrl?: string
   committee?: string
   isPlaceholder?: boolean
@@ -39,6 +40,8 @@ export type EventView = PlaceholderView & {
   /** Markdown. */
   description: string
   coverImage: string
+  /** Alt text for the cover; always set when coverImage is. */
+  coverImageAlt: string
   registrationUrl: string
   /** Slug of the organising committee, if any. */
   committee: string
@@ -62,6 +65,7 @@ export function toEventView(event: StoredEvent, now: Date): EventView {
     venue: event.venue ?? '',
     description: event.description ?? '',
     coverImage: event.coverImage ?? '',
+    coverImageAlt: event.coverImageAlt ?? '',
     registrationUrl: event.registrationUrl ?? '',
     committee: event.committee ?? '',
     ...placeholderView(event),

@@ -278,6 +278,32 @@ describe('events: saving real content clears the placeholder flag', () => {
     expect(JSON.stringify(res.body.error.details)).toMatch(/datePrecision/)
   })
 
+  it('requires alt text whenever an event has a cover photo', async () => {
+    const as = await signedIn(setup().app)
+    const event = {
+      slug: 'pans-dinner-2027-reception',
+      title: 'PANS Dinner reception',
+      startsAt: '2027-09-17T18:00:00+01:00',
+      endsAt: '2027-09-17T22:00:00+01:00',
+      coverImage: 'pans-unilag/events/pans-dinner-2027/cover',
+    }
+    const missing = await as.post('/api/admin/events', event)
+    expect(missing.status).toBe(400)
+    expect(missing.body.error.details).toEqual([
+      expect.objectContaining({
+        path: 'coverImageAlt',
+        message: expect.stringMatching(/alt text/),
+      }),
+    ])
+
+    const ok = await as.post('/api/admin/events', {
+      ...event,
+      coverImageAlt: 'Students in formal wear at the PANS Dinner',
+    })
+    expect(ok.status).toBe(201)
+    expect(ok.body.coverImageAlt).toBe('Students in formal wear at the PANS Dinner')
+  })
+
   it('returns 409 for a duplicate slug', async () => {
     const as = await signedIn(setup().app)
     const res = await as.post('/api/admin/events', {

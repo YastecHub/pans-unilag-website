@@ -21,6 +21,7 @@ const event = (
   venue: '',
   description: '',
   coverImage: '',
+  coverImageAlt: '',
   registrationUrl: '',
   committee: '',
   isPlaceholder: true,

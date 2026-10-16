@@ -13,6 +13,8 @@ import { photoField } from '../../../lib/validators.js'
 export const DATE_PRECISIONS = ['day', 'month', 'unknown'] as const
 
 type EventDates = {
+  coverImage?: string
+  coverImageAlt?: string
   startsAt?: Date | null
   endsAt?: Date | null
   datePrecision?: (typeof DATE_PRECISIONS)[number]
@@ -37,6 +39,8 @@ const eventSchema = new Schema({
   /** Markdown. */
   description: { type: String, default: '', trim: true },
   coverImage: photoField,
+  /** Describes the cover photo for people who can't see it. Required whenever there is a cover. */
+  coverImageAlt: { type: String, default: '', trim: true, maxlength: 200 },
   registrationUrl: {
     type: String,
     default: '',
@@ -56,6 +60,11 @@ eventSchema.index({ series: 1, dayNumber: 1 })
 eventSchema.pre(
   'validate',
   function (this: EventDates & { invalidate: (path: string, message: string) => void }) {
+    if (this.coverImage && !this.coverImageAlt?.trim())
+      this.invalidate(
+        'coverImageAlt',
+        'describe the cover photo (alt text) for people who can’t see it',
+      )
     if (this.datePrecision === 'unknown') {
       if (this.startsAt || this.endsAt)
         this.invalidate('datePrecision', 'events with unknown dates must not have startsAt/endsAt')

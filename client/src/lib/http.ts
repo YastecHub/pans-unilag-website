@@ -18,6 +18,8 @@ export type ApiErrorCode =
   | 'PAYLOAD_TOO_LARGE'
   | 'RATE_LIMITED'
   | 'INTERNAL_ERROR'
+  /** A feature the server isn't configured for yet, e.g. image uploads without Cloudinary. */
+  | 'SERVICE_UNAVAILABLE'
   /** The request never reached the server (offline, DNS, CORS). */
   | 'NETWORK_ERROR'
   /** The server answered with something that isn't our error format. */
@@ -91,6 +93,9 @@ export async function apiFetch<T>(path: string, options: RequestOptions = {}): P
       signal,
       // Send the admin session cookie (httpOnly) with every request.
       credentials: 'include',
+      // Always check with the server (it answers 304 when nothing changed), so edits made in the
+      // dashboard show on the next page load instead of after the 5-minute public cache.
+      cache: 'no-cache',
     })
   } catch (cause) {
     if (cause instanceof DOMException && cause.name === 'AbortError') throw cause
