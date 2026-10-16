@@ -73,15 +73,13 @@ export function Header() {
   return (
     <header className="border-b border-border bg-surface" onKeyDown={closeOnEscape}>
       <Container width="wide" className="flex min-h-[4.5rem] items-center gap-3 py-2">
-        <Link
-          to="/"
-          aria-label={`${SITE.shortName} home`}
-          className="flex shrink-0 items-center gap-2.5 text-text no-underline"
-        >
+        {/* Named by its visible text (WCAG 2.5.3, label in name), plus where it goes. */}
+        <Link to="/" className="flex shrink-0 items-center gap-2.5 text-text no-underline">
           <img src={badgeUrl} alt="" width={44} height={44} className="size-11" />
           <span className="flex flex-col leading-tight">
-            <span className="font-heading text-lg font-semibold">{SITE.shortName}</span>
+            <span className="font-heading text-lg font-semibold">{SITE.shortName}</span>{' '}
             <span className="text-xs text-text-muted">{SITE.motto}</span>
+            <span className="sr-only"> (home page)</span>
           </span>
         </Link>
 
@@ -110,10 +108,11 @@ export function Header() {
               setSearchOpen(false)
               setMenuOpen(!menuOpen)
             }}
-            className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-border-strong px-3 font-heading text-[15px] font-medium text-text nav:hidden"
+            className="inline-flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-lg border border-border-strong px-3 font-heading text-[15px] font-medium text-text max-[359px]:px-2.5 nav:hidden"
           >
             {menuOpen ? <CloseIcon /> : <MenuIcon />}
-            {menuOpen ? 'Close' : 'Menu'}
+            {/* On the narrowest phones (320px) the icon alone keeps the header from scrolling sideways. */}
+            <span className="max-[359px]:sr-only">{menuOpen ? 'Close' : 'Menu'}</span>
           </button>
         </div>
       </Container>
