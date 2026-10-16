@@ -473,7 +473,7 @@ Follows [`.agent/architect.md`](.agent/architect.md): Node API as `src/modules/<
 ```
 pans-unilag-website/
 ├── client/                          # React + Vite + TypeScript SPA
-│   ├── public/                      # favicon (from the badge), manifest, robots.txt, og-default.png
+│   ├── public/                      # favicon and icons (from the badge), manifest, og-default.png; robots.txt and sitemap.xml are generated at build
 │   └── src/
 │       ├── app/                     # routes.tsx, siteMap.ts (every URL + the menus), router.tsx, layouts/, pages/ (stubs, 404)
 │       ├── features/
@@ -864,7 +864,12 @@ pans-unilag/
 | Fonts | Poppins 500/600 and Inter 400/500 only |
 | Real-device check | Mid-range Android on throttled 3G/4G |
 
-**Link previews:** a React SPA renders in the browser, and WhatsApp and most crawlers don't run JavaScript. For v1, set site-wide Open Graph tags (name, motto, badge on pale green) in `client/index.html`. After launch, add per-page previews for events and opportunities via Express or pre-rendering.
+**Link previews:** a React SPA renders in the browser, and WhatsApp and most crawlers don't run JavaScript. For v1, `client/index.html` has site-wide Open Graph and X tags: the title "PANS UNILAG: Service to Humanity", the full name and motto, and `og-default.png` (the badge on pale green, 1200 × 630). After launch, add per-page previews for events and opportunities via Express or pre-rendering.
+
+- **Set `VITE_SITE_URL` to the live `https://` address in the client's build settings.** Previews need absolute image addresses, so the build writes it into the tags (`__SITE_URL__` in `index.html`), `robots.txt` and `sitemap.xml` (the `pans-seo` plugin in `client/vite.config.ts`). Without it the build warns and uses `http://localhost:5173`.
+- `sitemap.xml` lists the home page and every menu page (`client/src/app/siteMap.ts`); `robots.txt` keeps crawlers out of `/admin` and points to the sitemap. Pages with their own address (events, committees, albums) aren't listed yet.
+- Icons: `favicon.ico` (16, 32, 48 px), `apple-touch-icon.png`, and `icon-192`, `icon-512` and a maskable icon in `site.webmanifest`. All are made from the badge by `client/scripts/make-brand-images.py`; the badge in the repo is only 200 px, so **run it again with a larger badge** (512 px or more, transparent) when the Media Committee supplies one.
+- Check a preview after deploying with [Facebook's Sharing Debugger](https://developers.facebook.com/tools/debug/) (WhatsApp reads the same tags); it also refreshes a cached preview.
 
 ## Deployment
 
