@@ -5,15 +5,21 @@ import { useEvents } from '../../events/api/events.ts'
 import { EventCard } from '../../events/components/EventCard.tsx'
 import { CardGrid, HomeSection } from './HomeSection.tsx'
 
-/** The next three upcoming events, soonest first. */
+/** The upcoming events for the session, soonest first with dates, venues, and registration. */
 export function UpcomingEventsSection() {
-  const query = useEvents({ status: 'upcoming', pageSize: 3 })
+  const query = useEvents({ status: 'upcoming', pageSize: 4 })
 
   return (
-    <HomeSection id="events" title="Upcoming events" link={{ to: '/events', label: 'All events' }}>
+    <HomeSection
+      id="events"
+      title="Upcoming events"
+      intro="Key dates, venues, and registration links for PANS UNILAG events this session."
+      link={{ to: '/events', label: 'All events' }}
+    >
       {query.isPending ? (
         <LoadingState label="Loading upcoming events">
           <CardGrid as="div">
+            <SkeletonCard />
             <SkeletonCard />
             <SkeletonCard />
             <SkeletonCard />

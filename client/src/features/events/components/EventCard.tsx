@@ -28,10 +28,19 @@ export function EventCard({ event, headingLevel: Heading = 'h3', hideSeries = fa
       {!hideSeries && event.series && event.series !== event.title && (
         <span className="text-small text-text-muted">{event.series}</span>
       )}
-      <span className="mt-auto inline-flex items-center gap-2 pt-2 text-small text-text-muted">
-        <PinIcon />
-        {event.venue || <PlaceholderText>Venue to be announced</PlaceholderText>}
-      </span>
+      <div className="mt-auto flex items-center justify-between gap-2 pt-2 text-small text-text-muted">
+        <span className="inline-flex items-center gap-2">
+          <PinIcon />
+          {event.venue || <PlaceholderText>Venue to be announced</PlaceholderText>}
+        </span>
+        {event.registrationUrl ? (
+          <span className="shrink-0 rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
+            Register
+          </span>
+        ) : (
+          <span className="shrink-0 text-xs text-text-brand">View details</span>
+        )}
+      </div>
     </Link>
   )
 }

@@ -87,7 +87,15 @@ describe('Governance pages', () => {
 
 describe('Constitution', () => {
   it('marks the PDF as coming soon while it is a placeholder, without the internal note', async () => {
-    api()
+    const placeholderDoc = {
+      ...seedConstitution,
+      isPlaceholder: true,
+      fileUrl: '',
+      fileSizeBytes: null,
+      placeholderNote:
+        'PDF to be uploaded once President confirms handwritten changes on signed last page',
+    }
+    api([placeholderDoc])
     renderRoute('/governance/constitution')
     expect(await within(main()).findByText('PDF coming soon')).toBeTruthy()
     expect(within(main()).getByText(/full constitution \(55 pages\)/)).toBeTruthy()
@@ -97,15 +105,15 @@ describe('Constitution', () => {
   })
 
   it('offers the PDF with its size, page count and approval date once uploaded', async () => {
-    api([uploaded])
+    api([seedConstitution])
     renderRoute('/governance/constitution')
     const link = await within(main()).findByRole('link', {
       name: /Download the constitution \(PDF, 55 pages, 7\.1 MB\)/,
     })
-    expect(link.getAttribute('href')).toBe(uploaded.fileUrl)
+    expect(link.getAttribute('href')).toBe(seedConstitution.fileUrl)
     expect(link.getAttribute('target')).toBe('_blank')
     expect(link.getAttribute('rel')).toBe('noopener noreferrer')
-    expect(within(main()).getByText(/Version 2026 · approved 9 Jul 2026 by Congress/)).toBeTruthy()
+    expect(within(main()).getByText(/Version 2026 · approved 9 Jul 2026 by/)).toBeTruthy()
   })
 
   it('keeps the constitution text readable when the documents list fails, and can retry', async () => {

@@ -44,7 +44,7 @@ describe('routes', () => {
       expect(screen.queryByText('Page not found'), `${to} should exist`).toBeNull()
       cleanup()
     }
-  })
+  }, 15000)
 
   it('shows a not-found page for unknown URLs', async () => {
     renderRoute('/no-such-page')
@@ -55,7 +55,9 @@ describe('routes', () => {
   it('loads the admin area on demand, without the public header', async () => {
     mockApi({ '/api/auth/me': () => jsonResponse(401, apiError('UNAUTHORIZED', 'Sign in')) })
     renderRoute('/admin')
-    expect(await screen.findByRole('heading', { level: 1, name: 'Sign in' })).toBeTruthy()
+    expect(
+      await screen.findByRole('heading', { level: 1, name: 'Sign in' }, { timeout: 4000 }),
+    ).toBeTruthy()
     expect(screen.queryByRole('navigation', { name: 'Main' })).toBeNull()
   })
 

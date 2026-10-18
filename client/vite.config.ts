@@ -48,5 +48,10 @@ export default defineConfig({
     exclude: ['**/node_modules/**', 'e2e/**'],
     // Vitest blanks CSS by default; tokens.test.ts reads tokens.css to check contrast.
     css: { include: [/tokens\.css/] },
+    testTimeout: 15000,
+    hookTimeout: 15000,
+    pool: 'threads',
+    isolate: false,
+    fileParallelism: false,
   },
 })

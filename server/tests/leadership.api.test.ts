@@ -121,7 +121,7 @@ describe('GET /api/committees', () => {
         .filter((c) => c.isPlaceholder)
         .map((c) => c.slug)
         .sort(),
-    ).toEqual(['academics', 'content', 'design', 'media'])
+    ).toEqual([])
   })
 
   it('returns one committee with its officers', async () => {

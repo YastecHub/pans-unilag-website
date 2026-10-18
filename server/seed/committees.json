@@ -46,12 +46,17 @@
         "level": "300L"
       }
     ],
-    "description": "",
-    "activities": [],
+    "description": "The Content Committee is the voice of the organization. We plan, create, and publish the stories, updates, and resources that keep our members and followers engaged across our website and social media. Our work includes writing articles and newsletters, designing graphics, managing social media calendars, and capturing event highlights.\n\nAt the end of the session, we have a specially curated magazine by name \"RECIPHARM\", highlighting the innovations, creativity and milestones of the pharmacy profession. Stay tuned!",
+    "activities": [
+      "Planning, creating, and publishing stories, updates, and resources across the website and social media",
+      "Writing articles and newsletters",
+      "Designing graphics and managing social media calendars",
+      "Capturing event highlights"
+    ],
     "achievements": [],
-    "plans": [],
-    "isPlaceholder": true,
-    "placeholderNote": "Write-up (description, activities, plans) needed from the committee"
+    "plans": [
+      "Publishing the annual RECIPHARM magazine at the end of the session, highlighting innovations, creativity, and milestones in pharmacy"
+    ]
   },
   {
     "slug": "media",
@@ -71,12 +76,17 @@
         "level": "300L"
       }
     ],
-    "description": "",
-    "activities": [],
+    "description": "Ever laughed at funny videos and beautiful pictures of PANSITES? That's the Media Committee showing workings. We capture memorable moments, events, and significant milestones within the association, giving members a glimpse of the people, experiences, and activities that make PANS-UNILAG what it is.\n\nWhere words alone may not do justice, this team tells the story through pictures, videos, and other forms of media, ensuring that our activities are seen, shared, and remembered.",
+    "activities": [
+      "Capturing memorable moments, events, and significant milestones within the association",
+      "Creating engaging video content and photography of PANS activities",
+      "Documenting student life, experiences, and milestone events across the faculty",
+      "Ensuring association activities are seen, shared, and remembered through digital media"
+    ],
     "achievements": [],
-    "plans": [],
-    "isPlaceholder": true,
-    "placeholderNote": "Write-up (description, activities, plans) needed from the committee"
+    "plans": [
+      "Expanding multimedia event coverage and creative video storytelling across association platforms"
+    ]
   },
   {
     "slug": "design",
@@ -96,12 +106,17 @@
         "level": "300L"
       }
     ],
-    "description": "",
-    "activities": [],
+    "description": "From the beautiful flyers announcing upcoming events to the creative, eye-catching publicity materials and designs you see across our social media platforms, the individuals behind these visuals are the Design Committee.\n\nWe bring ideas to life through creativity, transforming information into appealing designs that capture attention and communicate effectively. From event promotions to announcements and other official materials, we help give PANS-UNILAG activities a distinct visual identity.",
+    "activities": [
+      "Designing creative, eye-catching event announcement flyers and publicity materials",
+      "Creating visual assets and promotional graphics for social media platforms",
+      "Developing official materials, announcements, and branding for association activities",
+      "Transforming information into engaging visual designs that communicate effectively"
+    ],
     "achievements": [],
-    "plans": [],
-    "isPlaceholder": true,
-    "placeholderNote": "Write-up (description, activities, plans) needed from the committee"
+    "plans": [
+      "Maintaining and elevating the distinct visual identity of PANS-UNILAG across all media"
+    ]
   },
   {
     "slug": "ppht",
@@ -267,12 +282,17 @@
         "level": "400L"
       }
     ],
-    "description": "",
-    "activities": [],
+    "description": "The Academic Committee supports the learning and academic development of students. We organize study sessions, tutorials, and share resources that help members grow academically and professionally. We also work to connect students with opportunities and show their prowess through competitions, research, and career development.",
+    "activities": [
+      "Organizing study sessions and tutorials for pharmacy students",
+      "Sharing academic resources to support learning and professional growth",
+      "Connecting students with academic competitions, research, and career development opportunities",
+      "Providing academic orientation and guidance for incoming pharmacy students"
+    ],
     "achievements": [],
-    "plans": [],
-    "isPlaceholder": true,
-    "placeholderNote": "Write-up (description, activities, plans) needed from the committee"
+    "plans": [
+      "Expanding peer tutorials, study resources, and academic support initiatives across all levels"
+    ]
   },
   {
     "slug": "alumni-network",

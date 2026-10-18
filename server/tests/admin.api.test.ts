@@ -343,7 +343,7 @@ describe('GET /api/admin/placeholders', () => {
     expect(res.status).toBe(200)
     expect(res.headers['cache-control']).toBe('no-store')
     expect(res.body.groups.map((g: { page: string }) => g.page)).toEqual(['Senate', 'Events'])
-    expect(res.body.total).toBe(4 + 22)
+    expect(res.body.total).toBe(4 + 18)
     expect(res.body.groups[0].items[0]).toMatchObject({
       label: 'Senate President',
       note: 'The 2026/27 Senate election has not been held yet',

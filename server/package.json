@@ -12,6 +12,7 @@
     "test": "vitest run --passWithNoTests",
     "seed": "tsx scripts/seed.ts",
     "seed:check": "tsx scripts/seed.ts --check",
+    "db:bundle": "tsx scripts/bundle-db-file.ts",
     "content:status": "tsx scripts/content-status.ts",
     "upload-album": "tsx scripts/upload-album.ts",
     "create-admin": "tsx scripts/create-admin.ts",

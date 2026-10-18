@@ -17,7 +17,7 @@ export type NavSection = {
   children?: NavLinkItem[]
 }
 
-/** The 8 main menu items, in order. "Home" is the logo. */
+/** The main menu items in order. "Home" is the logo. */
 export const MAIN_NAV: NavSection[] = [
   {
     label: 'About',
@@ -60,6 +60,54 @@ export const MAIN_NAV: NavSection[] = [
     ],
   },
   {
+    label: 'Events',
+    to: '/events',
+    children: [
+      {
+        label: 'Upcoming events',
+        to: '/events',
+        description: 'Dates, venues and registration links',
+      },
+      {
+        label: 'Past events',
+        to: '/events/past',
+        description: 'Health Week, Pharmalympics and more',
+      },
+      { label: 'Gallery', to: '/gallery', description: 'Photos from our events' },
+    ],
+  },
+  {
+    label: 'Student Tools',
+    to: '/academics/cgpa-calculator',
+    children: [
+      {
+        label: 'CGPA calculator',
+        to: '/academics/cgpa-calculator',
+        description: 'Work out your GPA and CGPA',
+      },
+      {
+        label: 'Join PANS Opportunities Hub',
+        to: '/opportunities',
+        description: 'Internships, scholarships and programmes',
+      },
+      {
+        label: 'Drop feedback & suggestions',
+        to: '/connect/feedback',
+        description: 'Write to the Secretary General',
+      },
+      {
+        label: 'Resources',
+        to: '/academics/resources',
+        description: 'Vetted study resources by level',
+      },
+    ],
+  },
+]
+
+/** All sections including full governance and connect for sidebar reference lookups. */
+export const ALL_SECTIONS: NavSection[] = [
+  ...MAIN_NAV,
+  {
     label: 'Governance',
     to: '/governance',
     children: [
@@ -91,20 +139,13 @@ export const MAIN_NAV: NavSection[] = [
     ],
   },
   {
-    label: 'Events',
-    to: '/events',
-    children: [
-      { label: 'Upcoming events', to: '/events', description: 'What is coming up this session' },
-      {
-        label: 'Past events',
-        to: '/events/past',
-        description: 'Health Week, Pharmalympics and more',
-      },
-      { label: 'Gallery', to: '/gallery', description: 'Photos from our events' },
-    ],
+    label: 'Opportunities',
+    to: '/opportunities',
   },
-  { label: 'Opportunities', to: '/opportunities' },
-  { label: 'Publications', to: '/publications' },
+  {
+    label: 'Publications',
+    to: '/publications',
+  },
   {
     label: 'Academics',
     to: '/academics',
@@ -163,13 +204,13 @@ export const STUB_PAGES: StubPage[] = []
 
 /** The menu section with this label (the About pages show its links beside them). */
 export function navSection(label: string): NavSection {
-  const section = MAIN_NAV.find((s) => s.label === label)
+  const section = ALL_SECTIONS.find((s) => s.label === label)
   if (!section) throw new Error(`No menu section called ${label}`)
   return section
 }
 
 /** Sections whose own URL is an overview of their pages (the others use their first page). */
-export const OVERVIEW_SECTIONS = MAIN_NAV.filter(
+export const OVERVIEW_SECTIONS = ALL_SECTIONS.filter(
   (section) => section.children && !section.children.some((child) => child.to === section.to),
 )
 

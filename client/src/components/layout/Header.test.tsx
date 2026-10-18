@@ -19,16 +19,7 @@ describe('desktop navigation', () => {
       .getAllByRole('listitem')
       .filter((item) => item.parentElement?.parentElement?.tagName === 'NAV')
       .map((item) => item.firstElementChild?.textContent)
-    expect(labels).toEqual([
-      'About',
-      'Leadership',
-      'Governance',
-      'Events',
-      'Opportunities',
-      'Publications',
-      'Academics',
-      'Connect',
-    ])
+    expect(labels).toEqual(['About', 'Leadership', 'Events', 'Student Tools'])
   })
 
   it('opens a dropdown with Enter and closes it with Escape, returning focus', async () => {
@@ -121,7 +112,7 @@ describe('mobile menu', () => {
     await user.click(await screen.findByRole('button', { name: 'Menu' }))
     const menu = within(screen.getByRole('navigation', { name: 'Main menu' }))
 
-    await user.click(menu.getByRole('button', { name: 'Academics' }))
+    await user.click(menu.getByRole('button', { name: 'Student Tools' }))
     await user.click(menu.getByRole('link', { name: 'CGPA calculator' }))
 
     expect(await screen.findByRole('heading', { level: 1, name: 'CGPA calculator' })).toBeTruthy()
@@ -130,13 +121,13 @@ describe('mobile menu', () => {
 
   it('opens the section of the current page', async () => {
     const user = userEvent.setup()
-    renderRoute('/connect/privacy')
+    renderRoute('/about/membership')
     await user.click(await screen.findByRole('button', { name: 'Menu' }))
     const menu = within(screen.getByRole('navigation', { name: 'Main menu' }))
-    expect(menu.getByRole('button', { name: 'Connect' }).getAttribute('aria-expanded')).toBe('true')
-    expect(menu.getByRole('link', { name: 'Privacy notice' }).getAttribute('aria-current')).toBe(
-      'page',
-    )
+    expect(menu.getByRole('button', { name: 'About' }).getAttribute('aria-expanded')).toBe('true')
+    expect(
+      menu.getByRole('link', { name: 'Membership & rights' }).getAttribute('aria-current'),
+    ).toBe('page')
   })
 })
 

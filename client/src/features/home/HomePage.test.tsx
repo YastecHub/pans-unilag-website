@@ -56,22 +56,6 @@ const upcoming = {
   totalPages: 2,
 }
 
-const committee = (i: number) => ({
-  slug: `committee-${i}`,
-  name: `Committee number ${i}`,
-  shortName: `C${i}`,
-  session: '2026/2027',
-  order: i,
-  description: '',
-  activities: [],
-  achievements: [],
-  plans: [],
-  motto: '',
-  officers: i === 1 ? [{ title: 'Lead', name: 'Dada Aishat', level: '500L' }] : [],
-  coverImage: '',
-  isPlaceholder: false,
-})
-
 const album = (series: string, day: number) => ({
   slug: `${series}-day-${day}`.toLowerCase().replace(/\W+/g, '-'),
   title: `Day ${day}`,
@@ -83,26 +67,19 @@ const album = (series: string, day: number) => ({
 })
 
 const API = {
-  '/api/announcements': {
-    announcements: [
+  '/api/events': upcoming,
+  '/api/executives': {
+    session: '2026/2027',
+    sessions: ['2026/2027'],
+    executives: [
       {
-        id: 'a2',
-        title: 'Freshers’ Week registration',
-        body: 'Register at the PANS stand.',
-        publishAt: '2026-10-10T08:00:00.000Z',
-        expiresAt: null,
-        pinned: true,
-        link: '',
+        session: '2026/2027',
+        office: 'President',
+        order: 1,
+        name: 'Owolabi Joshua',
         isPlaceholder: false,
       },
     ],
-  },
-  '/api/events': upcoming,
-  '/api/opportunities': { opportunities: [] },
-  '/api/committees': {
-    session: '2026/2027',
-    sessions: ['2026/2027'],
-    committees: Array.from({ length: 11 }, (_, i) => committee(i + 1)),
   },
   '/api/albums': {
     albums: [
@@ -122,40 +99,23 @@ const section = async (name: string) => {
 }
 
 describe('home page', () => {
-  it('shows the sections in the README order', async () => {
+  it('shows the sections in the requested order', async () => {
     mockApi(API)
     renderRoute('/')
-    await screen.findByText('Freshers’ Week registration')
+    await screen.findByText('PANS Leadership 26/27')
     const main = document.getElementById('main')!
     const headings = within(main)
       .getAllByRole('heading', { level: 2 })
       .map((h) => h.textContent)
     expect(headings).toEqual([
-      'Announcements',
       'Upcoming events',
-      'Open opportunities',
-      'Our committees',
+      'PANS Leadership 26/27',
       'From the gallery',
       'Student tools',
     ])
   })
 
-  it('shows pinned announcements with their date', async () => {
-    mockApi(API)
-    renderRoute('/')
-    const box = await section('Announcements')
-    expect(await within(box).findByText('Pinned')).toBeTruthy()
-    expect(within(box).getByText('10 Oct 2026')).toBeTruthy()
-  })
-
-  it('leaves out the announcements section when there are none', async () => {
-    mockApi({ ...API, '/api/announcements': { announcements: [] } })
-    renderRoute('/')
-    await screen.findByText('Freshers’ Week')
-    expect(screen.queryByRole('heading', { level: 2, name: 'Announcements' })).toBeNull()
-  })
-
-  it('asks for the next three upcoming events and shows their dates the way people write them', async () => {
+  it('asks for upcoming events and shows their dates the way people write them', async () => {
     const fetchMock = mockApi(API)
     renderRoute('/')
     const box = await section('Upcoming events')
@@ -163,14 +123,13 @@ describe('home page', () => {
     expect(await within(box).findByText('30 Nov – 4 Dec 2026')).toBeTruthy()
     expect(within(box).getByText('April – May 2027')).toBeTruthy()
     expect(within(box).getByText('7 – 11 Jun 2027')).toBeTruthy()
-    expect(within(box).getAllByText('Venue to be announced')).toHaveLength(3)
     expect(
       within(box)
         .getByRole('link', { name: /Freshers’ Week/ })
         .getAttribute('href'),
     ).toBe('/events/freshers-week-2026')
     expect(fetchMock.mock.calls.map(([url]) => String(url))).toContain(
-      '/api/events?status=upcoming&pageSize=3',
+      '/api/events?status=upcoming&pageSize=4',
     )
   })
 
@@ -184,54 +143,17 @@ describe('home page', () => {
     )
   })
 
-  it('shows the opportunities empty state', async () => {
+  it('shows the PANS Leadership 26/27 slider with read more links', async () => {
     mockApi(API)
     renderRoute('/')
-    const box = await section('Open opportunities')
-    expect(
-      await within(box).findByText('No open opportunities right now. Check back soon.'),
-    ).toBeTruthy()
-  })
-
-  it('lists open opportunities with their closing date', async () => {
-    mockApi({
-      ...API,
-      '/api/opportunities': {
-        opportunities: [
-          {
-            slug: 'nafdac-internship',
-            title: 'NAFDAC internship',
-            type: 'internship',
-            organisation: 'NAFDAC',
-            eligibility: '',
-            description: '',
-            deadline: '2026-11-29T23:00:00.000Z',
-            applyUrl: 'https://example.org',
-            lastCheckedAt: null,
-            isPlaceholder: false,
-          },
-        ],
-      },
-    })
-    renderRoute('/')
-    const box = await section('Open opportunities')
-    expect(await within(box).findByText('Internship')).toBeTruthy()
-    expect(within(box).getByText('30 Nov 2026')).toBeTruthy()
-  })
-
-  it('shows six committees, the session count and a link to all of them', async () => {
-    mockApi(API)
-    renderRoute('/')
-    const box = await section('Our committees')
-    expect(
-      await within(box).findByText('11 committees run PANS projects in the 2026/27 session.'),
-    ).toBeTruthy()
-    expect(within(box).getAllByRole('heading', { level: 3 })).toHaveLength(6)
-    expect(within(box).getByText('Lead: Dada Aishat')).toBeTruthy()
-    expect(within(box).getAllByText('Officers to be announced')).toHaveLength(5)
-    expect(within(box).getByRole('link', { name: 'All 11 committees' }).getAttribute('href')).toBe(
-      '/leadership/committees',
+    const box = await section('PANS Leadership 26/27')
+    expect(await within(box).findByText('Owolabi Joshua')).toBeTruthy()
+    expect(within(box).getByText('President')).toBeTruthy()
+    expect(within(box).getByRole('link', { name: 'Read more' }).getAttribute('href')).toBe(
+      '/leadership/executive-council',
     )
+    expect(within(box).getByRole('button', { name: 'Scroll left' })).toBeTruthy()
+    expect(within(box).getByRole('button', { name: 'Scroll right' })).toBeTruthy()
   })
 
   it('shows one gallery highlight per series, with photos still to come', async () => {
@@ -253,7 +175,7 @@ describe('home page', () => {
     expect(await within(box).findByText('We couldn’t load upcoming events.')).toBeTruthy()
     expect(within(box).getByRole('button', { name: 'Try again' })).toBeTruthy()
     expect(within(box).getByText('test-request-id')).toBeTruthy()
-    expect(await screen.findByText('Lead: Dada Aishat')).toBeTruthy()
+    expect(await screen.findByText('Owolabi Joshua')).toBeTruthy()
   })
 
   it('links the student tools', async () => {

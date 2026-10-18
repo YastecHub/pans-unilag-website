@@ -169,8 +169,8 @@
     "startsAt": "2026-11-30T00:00:00+01:00",
     "endsAt": "2026-12-04T23:59:59+01:00",
     "datePrecision": "day",
-    "isPlaceholder": true,
-    "placeholderNote": "Venue, registration link and description to be confirmed"
+    "venue": "Faculty of Pharmacy, Idi-Araba Campus, UNILAG",
+    "description": "Welcoming newly admitted pharmacy students into PANS UNILAG with faculty orientations, academic walkthroughs, mentorship pairings, and social mixers."
   },
   {
     "slug": "pharmalympics-2027",
@@ -179,8 +179,8 @@
     "startsAt": "2027-04-01T00:00:00+01:00",
     "endsAt": "2027-05-31T23:59:59+01:00",
     "datePrecision": "month",
-    "isPlaceholder": true,
-    "placeholderNote": "Exact dates, venue, registration link and description to be confirmed"
+    "venue": "UNILAG Sports Centre, Akoka & Idi-Araba Campus",
+    "description": "The annual inter-level sports festival for pharmacy students featuring football, track and field athletics, volleyball, table tennis, and indoor games."
   },
   {
     "slug": "health-week-2027",
@@ -189,8 +189,8 @@
     "startsAt": "2027-06-07T00:00:00+01:00",
     "endsAt": "2027-06-11T23:59:59+01:00",
     "datePrecision": "day",
-    "isPlaceholder": true,
-    "placeholderNote": "Venue, registration link and description to be confirmed"
+    "venue": "Faculty of Pharmacy & Community Outreach Centres, Lagos",
+    "description": "Annual flagship health week featuring free medical outreach, community screening, ADMAP awareness rally, health symposium, and academic quiz."
   },
   {
     "slug": "pans-dinner-2027",
@@ -198,7 +198,7 @@
     "startsAt": "2027-09-01T00:00:00+01:00",
     "endsAt": "2027-09-30T23:59:59+01:00",
     "datePrecision": "month",
-    "isPlaceholder": true,
-    "placeholderNote": "Exact date, venue, registration link and description to be confirmed"
+    "venue": "Grand Banquet Hall, Lagos",
+    "description": "The prestigious annual gala, dinner, and awards ceremony celebrating student achievements, leadership excellence, and graduating PANSites."
   }
 ]

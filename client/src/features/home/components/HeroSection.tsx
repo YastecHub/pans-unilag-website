@@ -28,10 +28,10 @@ export function HeroSection() {
             </ButtonLink>
             {/* White outline on green: no shared variant for this, so it is styled here. */}
             <Link
-              to="/events"
+              to="/about/impact"
               className="inline-flex min-h-12 items-center rounded-lg border-2 border-white px-6 font-heading font-medium text-white no-underline hover:bg-navy"
             >
-              See events
+              Read our impact reports
             </Link>
           </div>
         </div>

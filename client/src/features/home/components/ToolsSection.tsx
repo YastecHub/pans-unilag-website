@@ -1,6 +1,6 @@
 import { ButtonLink } from '../../../components/ui/Button.tsx'
 import { Card } from '../../../components/ui/Card.tsx'
-import { CalculatorIcon, MessageIcon } from '../../../components/ui/icons.tsx'
+import { CalculatorIcon, BriefcaseIcon, MessageIcon } from '../../../components/ui/icons.tsx'
 import { CardGrid, HomeSection } from './HomeSection.tsx'
 
 const TOOLS = [
@@ -10,6 +10,13 @@ const TOOLS = [
     to: '/academics/cgpa-calculator',
     action: 'Open the calculator',
     Icon: CalculatorIcon,
+  },
+  {
+    title: 'Join PANS Opportunities Hub',
+    text: 'Explore scholarships, internships, competitions, and professional development programs curated for pharmacy students.',
+    to: '/opportunities',
+    action: 'Join opportunities hub',
+    Icon: BriefcaseIcon,
   },
   {
     title: 'Feedback and suggestions',

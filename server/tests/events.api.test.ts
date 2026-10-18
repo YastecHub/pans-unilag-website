@@ -27,7 +27,7 @@ describe('GET /api/events', () => {
       datePrecision: 'month',
       status: 'upcoming',
       startsAt: '2027-03-31T23:00:00.000Z',
-      isPlaceholder: true,
+      isPlaceholder: false,
     })
     expect(res.body).toMatchObject({ page: 1, pageSize: 12, total: 4, totalPages: 1 })
   })

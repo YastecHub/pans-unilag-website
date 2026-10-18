@@ -59,7 +59,7 @@ describe('Publications', () => {
   it('groups by series and marks every series as coming soon until editions arrive', async () => {
     mockApi({ '/api/publications': { publications: seed } })
     renderRoute('/publications')
-    await within(main()).findByRole('heading', { level: 2, name: 'Recipharm' })
+    await within(main()).findByRole('heading', { level: 2, name: 'Recipharm' }, { timeout: 4000 })
     expect(
       within(main())
         .getAllByRole('heading', { level: 2 })

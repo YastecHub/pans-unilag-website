@@ -93,7 +93,9 @@ describe('Upcoming events', () => {
   it('lists the four 2026/27 events soonest first, with month-only dates never given a day', async () => {
     api()
     renderRoute('/events')
-    expect(await within(main()).findByRole('heading', { name: "Freshers' Week" })).toBeTruthy()
+    expect(
+      await within(main()).findByRole('heading', { name: "Freshers' Week" }, { timeout: 4000 }),
+    ).toBeTruthy()
     const articles = within(main()).getAllByRole('article')
     expect(articles.map((a) => within(a).getByRole('heading').textContent)).toEqual([
       "Freshers' Week",

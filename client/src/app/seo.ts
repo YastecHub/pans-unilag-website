@@ -1,4 +1,4 @@
-import { MAIN_NAV } from './siteMap.ts'
+import { ALL_SECTIONS } from './siteMap.ts'
 
 /**
  * Search engines and link previews (README → Performance, SEO and accessibility). Used by
@@ -32,9 +32,12 @@ export function buildSiteUrl(env: {
   return vercel ? siteUrl(`https://${vercel.replace(/^https?:\/\//, '')}`) : DEV_SITE_URL
 }
 
-/** Every public page with a fixed address: the home page and the menu's pages. */
+/** Every public page with a fixed address: the home page and the site sections. */
 export function sitemapPaths(): string[] {
-  const paths = ['/', ...MAIN_NAV.flatMap((s) => [s.to, ...(s.children ?? []).map((c) => c.to)])]
+  const paths = [
+    '/',
+    ...ALL_SECTIONS.flatMap((s) => [s.to, ...(s.children ?? []).map((c) => c.to)]),
+  ]
   return [...new Set(paths)]
 }
 

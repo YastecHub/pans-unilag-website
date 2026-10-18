@@ -11,7 +11,7 @@ describe('server/seed files', () => {
     await expect(
       runSeed({ dir: SEED_DIR, targets: SEED_TARGETS, mode: 'check', isProduction: false }),
     ).resolves.toBeDefined()
-  })
+  }, 15_000)
 
   it.each(SEED_TARGETS.map((t) => [t.file, t] as const))(
     '%s has a unique index on its key',

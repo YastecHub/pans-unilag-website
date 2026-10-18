@@ -17,6 +17,18 @@ export const ChevronDownIcon = ({ className = 'size-3' }: IconProps) => (
   </svg>
 )
 
+export const ChevronLeftIcon = ({ className = 'size-4' }: IconProps) => (
+  <svg {...base} strokeWidth={2.4} className={className}>
+    <path d="M15 18l-6-6 6-6" />
+  </svg>
+)
+
+export const ChevronRightIcon = ({ className = 'size-4' }: IconProps) => (
+  <svg {...base} strokeWidth={2.4} className={className}>
+    <path d="M9 18l6-6-6-6" />
+  </svg>
+)
+
 export const SearchIcon = ({ className = 'size-[22px]' }: IconProps) => (
   <svg {...base} className={className}>
     <circle cx="11" cy="11" r="7" />
@@ -87,5 +99,12 @@ export const MessageIcon = ({ className = 'size-8' }: IconProps) => (
   <svg {...base} strokeWidth={1.6} className={className}>
     <path d="M4 5h16v11H9l-5 4z" />
     <path d="M8 9h8M8 12h5" />
+  </svg>
+)
+
+export const BriefcaseIcon = ({ className = 'size-8' }: IconProps) => (
+  <svg {...base} strokeWidth={1.6} className={className}>
+    <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
   </svg>
 )

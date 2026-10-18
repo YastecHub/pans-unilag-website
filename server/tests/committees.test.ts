@@ -35,14 +35,9 @@ describe('seed/committees.json', () => {
     }
   })
 
-  it('marks exactly the four committees without a write-up as placeholders', () => {
-    expect(committees.filter((c) => c.isPlaceholder).map((c) => c.slug)).toEqual([
-      'content',
-      'media',
-      'design',
-      'academics',
-    ])
-    expect(committees.filter((c) => c.isPlaceholder).every((c) => c.description === '')).toBe(true)
+  it('gives every committee a full description and write-up', () => {
+    expect(committees.filter((c) => c.isPlaceholder)).toEqual([])
+    expect(committees.every((c) => Boolean(c.description))).toBe(true)
   })
 
   it('keeps the SDG motto and the constitutional name', () => {

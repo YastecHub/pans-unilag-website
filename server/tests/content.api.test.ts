@@ -158,7 +158,7 @@ describe('publications', () => {
 })
 
 describe('documents: the latest approved version of each', () => {
-  it('returns the constitution as a placeholder until the PDF is uploaded', async () => {
+  it('returns the constitution document with approved version and PDF download link', async () => {
     const res = await get('/api/documents')
 
     expect(res.body.documents).toHaveLength(1)
@@ -167,8 +167,8 @@ describe('documents: the latest approved version of each', () => {
       version: '2026',
       approvedOn: '2026-07-08T23:00:00.000Z',
       pageCount: 55,
-      fileUrl: '',
-      isPlaceholder: true,
+      fileUrl: 'https://pansunilag.com/documents/pans-unilag-constitution-2026.pdf',
+      isPlaceholder: false,
     })
   })
 

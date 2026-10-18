@@ -136,7 +136,7 @@ describe('Committees', () => {
     const cards = [...main().querySelectorAll('a[href^="/leadership/committees/"]')]
     expect(cards).toHaveLength(11)
     expect(cards[0]?.getAttribute('href')).toBe('/leadership/committees/admap')
-    expect(within(main()).getAllByText('Write-up coming soon')).toHaveLength(4)
+    expect(within(main()).queryAllByText('Write-up coming soon')).toHaveLength(0)
     expect(
       within(main()).getByText(/The 11 committees appointed for the 2026\/27 session/),
     ).toBeTruthy()
@@ -159,11 +159,11 @@ describe('Committees', () => {
     expect(within(others).getAllByRole('link')).toHaveLength(10)
   })
 
-  it('shows a placeholder for a committee still waiting for its write-up', async () => {
+  it('shows a newly updated committee write-up', async () => {
     mockApi(API)
     renderRoute('/leadership/committees/media')
-    expect(await screen.findByText('Write-up coming soon')).toBeTruthy()
-    expect(screen.getByText(/needed from the committee/)).toBeTruthy()
+    expect(await screen.findByRole('heading', { level: 1, name: /Media Committee/ })).toBeTruthy()
+    expect(screen.getByText(/showing workings/)).toBeTruthy()
   })
 
   it('says when a committee does not exist', async () => {

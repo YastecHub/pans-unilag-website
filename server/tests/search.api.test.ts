@@ -38,16 +38,14 @@ describe('GET /api/search', () => {
   })
 
   it('never returns placeholders', async () => {
-    // Pharmathon is a placeholder event, Recipharm a placeholder publication,
-    // and the Media Committee a placeholder waiting for its write-up.
-    for (const q of ['Pharmathon', 'Recipharm', 'Media']) {
+    // Pharmathon is a placeholder event, Recipharm a placeholder publication.
+    for (const q of ['Pharmathon', 'Recipharm']) {
       const res = await get(`/api/search?q=${q}`)
       expect(res.status, q).toBe(200)
       expect(
         types(res.body.results).filter((t) => !t.startsWith('committee:')),
         q,
       ).toEqual([])
-      expect(types(res.body.results), q).not.toContain('committee:/leadership/committees/media')
     }
   })
 
