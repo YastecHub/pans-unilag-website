@@ -24,7 +24,11 @@ describe('leadership seed files', () => {
   })
 
   it('names the 12 provided executives with bios; Treasurer and Financial Secretary remain placeholders', () => {
-    expect(executives[0]).toMatchObject({ office: 'President', name: 'Abigail Moejoh', isPlaceholder: false })
+    expect(executives[0]).toMatchObject({
+      office: 'President',
+      name: 'Abigail Moejoh',
+      isPlaceholder: false,
+    })
     const placeholders = executives.filter((e) => e.isPlaceholder === true)
     expect(placeholders.map((e) => e.office)).toEqual(['Treasurer', 'Financial Secretary'])
     expect(placeholders.every((e) => e.name === 'Name to be announced')).toBe(true)
