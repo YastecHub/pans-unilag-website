@@ -129,9 +129,9 @@ describe('Executive Council', () => {
     renderRoute('/admin/executives/x1')
     expect(await screen.findByLabelText('Office')).toHaveProperty('value', 'President')
 
-    await user.type(screen.getByLabelText(/^Bio/), Array(61).fill('word').join(' '))
+    await user.type(screen.getByLabelText(/^Bio/), Array(201).fill('word').join(' '))
     await save(user)
-    expect(summary().getByText(/Keep the bio to 60 words or fewer \(it’s 61\)/)).toBeTruthy()
+    expect(summary().getByText(/Keep the bio to 200 words or fewer \(it’s 201\)/)).toBeTruthy()
 
     await user.clear(screen.getByLabelText(/^Bio/))
     await user.type(screen.getByLabelText(/^Bio/), 'A 400L student and former Welfare Secretary.')

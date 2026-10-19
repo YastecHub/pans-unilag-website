@@ -23,10 +23,14 @@ describe('leadership seed files', () => {
     expect(executives.map((e) => e.order)).toEqual(EXECUTIVE_OFFICES.map((_, i) => i + 1))
   })
 
-  it('names only the President; every officer is a placeholder until the Exco document and photoshoot', () => {
-    expect(executives[0]).toMatchObject({ office: 'President', name: 'Abigail Moejoh' })
-    expect(executives.slice(1).every((e) => e.name === 'Name to be announced')).toBe(true)
-    expect(executives.every((e) => e.isPlaceholder === true && !e.bio && !e.photo)).toBe(true)
+  it('names the 12 provided executives with bios; Treasurer and Financial Secretary remain placeholders', () => {
+    expect(executives[0]).toMatchObject({ office: 'President', name: 'Abigail Moejoh', isPlaceholder: false })
+    const placeholders = executives.filter((e) => e.isPlaceholder === true)
+    expect(placeholders.map((e) => e.office)).toEqual(['Treasurer', 'Financial Secretary'])
+    expect(placeholders.every((e) => e.name === 'Name to be announced')).toBe(true)
+    const active = executives.filter((e) => e.isPlaceholder === false)
+    expect(active).toHaveLength(12)
+    expect(active.every((e) => typeof e.bio === 'string' && e.bio.length > 0)).toBe(true)
   })
 
   it('lists only the four principal officers of the Senate, pending election', () => {
@@ -56,7 +60,7 @@ describe('leadership models', () => {
   it.each([
     ['an office the constitution does not have', { office: 'Chairman' }, /office/],
     ['a malformed session', { session: '2026/2028' }, /session must look like/],
-    ['a bio longer than 60 words', { bio: 'word '.repeat(61) }, /60 words or fewer/],
+    ['a bio longer than 200 words', { bio: 'word '.repeat(201) }, /200 words or fewer/],
     [
       'a photo URL instead of a Cloudinary id',
       { photo: 'https://drive.google.com/x' },
