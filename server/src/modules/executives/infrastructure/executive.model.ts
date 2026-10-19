@@ -26,7 +26,7 @@ const executiveSchema = new Schema({
   order: { type: Number, required: true, min: 1 },
   name: { type: String, required: true, trim: true, maxlength: 120 },
   level: { type: String, enum: [...LEVELS, ''], default: '' },
-  bio: { type: String, default: '', trim: true, validate: maxWords(60) },
+  bio: { type: String, default: '', trim: true, validate: maxWords(200) },
   photo: photoField,
   /** Official role email only, never a personal address. */
   roleEmail: {

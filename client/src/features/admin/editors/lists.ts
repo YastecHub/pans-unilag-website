@@ -26,7 +26,7 @@ export const SENATE_POSITIONS = [
   'Chief Whip',
 ] as const
 
-export const BIO_WORDS = 60
+export const BIO_WORDS = 200
 
 export const PUBLICATION_SERIES = [
   { value: 'recipharm', label: 'Recipharm (annual magazine)' },

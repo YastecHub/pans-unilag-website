@@ -51,13 +51,15 @@ describe('GET /api/executives', () => {
   })
 
   it('returns placeholders with their flag, note and empty optional fields', async () => {
-    const [president, vicePresident] = (await get('/api/executives')).body.executives
+    const executives = (await get('/api/executives')).body.executives
+    const president = executives[0]
+    const treasurer = executives.find((e: { office: string }) => e.office === 'Treasurer')
 
-    expect(president).toMatchObject({ name: 'Abigail Moejoh', isPlaceholder: true })
-    expect(vicePresident).toEqual({
+    expect(president).toMatchObject({ name: 'Abigail Moejoh', isPlaceholder: false })
+    expect(treasurer).toEqual({
       session: '2026/2027',
-      office: 'Vice President',
-      order: 2,
+      office: 'Treasurer',
+      order: 5,
       name: 'Name to be announced',
       level: '',
       bio: '',
