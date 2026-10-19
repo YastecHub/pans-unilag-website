@@ -73,16 +73,18 @@ describe('Executive Council', () => {
   it('shows a real name as a name, and stand-ins as clearly marked placeholders', async () => {
     mockApi(API)
     renderRoute('/leadership/executive-council')
-    const [president, vicePresident] = await within(main()).findAllByRole('article')
+    const cards = await within(main()).findAllByRole('article')
+    const president = cards[0]
+    const treasurer = cards.find((c) => within(c).queryByText('Treasurer'))!
 
     const presidentName = within(president!).getByRole('heading', { level: 3 })
     expect(presidentName.textContent).toBe('Abigail Moejoh')
     expect(presidentName.querySelector('.border-dashed')).toBeNull()
 
-    const standIn = within(vicePresident!).getByText('Name to be announced')
+    const standIn = within(treasurer!).getByText('Name to be announced')
     expect(standIn.className).toMatch(/border-dashed/)
-    expect(within(vicePresident!).getByText('Bio coming soon')).toBeTruthy()
-    expect(within(vicePresident!).getByRole('img', { name: 'Photo coming soon' })).toBeTruthy()
+    expect(within(treasurer!).getByText('Bio coming soon')).toBeTruthy()
+    expect(within(treasurer!).getByRole('img', { name: 'Photo coming soon' })).toBeTruthy()
   })
 
   it('shows each office’s duties from the constitution', async () => {

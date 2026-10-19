@@ -134,13 +134,13 @@ describe('every page’s placeholders can be cleared from the dashboard', () => 
       session: '2027/2029',
       office: 'Chief Executive',
       name: 'X',
-      bio: Array(61).fill('word').join(' '),
+      bio: Array(201).fill('word').join(' '),
     })
     expect(bad.status).toBe(400)
     expect(paths(bad)).toEqual(expect.arrayContaining(['session', 'office']))
 
     const longBio = await api.patch(`/api/admin/executives/${id}`, {
-      bio: Array(61).fill('word').join(' '),
+      bio: Array(201).fill('word').join(' '),
     })
     expect(longBio.status).toBe(400)
     expect(paths(longBio)).toContain('bio')

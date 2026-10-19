@@ -4,32 +4,36 @@
     "office": "President",
     "order": 1,
     "name": "Abigail Moejoh",
-    "isPlaceholder": true,
-    "placeholderNote": "Bio to come in the President's Exco document; official photo after the October photoshoot (by 31 Oct 2026)"
+    "level": "500L",
+    "bio": "Abigail Moejoh is a 500-level Pharmacy student at the University of Lagos, a health-tech innovator, and a leader passionate about growth, service, and meaningful impact. Having served in the leadership of the National Fellowship of Christian Pharmacy Students (NFCPS) for two years, she has led student development and innovation initiatives, including the PharmaTether community and Pharmathon. Passionate about building at the intersection of health and technology, she has won several hackathons, earning prizes and grants worth over ₦4 million. As President of PANS UNILAG, she is committed to purposeful leadership, collaboration, and initiatives that equip pharmacy students with the skills, knowledge, and opportunities they need to thrive both during their studies and beyond graduation.",
+    "isPlaceholder": false
   },
   {
     "session": "2026/2027",
     "office": "Vice President",
     "order": 2,
-    "name": "Name to be announced",
-    "isPlaceholder": true,
-    "placeholderNote": "Name and bio to come in the President's Exco document; official photo after the October photoshoot (by 31 Oct 2026)"
+    "name": "Adeyinka Olanrewaju",
+    "level": "400L",
+    "bio": "Adeyinka Olanrewaju is a 400-level Pharmacy student at the University of Lagos with experience in student representation, fundraising, and committee leadership. She has served as a Senator, Fundraising Team Lead, and committee member for initiatives including Health Week, Pharmathon, Senate Day, and PANS Trivia. As Vice President, she supports the President, oversees Health Week, and contributes to student welfare initiatives. Her interests include event planning, volunteering, and building effective structures for student-led projects.",
+    "isPlaceholder": false
   },
   {
     "session": "2026/2027",
     "office": "Secretary General",
     "order": 3,
-    "name": "Name to be announced",
-    "isPlaceholder": true,
-    "placeholderNote": "Name and bio to come in the President's Exco document; official photo after the October photoshoot (by 31 Oct 2026)"
+    "name": "Oluwole Opeyemi",
+    "level": "500L",
+    "bio": "Oluwole Opeyemi is a 500-level Pharmacy student at the University of Lagos and serves as the Secretary General of PANS UNILAG. She coordinates the Secretariat, manages official correspondence and documentation, records meetings, and communicates executive decisions. Through these responsibilities, she contributes to effective administration and the smooth operation of the association.",
+    "isPlaceholder": false
   },
   {
     "session": "2026/2027",
     "office": "Assistant Secretary General",
     "order": 4,
-    "name": "Name to be announced",
-    "isPlaceholder": true,
-    "placeholderNote": "Name and bio to come in the President's Exco document; official photo after the October photoshoot (by 31 Oct 2026)"
+    "name": "Temilade Wealth Elizabeth",
+    "level": "300L",
+    "bio": "Temilade Wealth Elizabeth is a 300-level Pharmacy student at the University of Lagos with a strong interest in student development, leadership, and capacity building. She previously served as a Senator representing the 200-level constituency during the 2025/2026 tenure and participated in various subcommittees within the association. As Assistant Secretary General, she supports administrative operations, manages correspondence, assists with the oversight of association properties, and promotes student participation and development.",
+    "isPlaceholder": false
   },
   {
     "session": "2026/2027",
@@ -37,7 +41,7 @@
     "order": 5,
     "name": "Name to be announced",
     "isPlaceholder": true,
-    "placeholderNote": "Name and bio to come in the President's Exco document; official photo after the October photoshoot (by 31 Oct 2026)"
+    "placeholderNote": "Name and bio to come in the President's Exco document; official photo after the photoshoot (by 31 Oct 2026)"
   },
   {
     "session": "2026/2027",
@@ -45,70 +49,78 @@
     "order": 6,
     "name": "Name to be announced",
     "isPlaceholder": true,
-    "placeholderNote": "Name and bio to come in the President's Exco document; official photo after the October photoshoot (by 31 Oct 2026)"
+    "placeholderNote": "Name and bio to come in the President's Exco document; official photo after the photoshoot (by 31 Oct 2026)"
   },
   {
     "session": "2026/2027",
     "office": "Public Relations Officer",
     "order": 7,
-    "name": "Name to be announced",
-    "isPlaceholder": true,
-    "placeholderNote": "Name and bio to come in the President's Exco document; official photo after the October photoshoot (by 31 Oct 2026)"
+    "name": "Adedipe Maliq Olamide",
+    "level": "300L",
+    "bio": "Adedipe Maliq Olamide is a 300-level Doctor of Pharmacy student at the University of Lagos with experience in publicity, editorial work, and event hosting. He previously served as Assistant Publicity Team Lead for PANS UNILAG SDG during the 2025/2026 session, co-hosted Pharmathon 3.0, and participated in the COMPSSA Editorial Board. Passionate about writing, digital media, healthcare, research, and entrepreneurship, he is also developing skills in videography, graphic design, video editing, and educational content creation. As Public Relations Officer, he leads communication and publicity efforts, strengthens engagement between PANS UNILAG and its members, and works towards building a more visible and connected association through Project AUREA 26/27.",
+    "isPlaceholder": false
   },
   {
     "session": "2026/2027",
     "office": "Assistant Public Relations Officer",
     "order": 8,
-    "name": "Name to be announced",
-    "isPlaceholder": true,
-    "placeholderNote": "Name and bio to come in the President's Exco document; official photo after the October photoshoot (by 31 Oct 2026)"
+    "name": "Ajose Shamsudeen",
+    "level": "300L",
+    "bio": "Ajose Shamsudeen is a 300-level Pharmacy student at the University of Lagos with interests in leadership, sports, volunteering, mentorship, and creative writing. He co-hosted Fresher’s week panel session during the 2025/2026 session, and has participated actively as a member under several subcommittees. Being an active student of his class, he’s always committed time to carrying his fellow coursemates along. He is also an active member of the Pharmaceutical Muslims student society of Nigeria (PMSSN). He is passionate about personal and academic growth and strives to balance his studies with leadership and service. He also enjoys writing reflective pieces on life and love and is committed to developing his creative writing skills. As Assistant Public Relations Officer, he supports the association’s publicity and communication efforts, serving as a link between PANSites and the Executive Council while promoting accessibility, engagement, and unity within PANS UNILAG.",
+    "isPlaceholder": false
   },
   {
     "session": "2026/2027",
     "office": "Editor-in-Chief",
     "order": 9,
-    "name": "Name to be announced",
-    "isPlaceholder": true,
-    "placeholderNote": "Name and bio to come in the President's Exco document; official photo after the October photoshoot (by 31 Oct 2026)"
+    "name": "Oyawoye Anuoluwapo",
+    "level": "500L",
+    "bio": "Oyawoye Anuoluwapo is a 500-level Pharmacy student with a passion for creativity, writing, healthcare innovation, and community impact. A natural storyteller and creative thinker, she enjoys transforming ideas into engaging narratives and visual experiences. Her experience includes leadership in health technology and volunteering in community health initiatives. She is also interested in research, data analytics, and digital innovation, with a commitment to creating meaningful solutions that improve lives.",
+    "isPlaceholder": false
   },
   {
     "session": "2026/2027",
     "office": "Social Secretary",
     "order": 10,
-    "name": "Name to be announced",
-    "isPlaceholder": true,
-    "placeholderNote": "Name and bio to come in the President's Exco document; official photo after the October photoshoot (by 31 Oct 2026)"
+    "name": "Arigbabowo Abdulraheem Anuoluwapo",
+    "level": "400L",
+    "bio": "Arigbabowo Abdulraheem Anuoluwapo is a 400-level Pharmacy student at the University of Lagos with interests in event planning, teamwork, student engagement, and leadership. He has served on the PANS Social Committee and volunteered in student welfare, sports, publicity, logistics, and event coordination. He is also a member of the Ingenium Basketball Team and participates in the PANS Public Health Team, PANS Research Team, and ADMAP. As Social Secretary, he coordinates social activities that foster connection, unity, and an engaging student experience for pharmacy students.",
+    "isPlaceholder": false
   },
   {
     "session": "2026/2027",
     "office": "Assistant Social Secretary",
     "order": 11,
-    "name": "Name to be announced",
-    "isPlaceholder": true,
-    "placeholderNote": "Name and bio to come in the President's Exco document; official photo after the October photoshoot (by 31 Oct 2026)"
+    "name": "Adekoya Oyinkansola Isabella",
+    "level": "300L",
+    "bio": "Adekoya Oyinkansola Isabella is a 300-level Pharmacy student at the University of Lagos who is passionate about leadership, self-development, and service. She has served in various leadership capacities, including as a member of the association’s legislative arm, where she represented her constituency, and as a class representative. She also actively participates in volunteering activities within PANS. Through her role as Assistant Social Secretary, she contributes to student engagement and association activities while seeking opportunities to grow personally and professionally.",
+    "isPlaceholder": false
   },
   {
     "session": "2026/2027",
     "office": "Sports Secretary",
     "order": 12,
-    "name": "Name to be announced",
-    "isPlaceholder": true,
-    "placeholderNote": "Name and bio to come in the President's Exco document; official photo after the October photoshoot (by 31 Oct 2026)"
+    "name": "Akintoye Mahmud Korede",
+    "level": "400L",
+    "bio": "Akintoye Mahmud Korede is a 400-level Pharmacy student at the University of Lagos with a strong interest in sports, teamwork, and leadership. He previously participated as a PANS football player and served on the PANS Sports Committee during the 2025/2026 session. He has competed in interfaculty and Pharmalympics events, earning medals, including a gold medal in the Provost Cup football competition. As Sports Secretary, he coordinates sporting activities and competitions while promoting sportsmanship, teamwork, and unity among pharmacy students.",
+    "isPlaceholder": false
   },
   {
     "session": "2026/2027",
     "office": "Assistant Sports Secretary",
     "order": 13,
-    "name": "Name to be announced",
-    "isPlaceholder": true,
-    "placeholderNote": "Name and bio to come in the President's Exco document; official photo after the October photoshoot (by 31 Oct 2026)"
+    "name": "Farayola Fawaz Damola",
+    "level": "400L",
+    "bio": "Farayola Fawaz Damola is a 400-level Pharmacy student at the University of Lagos with interests in sports, teamwork, student engagement, and leadership. He previously served as a Sports Representative for ULSP and was a member of the PANS Sports Committee during the 2025/2026 session. He has also participated in interfaculty and pharmacy sporting competitions, earning medals in football and athletics-related events. As Assistant Sports Secretary, he supports the coordination of sporting activities and promotes sportsmanship, student participation, teamwork, and unity among pharmacy students.",
+    "isPlaceholder": false
   },
   {
     "session": "2026/2027",
     "office": "Welfare Secretary",
     "order": 14,
-    "name": "Name to be announced",
-    "isPlaceholder": true,
-    "placeholderNote": "Name and bio to come in the President's Exco document; official photo after the October photoshoot (by 31 Oct 2026)"
+    "name": "Ojo Temidayo Ajoke",
+    "level": "500L",
+    "bio": "Ojo Temidayo Ajoke is a 500-level Pharmacy student passionate about leadership, service, personal development, and community impact. She previously served as Senate Leader during the 2025/2026 academic session and as Chairperson of the PANS Health Week Committee. As Welfare Secretary, she is committed to student welfare, effective representation, and initiatives that improve the student experience. Beyond academics and leadership, she is an aspiring entrepreneur interested in healthcare innovation, pharmaceutical research, and business development.",
+    "isPlaceholder": false
   }
 ]
