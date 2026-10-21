@@ -62,14 +62,20 @@ export function HeroSection() {
             }`}
           />
         ))}
-        {/* Brand wash: deepest behind the text (left), lighter where the photo shows (right). */}
-        <div className="absolute inset-0 bg-linear-to-r from-primary/95 via-primary/80 to-navy/55" />
-        <div className="absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-navy/60 to-transparent" />
+        {/*
+          Brand wash. Phones: an even, lighter green so the photo shows through behind the text.
+          Larger screens: deepest behind the text (left), lighter where the photo shows (right).
+        */}
+        <div className="absolute inset-0 bg-primary/50 sm:bg-transparent sm:bg-linear-to-r sm:from-primary/95 sm:via-primary/80 sm:to-navy/55" />
+        <div className="absolute inset-x-0 bottom-0 hidden h-1/3 bg-linear-to-t from-navy/60 to-transparent sm:block" />
       </div>
 
       <Container className="flex flex-col justify-center py-10 sm:min-h-[34rem] sm:py-16 lg:min-h-[38rem] lg:py-24">
-        {/* On phones the glass runs edge to edge, so the text keeps the full width and wraps as before. */}
-        <div className="-mx-4 flex max-w-[44rem] flex-col gap-5 border-y border-white/15 bg-white/10 px-4 py-8 backdrop-blur-md sm:mx-0 sm:rounded-3xl sm:border sm:border-white/20 sm:p-10 sm:shadow-2xl">
+        {/*
+          Phones: the glass runs edge to edge (the text keeps its full width) with a light blur, so
+          the photo stays visible; a soft shadow keeps the text crisp over it.
+        */}
+        <div className="-mx-4 flex max-w-[44rem] flex-col gap-5 border-y border-white/15 bg-primary/30 px-4 py-8 backdrop-blur-[3px] [text-shadow:0_1px_3px_rgb(0_0_0/0.5)] sm:mx-0 sm:bg-white/10 sm:backdrop-blur-md sm:[text-shadow:none] sm:rounded-3xl sm:border sm:border-white/20 sm:p-10 sm:shadow-2xl">
           <p className="font-heading text-sm font-medium tracking-[0.12em] uppercase">
             {SITE.shortName} · Faculty of Pharmacy
           </p>
