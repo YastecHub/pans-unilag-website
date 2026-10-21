@@ -12,9 +12,9 @@ import { SITE } from '../../../lib/site.ts'
  * removed) and saved as WebP under 100 KB each. `position` keeps the people in frame.
  */
 const SLIDES = [
-  { src: pansFamily, position: '50% 60%', label: 'PANSites together at a faculty event' },
-  { src: panelSession, position: '50% 35%', label: 'A panel session' },
-  { src: lectureHall, position: '50% 55%', label: 'Students in the lecture hall' },
+  { src: pansFamily, position: '50% 60%' },
+  { src: panelSession, position: '50% 35%' },
+  { src: lectureHall, position: '50% 55%' },
 ]
 const SLIDE_MS = 6000
 
@@ -28,12 +28,12 @@ const prefersReducedMotion = () =>
  *
  * - The photos are decoration (the text says what matters), so screen readers skip them.
  * - A dark brand-coloured wash keeps white and yellow text readable on every photo.
- * - WCAG 2.2.2: there's a visible Pause button, and nothing moves for people whose device asks
- *   for reduced motion.
+ * - Nothing moves for people whose device asks for reduced motion.
  */
 export function HeroSection() {
   const [active, setActive] = useState(0)
-  const [playing, setPlaying] = useState(() => !prefersReducedMotion())
+  // Nothing moves for people whose device asks for reduced motion.
+  const [playing] = useState(() => !prefersReducedMotion())
 
   useEffect(() => {
     if (!playing) return
@@ -67,8 +67,9 @@ export function HeroSection() {
         <div className="absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-navy/60 to-transparent" />
       </div>
 
-      <Container className="flex min-h-[34rem] flex-col justify-center gap-8 py-16 lg:min-h-[38rem] lg:py-24">
-        <div className="flex max-w-[44rem] flex-col gap-5 rounded-3xl border border-white/20 bg-white/10 p-6 shadow-2xl backdrop-blur-md sm:p-10">
+      <Container className="flex flex-col justify-center py-10 sm:min-h-[34rem] sm:py-16 lg:min-h-[38rem] lg:py-24">
+        {/* On phones the glass runs edge to edge, so the text keeps the full width and wraps as before. */}
+        <div className="-mx-4 flex max-w-[44rem] flex-col gap-5 border-y border-white/15 bg-white/10 px-4 py-8 backdrop-blur-md sm:mx-0 sm:rounded-3xl sm:border sm:border-white/20 sm:p-10 sm:shadow-2xl">
           <p className="font-heading text-sm font-medium tracking-[0.12em] uppercase">
             {SITE.shortName} · Faculty of Pharmacy
           </p>
@@ -81,45 +82,20 @@ export function HeroSection() {
             {SITE.motto}
           </p>
           <p className="max-w-[40rem]">{SITE.purpose}</p>
-          <div className="flex flex-wrap gap-3 pt-2">
-            <ButtonLink to="/about" variant="accent">
+          {/* Phones: two equal buttons on one line (the second with a shorter label). */}
+          <div className="grid grid-cols-2 gap-3 pt-2 sm:flex sm:flex-wrap">
+            <ButtonLink to="/about" variant="accent" className="justify-center">
               About PANS
             </ButtonLink>
             {/* White outline on green: no shared variant for this, so it is styled here. */}
             <Link
               to="/about/impact"
-              className="inline-flex min-h-12 items-center rounded-lg border-2 border-white px-6 font-heading font-medium text-white no-underline hover:bg-navy"
+              className="inline-flex min-h-12 items-center justify-center rounded-lg border-2 border-white px-4 font-heading font-medium text-white no-underline hover:bg-navy sm:px-6"
             >
-              Read our impact reports
+              <span className="sm:hidden">Our impact</span>
+              <span className="hidden sm:inline">Read our impact reports</span>
             </Link>
           </div>
-        </div>
-
-        <div className="flex items-center gap-2 self-start rounded-full border border-white/20 bg-white/10 py-1 pr-1 pl-3 backdrop-blur-md sm:self-end">
-          {SLIDES.map((slide, i) => (
-            <button
-              key={slide.src}
-              type="button"
-              onClick={() => setActive(i)}
-              aria-label={`Show photo ${i + 1} of ${SLIDES.length}: ${slide.label}`}
-              aria-current={i === active ? 'true' : undefined}
-              className="inline-flex size-6 items-center justify-center"
-            >
-              <span
-                aria-hidden="true"
-                className={`h-1.5 rounded-full bg-white transition-all duration-300 ${
-                  i === active ? 'w-6' : 'w-1.5 opacity-60'
-                }`}
-              />
-            </button>
-          ))}
-          <button
-            type="button"
-            onClick={() => setPlaying((p) => !p)}
-            className="ml-1 inline-flex min-h-11 items-center rounded-full px-3 text-xs font-semibold text-white hover:bg-white/15"
-          >
-            {playing ? 'Pause photos' : 'Play photos'}
-          </button>
         </div>
       </Container>
     </section>
