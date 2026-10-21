@@ -29,7 +29,8 @@ const prefersReducedMotion = () =>
  */
 export function LeadershipSection() {
   const query = useExecutives()
-  const executives = query.data?.executives ?? []
+  // Only the officers whose details have been published; offices still to be filled stay off the slider.
+  const executives = (query.data?.executives ?? []).filter((e) => !e.isPlaceholder)
   const count = executives.length
   const scrollRef = useRef<HTMLUListElement>(null)
   const [activeIndex, setActiveIndex] = useState(0)
