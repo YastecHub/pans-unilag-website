@@ -69,9 +69,13 @@ function ExecutiveCard({
       level={e.level}
       photo={e.photo}
     >
-      {e.bio ? <p>{e.bio}</p> : <PlaceholderText>Bio coming soon</PlaceholderText>}
+      {e.bio ? (
+        <p className="text-small text-text-muted leading-relaxed whitespace-pre-line">{e.bio}</p>
+      ) : (
+        <PlaceholderText>Bio coming soon</PlaceholderText>
+      )}
       {e.roleEmail && (
-        <a href={`mailto:${e.roleEmail}`} className="text-small">
+        <a href={`mailto:${e.roleEmail}`} className="text-small text-text-brand underline">
           {e.roleEmail}
         </a>
       )}
