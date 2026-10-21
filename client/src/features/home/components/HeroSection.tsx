@@ -1,15 +1,74 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
-import badgeUrl from '../../../assets/pans-badge.png'
+import lectureHall from '../../../assets/hero/lecture-hall.webp'
+import panelSession from '../../../assets/hero/panel-session.webp'
+import pansFamily from '../../../assets/hero/pans-family.webp'
 import { Container } from '../../../components/layout/Container.tsx'
 import { ButtonLink } from '../../../components/ui/Button.tsx'
 import { SITE } from '../../../lib/site.ts'
 
-/** Full name, motto, one-line purpose and the two main ways in (README → Home page sections). */
+/**
+ * Photos behind the hero, in order. Cropped from the photographer's originals (watermark
+ * removed) and saved as WebP under 100 KB each. `position` keeps the people in frame.
+ */
+const SLIDES = [
+  { src: pansFamily, position: '50% 60%', label: 'PANSites together at a faculty event' },
+  { src: panelSession, position: '50% 35%', label: 'A panel session' },
+  { src: lectureHall, position: '50% 55%', label: 'Students in the lecture hall' },
+]
+const SLIDE_MS = 6000
+
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' &&
+  (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false)
+
+/**
+ * Full name, motto, one-line purpose and the two main ways in (README → Home page sections), on a
+ * frosted-glass panel over a slow crossfade of PANS photos.
+ *
+ * - The photos are decoration (the text says what matters), so screen readers skip them.
+ * - A dark brand-coloured wash keeps white and yellow text readable on every photo.
+ * - WCAG 2.2.2: there's a visible Pause button, and nothing moves for people whose device asks
+ *   for reduced motion.
+ */
 export function HeroSection() {
+  const [active, setActive] = useState(0)
+  const [playing, setPlaying] = useState(() => !prefersReducedMotion())
+
+  useEffect(() => {
+    if (!playing) return
+    const timer = setTimeout(() => setActive((i) => (i + 1) % SLIDES.length), SLIDE_MS)
+    return () => clearTimeout(timer)
+  }, [playing, active])
+
   return (
-    <section aria-labelledby="hero-title" className="bg-primary text-on-primary">
-      <Container className="flex flex-wrap items-center gap-12 py-16 lg:py-24">
-        <div className="flex min-w-0 flex-[1_1_32rem] flex-col gap-5">
+    <section
+      aria-labelledby="hero-title"
+      className="relative isolate overflow-hidden bg-primary text-on-primary"
+    >
+      <div aria-hidden="true" className="absolute inset-0 -z-10">
+        {SLIDES.map((slide, i) => (
+          <img
+            key={slide.src}
+            src={slide.src}
+            alt=""
+            // The first photo is on screen at once; the others load when the browser is idle.
+            loading={i === 0 ? 'eager' : 'lazy'}
+            fetchPriority={i === 0 ? 'high' : 'low'}
+            decoding="async"
+            style={{ objectPosition: slide.position }}
+            className={`absolute inset-0 size-full object-cover transition-[opacity,transform] duration-[1600ms] ease-out motion-reduce:transition-none ${
+              i === active ? 'scale-100 opacity-100' : 'scale-105 opacity-0'
+            }`}
+          />
+        ))}
+        {/* Brand wash: deepest behind the text (left), lighter where the photo shows (right). */}
+        <div className="absolute inset-0 bg-linear-to-r from-primary/95 via-primary/80 to-navy/55" />
+        <div className="absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-navy/60 to-transparent" />
+      </div>
+
+      <Container className="flex min-h-[34rem] flex-col justify-center gap-8 py-16 lg:min-h-[38rem] lg:py-24">
+        <div className="flex max-w-[44rem] flex-col gap-5 rounded-3xl border border-white/20 bg-white/10 p-6 shadow-2xl backdrop-blur-md sm:p-10">
           <p className="font-heading text-sm font-medium tracking-[0.12em] uppercase">
             {SITE.shortName} · Faculty of Pharmacy
           </p>
@@ -35,9 +94,32 @@ export function HeroSection() {
             </Link>
           </div>
         </div>
-        <div className="hidden size-72 shrink-0 items-center justify-center rounded-full bg-surface-alt md:flex">
-          {/* Shown on first load: not lazy. 200 px PNG keeps the page light. */}
-          <img src={badgeUrl} alt="" width={200} height={200} className="size-50" />
+
+        <div className="flex items-center gap-2 self-start rounded-full border border-white/20 bg-white/10 py-1 pr-1 pl-3 backdrop-blur-md sm:self-end">
+          {SLIDES.map((slide, i) => (
+            <button
+              key={slide.src}
+              type="button"
+              onClick={() => setActive(i)}
+              aria-label={`Show photo ${i + 1} of ${SLIDES.length}: ${slide.label}`}
+              aria-current={i === active ? 'true' : undefined}
+              className="inline-flex size-6 items-center justify-center"
+            >
+              <span
+                aria-hidden="true"
+                className={`h-1.5 rounded-full bg-white transition-all duration-300 ${
+                  i === active ? 'w-6' : 'w-1.5 opacity-60'
+                }`}
+              />
+            </button>
+          ))}
+          <button
+            type="button"
+            onClick={() => setPlaying((p) => !p)}
+            className="ml-1 inline-flex min-h-11 items-center rounded-full px-3 text-xs font-semibold text-white hover:bg-white/15"
+          >
+            {playing ? 'Pause photos' : 'Play photos'}
+          </button>
         </div>
       </Container>
     </section>
