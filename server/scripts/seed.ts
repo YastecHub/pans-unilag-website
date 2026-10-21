@@ -2,6 +2,8 @@
  * Loads server/seed/*.json into MongoDB. Run from the repository root:
  *   npm run seed -w server                 add missing documents (safe to run any time)
  *   npm run seed -w server -- --update     also overwrite existing documents with the seed values
+ *   npm run seed -w server -- --update --only=executives
+ *                                          refresh just one file (comma-separate several)
  *   npm run seed -w server -- --reset      empty the seeded collections first (development only)
  *   npm run seed:check -w server           validate the files without a database
  */
@@ -34,11 +36,17 @@ function printResults(results: SeedFileResult[], mode: SeedMode) {
 
 async function main() {
   const args = process.argv.slice(2)
-  const unknown = args.filter((a) => !FLAGS.has(a))
+  const onlyArg = args.find((a) => a.startsWith('--only='))
+  const only = onlyArg
+    ?.slice('--only='.length)
+    .split(',')
+    .map((n) => n.trim().replace(/\.json$/, ''))
+    .filter(Boolean)
+  const unknown = args.filter((a) => !FLAGS.has(a) && a !== onlyArg)
   if (args.includes('--help') || unknown.length > 0) {
     if (unknown.length > 0) console.error(`Unknown option: ${unknown.join(' ')}`)
     console.log(
-      'Usage: npm run seed -w server [-- --update | --reset]   or   npm run seed:check -w server',
+      'Usage: npm run seed -w server [-- --update | --reset] [--only=executives,events]   or   npm run seed:check -w server',
     )
     process.exit(unknown.length > 0 ? 1 : 0)
   }
@@ -67,9 +75,11 @@ async function main() {
   await connectDb(env.MONGODB_URI)
   try {
     const { host, name } = mongoose.connection
-    console.log(`Seeding database "${name}" on ${host} (${mode}${reset ? ', reset first' : ''})\n`)
+    console.log(
+      `Seeding database "${name}" on ${host} (${mode}${reset ? ', reset first' : ''}${only ? `, only ${only.join(', ')}` : ''})\n`,
+    )
     printResults(
-      await runSeed({ dir: SEED_DIR, targets: SEED_TARGETS, mode, reset, isProduction }),
+      await runSeed({ dir: SEED_DIR, targets: SEED_TARGETS, mode, reset, isProduction, only }),
       mode,
     )
   } finally {

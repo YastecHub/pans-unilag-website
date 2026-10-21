@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router'
 import { ButtonLink } from '../../../components/ui/Button.tsx'
 import { Card } from '../../../components/ui/Card.tsx'
@@ -10,58 +10,67 @@ import { EmptyState, ErrorState, LoadingState } from '../../../components/ui/Sta
 import { type Executive, isStandInName, useExecutives } from '../../leadership/api/leadership.ts'
 import { HomeSection } from './HomeSection.tsx'
 
+const GAP_PX = 20
+const SLIDE_MS = 5000
+
+/** Visitors who ask their device for less motion get no auto-sliding or smooth scrolling. */
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' &&
+  (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false)
+
+/**
+ * The 2026/2027 Executive Council as a carousel: one card per office, in constitutional order.
+ * A card without a photo shows the photo placeholder until one is added in the dashboard
+ * (Content → Executive Council → Photo).
+ *
+ * Accessibility (WCAG 2.2.2): it slides by itself only while nobody is pointing at it or
+ * focused inside it, never when the device asks for reduced motion, and there's always a
+ * visible Pause button. Previous/next and the dots move one card at a time.
+ */
 export function LeadershipSection() {
   const query = useExecutives()
   const executives = query.data?.executives ?? []
+  const count = executives.length
   const scrollRef = useRef<HTMLUListElement>(null)
-  const [isPaused, setIsPaused] = useState(false)
   const [activeIndex, setActiveIndex] = useState(0)
+  const [playing, setPlaying] = useState(() => !prefersReducedMotion())
+  const [hovered, setHovered] = useState(false)
+  const [focused, setFocused] = useState(false)
+  const sliding = playing && !hovered && !focused && count > 1
 
-  const handleScroll = () => {
-    if (!scrollRef.current) return
+  const goTo = useCallback((index: number) => {
     const container = scrollRef.current
+    if (!container) return
     const cardWidth = container.firstElementChild?.clientWidth ?? 340
-    const gap = 20
-    const scrollPosition = container.scrollLeft
-    const index = Math.round(scrollPosition / (cardWidth + gap))
-    setActiveIndex(Math.min(Math.max(0, index), executives.length - 1))
-  }
-
-  const scrollToCard = (index: number) => {
-    if (!scrollRef.current) return
-    const container = scrollRef.current
-    const cardWidth = container.firstElementChild?.clientWidth ?? 340
-    const gap = 20
-    container.scrollTo({ left: index * (cardWidth + gap), behavior: 'smooth' })
+    container.scrollTo?.({
+      left: index * (cardWidth + GAP_PX),
+      behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+    })
     setActiveIndex(index)
-  }
+  }, [])
 
-  const scroll = (direction: 'left' | 'right') => {
-    if (!scrollRef.current) return
-    const maxIndex = executives.length - 1
-    if (direction === 'right') {
-      const nextIndex = activeIndex >= maxIndex ? 0 : activeIndex + 1
-      scrollToCard(nextIndex)
-    } else {
-      const prevIndex = activeIndex <= 0 ? maxIndex : activeIndex - 1
-      scrollToCard(prevIndex)
-    }
-  }
+  const step = (by: 1 | -1) => goTo((activeIndex + by + count) % count)
 
-  // Auto-play moving carousel every 4 seconds when not paused
   useEffect(() => {
-    if (isPaused || executives.length === 0) return
-    const interval = setInterval(() => {
-      scroll('right')
-    }, 4000)
-    return () => clearInterval(interval)
-  }, [isPaused, activeIndex, executives.length])
+    if (!sliding) return
+    const timer = setTimeout(() => goTo((activeIndex + 1) % count), SLIDE_MS)
+    return () => clearTimeout(timer)
+  }, [sliding, activeIndex, count, goTo])
+
+  // Swiping or scrolling by hand moves the dots too.
+  const onScroll = () => {
+    const container = scrollRef.current
+    if (!container || count === 0) return
+    const cardWidth = container.firstElementChild?.clientWidth ?? 340
+    const index = Math.round(container.scrollLeft / (cardWidth + GAP_PX))
+    setActiveIndex(Math.min(Math.max(0, index), count - 1))
+  }
 
   return (
     <HomeSection
       id="leadership"
       title="PANS Leadership 26/27"
-      intro="Meet the executive officers elected to steer the 2026/2027 parliamentary session in constitutional order."
+      intro="Meet the Executive Council serving PANSites in the 2026/2027 session, in constitutional order."
       tone="alt"
       link={{ to: '/leadership/executive-council', label: 'All leaders' }}
     >
@@ -79,62 +88,78 @@ export function LeadershipSection() {
           error={query.error}
           onRetry={() => query.refetch()}
         />
-      ) : executives.length === 0 ? (
+      ) : count === 0 ? (
         <EmptyState
           title="Leadership for the 2026/27 session will be announced soon."
           className="bg-surface"
         />
       ) : (
-        <div
+        <section
+          aria-roledescription="carousel"
+          aria-label="2026/2027 Executive Council"
           className="relative flex flex-col gap-6"
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => setIsPaused(false)}
-          onFocus={() => setIsPaused(true)}
-          onBlur={() => setIsPaused(false)}
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
+          onFocus={() => setFocused(true)}
+          onBlur={(e) => {
+            if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setFocused(false)
+          }}
         >
-          {/* Controls Header */}
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-                <span className="size-2 rounded-full bg-primary animate-pulse" />
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-text-brand">
+                <span
+                  aria-hidden="true"
+                  className={`size-2 rounded-full bg-primary ${sliding ? 'motion-safe:animate-pulse' : ''}`}
+                />
                 2026/2027 Executive Council
               </span>
-              <span className="hidden sm:inline text-xs text-text-muted">
-                {isPaused ? '• Paused on hover' : '• Auto-sliding'}
-              </span>
+              <button
+                type="button"
+                onClick={() => setPlaying((p) => !p)}
+                className="inline-flex min-h-11 items-center rounded-full px-3 text-xs font-semibold text-text-brand underline-offset-4 hover:underline"
+              >
+                {playing ? 'Pause slideshow' : 'Play slideshow'}
+              </button>
             </div>
 
             <div className="flex items-center gap-3">
-              {/* Pagination indicators */}
-              <div className="hidden md:flex items-center gap-1.5 mr-2">
+              <div className="hidden items-center md:flex">
                 {executives.map((exec, idx) => (
                   <button
                     key={exec.office}
                     type="button"
-                    onClick={() => scrollToCard(idx)}
-                    aria-label={`Go to ${exec.office}`}
-                    className={`h-2 rounded-full transition-all duration-300 ${
-                      idx === activeIndex ? 'w-6 bg-primary' : 'w-2 bg-border hover:bg-text-muted'
-                    }`}
-                  />
+                    onClick={() => goTo(idx)}
+                    aria-label={`Show ${exec.office}`}
+                    aria-current={idx === activeIndex ? 'true' : undefined}
+                    className="group/dot inline-flex size-6 items-center justify-center"
+                  >
+                    <span
+                      aria-hidden="true"
+                      className={`h-2 rounded-full transition-all duration-300 ${
+                        idx === activeIndex
+                          ? 'w-5 bg-primary'
+                          : 'w-2 bg-border-strong group-hover/dot:bg-text-muted'
+                      }`}
+                    />
+                  </button>
                 ))}
               </div>
 
-              {/* Navigation buttons */}
               <div className="flex items-center gap-2">
                 <button
                   type="button"
-                  onClick={() => scroll('left')}
-                  aria-label="Scroll left"
-                  className="inline-flex size-10 items-center justify-center rounded-full border border-border bg-surface text-text shadow-xs hover:border-primary/50 hover:bg-surface-alt hover:text-primary transition-all active:scale-95"
+                  onClick={() => step(-1)}
+                  aria-label="Previous executive"
+                  className="inline-flex size-11 items-center justify-center rounded-full border border-border bg-surface text-text shadow-xs transition-all hover:border-primary/50 hover:bg-surface-alt hover:text-text-brand active:scale-95"
                 >
                   <ChevronLeftIcon className="size-5" />
                 </button>
                 <button
                   type="button"
-                  onClick={() => scroll('right')}
-                  aria-label="Scroll right"
-                  className="inline-flex size-10 items-center justify-center rounded-full border border-border bg-surface text-text shadow-xs hover:border-primary/50 hover:bg-surface-alt hover:text-primary transition-all active:scale-95"
+                  onClick={() => step(1)}
+                  aria-label="Next executive"
+                  className="inline-flex size-11 items-center justify-center rounded-full border border-border bg-surface text-text shadow-xs transition-all hover:border-primary/50 hover:bg-surface-alt hover:text-text-brand active:scale-95"
                 >
                   <ChevronRightIcon className="size-5" />
                 </button>
@@ -142,30 +167,35 @@ export function LeadershipSection() {
             </div>
           </div>
 
-          {/* Carousel Track */}
           <ul
             ref={scrollRef}
-            onScroll={handleScroll}
-            aria-label="Executive leadership"
-            className="flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4 pt-1 scroll-smooth focus:outline-none"
+            onScroll={onScroll}
+            aria-label="Executive Council members"
+            className="flex snap-x snap-mandatory gap-5 overflow-x-auto pt-1 pb-4 motion-safe:scroll-smooth"
             tabIndex={0}
           >
             {executives.map((exec, idx) => (
-              <li key={exec.office} className="w-[19rem] shrink-0 snap-start sm:w-[22rem]">
+              <li
+                key={exec.office}
+                aria-roledescription="slide"
+                aria-label={`${idx + 1} of ${count}: ${exec.office}`}
+                className="w-[19rem] shrink-0 snap-start sm:w-[22rem]"
+              >
                 <LeadershipCard executive={exec} isActive={idx === activeIndex} />
               </li>
             ))}
           </ul>
 
-          <div className="flex items-center justify-between pt-2">
-            <span className="text-xs text-text-muted">
-              Showing {activeIndex + 1} of {executives.length} executives
+          <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
+            {/* Announced only when someone moves it, not on every automatic slide. */}
+            <span aria-live={sliding ? 'off' : 'polite'} className="text-xs text-text-muted">
+              Showing {activeIndex + 1} of {count}: {executives[activeIndex]?.office}
             </span>
             <ButtonLink to="/leadership/executive-council" variant="outline">
               Explore full Executive Council & Senate
             </ButtonLink>
           </div>
-        </div>
+        </section>
       )}
     </HomeSection>
   )
@@ -183,19 +213,19 @@ function LeadershipCard({ executive: e, isActive }: { executive: Executive; isAc
     >
       {/* Photo / Avatar Frame */}
       <div className="p-3 pb-0">
-        {e.photo !== undefined &&
-          (e.photo ? (
-            <Img publicId={e.photo} alt={`${e.name}, ${e.office}`} width={480} height={320} />
-          ) : (
-            <PlaceholderImage kind="person" />
-          ))}
+        {/* The official photo once it's added in the dashboard; until then, a placeholder. */}
+        {e.photo ? (
+          <Img publicId={e.photo} alt={`${e.name}, ${e.office}`} width={480} height={360} />
+        ) : (
+          <PlaceholderImage kind="person" label={`Photo of ${e.name} coming soon`} />
+        )}
       </div>
 
       {/* Content Body */}
       <div className="flex flex-1 flex-col justify-between p-5 gap-4">
         <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between gap-2 flex-wrap">
-            <span className="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-bold text-primary border border-primary/20">
+            <span className="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-bold text-text-brand border border-primary/20">
               {e.office}
             </span>
             {e.level && (
@@ -205,7 +235,7 @@ function LeadershipCard({ executive: e, isActive }: { executive: Executive; isAc
             )}
           </div>
 
-          <h3 className="font-heading text-xl font-bold text-text tracking-tight group-hover:text-primary transition-colors mt-1">
+          <h3 className="font-heading text-xl font-bold text-text tracking-tight group-hover:text-text-brand transition-colors mt-1">
             {isStandIn ? <PlaceholderText>{e.name}</PlaceholderText> : e.name}
           </h3>
 
@@ -220,7 +250,8 @@ function LeadershipCard({ executive: e, isActive }: { executive: Executive; isAc
         <div className="pt-3 border-t border-border/60 flex items-center justify-between">
           <Link
             to="/leadership/executive-council"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-primary hover:text-primary-dark group-hover:translate-x-0.5 transition-all"
+            aria-label={`Read more about ${e.name}`}
+            className="inline-flex min-h-11 items-center gap-1.5 text-xs font-bold text-text-brand underline-offset-4 hover:underline"
           >
             <span>Read more</span>
             <ChevronRightIcon className="size-3.5 transition-transform group-hover:translate-x-1" />

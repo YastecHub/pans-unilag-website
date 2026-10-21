@@ -41,6 +41,12 @@ export type SeedOptions = {
   getCollection?: (target: SeedTarget) => SeedCollection
   /** Defaults to new Date(). */
   now?: Date
+  /**
+   * Write only these files (by name without .json, e.g. ["executives"]). Every file is still
+   * validated. With update mode this refreshes one collection without overwriting the rest of
+   * the dashboard's edits.
+   */
+  only?: readonly string[]
 }
 
 export type SeedFileResult = {
@@ -77,6 +83,14 @@ export async function runSeed(options: SeedOptions): Promise<SeedFileResult[]> {
     ])
   }
   if (reset && mode === 'check') throw new SeedError(['--reset cannot be combined with --check'])
+  const names = targets.map((t) => t.file.replace(/\.json$/, ''))
+  const unknownOnly = (options.only ?? []).filter((n) => !names.includes(n))
+  if (unknownOnly.length > 0)
+    throw new SeedError(
+      unknownOnly.map((n) => `--only ${n}: no such seed file (one of: ${names.join(', ')})`),
+    )
+  const writes = (target: SeedTarget) =>
+    !options.only || options.only.includes(target.file.replace(/\.json$/, ''))
 
   // 1. Every JSON file must belong to a registered target (no silently ignored files).
   const registered = new Set(targets.map((t) => t.file))
@@ -111,11 +125,13 @@ export async function runSeed(options: SeedOptions): Promise<SeedFileResult[]> {
 
   // 3. Write.
   if (reset) {
-    for (const target of [...targets].reverse()) await getCollection(target).deleteMany({})
+    for (const target of [...targets].reverse())
+      if (writes(target)) await getCollection(target).deleteMany({})
   }
 
   const results: SeedFileResult[] = []
   for (const { target, docs } of prepared) {
+    if (!writes(target)) continue
     if (!docs) {
       results.push(result(target.file, 'missing', 0))
       continue
