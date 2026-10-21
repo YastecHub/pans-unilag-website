@@ -1,24 +1,50 @@
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router'
 import { ButtonLink } from '../../../components/ui/Button.tsx'
 import { Card } from '../../../components/ui/Card.tsx'
 import { ChevronLeftIcon, ChevronRightIcon } from '../../../components/ui/icons.tsx'
-import { PlaceholderText } from '../../../components/ui/Placeholder.tsx'
+import { Img } from '../../../components/ui/Img.tsx'
+import { PlaceholderImage, PlaceholderText } from '../../../components/ui/Placeholder.tsx'
 import { Skeleton } from '../../../components/ui/Skeleton.tsx'
 import { EmptyState, ErrorState, LoadingState } from '../../../components/ui/States.tsx'
-import { type Executive, useExecutives } from '../../leadership/api/leadership.ts'
+import { type Executive, isStandInName, useExecutives } from '../../leadership/api/leadership.ts'
 import { HomeSection } from './HomeSection.tsx'
 
 export function LeadershipSection() {
   const query = useExecutives()
   const executives = query.data?.executives ?? []
   const scrollRef = useRef<HTMLUListElement>(null)
+  const [isPaused, setIsPaused] = useState(false)
 
   const scroll = (direction: 'left' | 'right') => {
     if (!scrollRef.current) return
-    const offset = direction === 'left' ? -320 : 320
-    scrollRef.current.scrollBy({ left: offset, behavior: 'smooth' })
+    const cardWidth = 340
+    const currentScroll = scrollRef.current.scrollLeft
+    const maxScroll = scrollRef.current.scrollWidth - scrollRef.current.clientWidth
+
+    if (direction === 'right') {
+      if (currentScroll >= maxScroll - 10) {
+        scrollRef.current.scrollTo({ left: 0, behavior: 'smooth' })
+      } else {
+        scrollRef.current.scrollBy({ left: cardWidth, behavior: 'smooth' })
+      }
+    } else {
+      if (currentScroll <= 10) {
+        scrollRef.current.scrollTo({ left: maxScroll, behavior: 'smooth' })
+      } else {
+        scrollRef.current.scrollBy({ left: -cardWidth, behavior: 'smooth' })
+      }
+    }
   }
+
+  // Auto-play moving carousel every 3.5 seconds when not paused
+  useEffect(() => {
+    if (isPaused || executives.length === 0) return
+    const interval = setInterval(() => {
+      scroll('right')
+    }, 3500)
+    return () => clearInterval(interval)
+  }, [isPaused, executives.length])
 
   return (
     <HomeSection
@@ -48,24 +74,35 @@ export function LeadershipSection() {
           className="bg-surface"
         />
       ) : (
-        <div className="relative flex flex-col gap-6">
-          <div className="flex items-center justify-end gap-2">
-            <button
-              type="button"
-              onClick={() => scroll('left')}
-              aria-label="Scroll left"
-              className="inline-flex size-10 items-center justify-center rounded-full border border-border bg-surface text-text hover:bg-surface-alt"
-            >
-              <ChevronLeftIcon className="size-5" />
-            </button>
-            <button
-              type="button"
-              onClick={() => scroll('right')}
-              aria-label="Scroll right"
-              className="inline-flex size-10 items-center justify-center rounded-full border border-border bg-surface text-text hover:bg-surface-alt"
-            >
-              <ChevronRightIcon className="size-5" />
-            </button>
+        <div
+          className="relative flex flex-col gap-6"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+          onFocus={() => setIsPaused(true)}
+          onBlur={() => setIsPaused(false)}
+        >
+          <div className="flex items-center justify-between">
+            <span className="text-small font-medium text-text-muted">
+              Auto-playing Executive Council • Hover to pause
+            </span>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => scroll('left')}
+                aria-label="Scroll left"
+                className="inline-flex size-10 items-center justify-center rounded-full border border-border bg-surface text-text hover:bg-surface-alt transition-colors"
+              >
+                <ChevronLeftIcon className="size-5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => scroll('right')}
+                aria-label="Scroll right"
+                className="inline-flex size-10 items-center justify-center rounded-full border border-border bg-surface text-text hover:bg-surface-alt transition-colors"
+              >
+                <ChevronRightIcon className="size-5" />
+              </button>
+            </div>
           </div>
 
           <ul
@@ -75,7 +112,7 @@ export function LeadershipSection() {
             tabIndex={0}
           >
             {executives.map((exec) => (
-              <li key={exec.office} className="w-[18rem] shrink-0 snap-start sm:w-[20rem]">
+              <li key={exec.office} className="w-[18rem] shrink-0 snap-start sm:w-[22rem]">
                 <LeadershipCard executive={exec} />
               </li>
             ))}
@@ -93,27 +130,44 @@ export function LeadershipSection() {
 }
 
 function LeadershipCard({ executive: e }: { executive: Executive }) {
+  const isStandIn = isStandInName(e)
   return (
-    <Card as="article" className="flex h-full flex-col justify-between bg-surface p-5 shadow-sm">
-      <div className="flex flex-col gap-2">
-        <span className="inline-block w-fit rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-          {e.office}
-        </span>
-        <h3 className="font-heading text-lg font-semibold text-text">
-          {e.name || <PlaceholderText>Name to be announced</PlaceholderText>}
-        </h3>
-        {e.level && <span className="text-small font-medium text-text-muted">{e.level}</span>}
-        {e.bio && <p className="line-clamp-3 text-small text-text-muted">{e.bio}</p>}
-      </div>
+    <Card as="article" className="flex h-full flex-col overflow-hidden bg-surface p-0 shadow-sm">
+      {e.photo !== undefined &&
+        (e.photo ? (
+          <Img publicId={e.photo} alt={`${e.name}, ${e.office}`} width={480} height={320} />
+        ) : (
+          <div className="p-3 pb-0">
+            <PlaceholderImage kind="person" />
+          </div>
+        ))}
+      <div className="flex flex-1 flex-col justify-between p-5 gap-3">
+        <div className="flex flex-col gap-2">
+          <span className="inline-block w-fit rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+            {e.office}
+          </span>
+          <h3 className="font-heading text-lg font-semibold text-text">
+            {isStandIn ? <PlaceholderText>{e.name}</PlaceholderText> : e.name}
+          </h3>
+          {e.level && <span className="text-small font-medium text-text-muted">{e.level}</span>}
+          {e.bio ? (
+            <p className="text-small text-text-muted leading-relaxed whitespace-pre-line">
+              {e.bio}
+            </p>
+          ) : (
+            <PlaceholderText>Bio coming soon</PlaceholderText>
+          )}
+        </div>
 
-      <div className="pt-4">
-        <Link
-          to="/leadership/executive-council"
-          className="inline-flex items-center gap-1.5 font-heading text-small font-semibold text-text-brand hover:underline"
-        >
-          Read more
-          <ChevronRightIcon className="size-3.5" />
-        </Link>
+        <div className="pt-2 border-t border-border">
+          <Link
+            to="/leadership/executive-council"
+            className="inline-flex items-center gap-1.5 font-heading text-small font-semibold text-text-brand hover:underline"
+          >
+            Read more
+            <ChevronRightIcon className="size-3.5" />
+          </Link>
+        </div>
       </div>
     </Card>
   )
