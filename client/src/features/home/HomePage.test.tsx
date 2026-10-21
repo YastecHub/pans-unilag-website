@@ -80,6 +80,13 @@ const API = {
         name: 'Owolabi Joshua',
         isPlaceholder: false,
       },
+      {
+        session: '2026/2027',
+        office: 'Treasurer',
+        order: 5,
+        name: 'Name to be announced',
+        isPlaceholder: true,
+      },
     ],
   },
   '/api/albums': {
@@ -162,6 +169,8 @@ describe('home page', () => {
     await userEvent.click(pause)
     expect(within(box).getByRole('button', { name: 'Play slideshow' })).toBeTruthy()
     expect(within(box).getByLabelText('1 of 1: President')).toBeTruthy()
+    // Offices still to be announced stay off the slider.
+    expect(within(box).queryByText('Treasurer')).toBeNull()
     // No photo yet: a placeholder holds its place until one is added in the dashboard.
     expect(
       within(box).getByRole('img', { name: 'Photo of Owolabi Joshua coming soon' }),
