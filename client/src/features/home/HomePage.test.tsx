@@ -1,4 +1,5 @@
 import { screen, within } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { apiError, jsonResponse, mockApi } from '../../test/mockApi.ts'
 import { renderRoute } from '../../test/renderRoute.tsx'
@@ -149,11 +150,22 @@ describe('home page', () => {
     const box = await section('PANS Leadership 26/27')
     expect(await within(box).findByText('Owolabi Joshua')).toBeTruthy()
     expect(within(box).getByText('President')).toBeTruthy()
-    expect(within(box).getByRole('link', { name: 'Read more' }).getAttribute('href')).toBe(
-      '/leadership/executive-council',
-    )
-    expect(within(box).getByRole('button', { name: 'Scroll left' })).toBeTruthy()
-    expect(within(box).getByRole('button', { name: 'Scroll right' })).toBeTruthy()
+    expect(
+      within(box)
+        .getByRole('link', { name: 'Read more about Owolabi Joshua' })
+        .getAttribute('href'),
+    ).toBe('/leadership/executive-council')
+    expect(within(box).getByRole('button', { name: 'Previous executive' })).toBeTruthy()
+    expect(within(box).getByRole('button', { name: 'Next executive' })).toBeTruthy()
+    // WCAG 2.2.2: anything that moves by itself can be paused.
+    const pause = within(box).getByRole('button', { name: 'Pause slideshow' })
+    await userEvent.click(pause)
+    expect(within(box).getByRole('button', { name: 'Play slideshow' })).toBeTruthy()
+    expect(within(box).getByLabelText('1 of 1: President')).toBeTruthy()
+    // No photo yet: a placeholder holds its place until one is added in the dashboard.
+    expect(
+      within(box).getByRole('img', { name: 'Photo of Owolabi Joshua coming soon' }),
+    ).toBeTruthy()
   })
 
   it('shows one gallery highlight per series, with photos still to come', async () => {

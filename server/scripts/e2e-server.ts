@@ -208,6 +208,12 @@ async function main() {
     }
     next()
   })
+  // Vercel Web Analytics (client/src/main.tsx): on Vercel the platform serves the script and
+  // takes the page views; here an empty script and a 204 stand in, so pages don't log errors.
+  site.use('/_vercel/insights', (req, res) => {
+    if (req.path === '/script.js') res.type('js').send('')
+    else res.status(204).end()
+  })
   // The API answers /api/* (its own 404s included); everything else is the site.
   site.use((req, res, next) => (req.path.startsWith('/api') ? api(req, res, next) : next()))
   // Text files gzipped, as Vercel's CDN does (it also offers brotli).

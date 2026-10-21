@@ -105,6 +105,30 @@ describe('runSeed', () => {
     expect(collection.docs.find((d) => d.slug === 'sdg')?.name).toBe('SDG Committee')
   })
 
+  it('--only writes just the named files, but still validates every file', async () => {
+    const other: SeedTarget = { file: 'boards.json', model: SeedCommittee, key: ['slug'] }
+    const boards = new FakeCollection()
+    await writeSeed('committees.json', committees)
+    await writeSeed('boards.json', [{ slug: 'board', name: 'A board', kind: 'board' }])
+    const run = (options: Partial<Parameters<typeof runSeed>[0]>) =>
+      seed({
+        targets: [target, other],
+        getCollection: (t) => (t === other ? boards : collection),
+        ...options,
+      })
+
+    const results = await run({ only: ['committees'] })
+    expect(results.map((r) => r.file)).toEqual(['committees.json'])
+    expect(collection.docs).toHaveLength(3)
+    expect(boards.docs).toHaveLength(0)
+
+    await writeSeed('boards.json', [{ slug: 'board' }]) // missing the required name
+    await expect(run({ only: ['committees'], mode: 'update' })).rejects.toThrow(/boards\.json/)
+    await expect(run({ only: ['commitees'] })).rejects.toThrow(
+      /--only commitees: no such seed file/,
+    )
+  })
+
   it('casts values with the schema: dates become Date objects and defaults are applied', async () => {
     await writeSeed('committees.json', committees)
     await seed()
