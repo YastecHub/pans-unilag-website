@@ -1,4 +1,4 @@
-import { screen, within } from '@testing-library/react'
+import { fireEvent, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { type Call, fakeApi, sent } from '../../../test/fakeAdminApi.ts'
@@ -129,7 +129,9 @@ describe('Executive Council', () => {
     renderRoute('/admin/executives/x1')
     expect(await screen.findByLabelText('Office')).toHaveProperty('value', 'President')
 
-    await user.type(screen.getByLabelText(/^Bio/), Array(201).fill('word').join(' '))
+    fireEvent.change(screen.getByLabelText(/^Bio/), {
+      target: { value: Array(201).fill('word').join(' ') },
+    })
     await save(user)
     expect(summary().getByText(/Keep the bio to 200 words or fewer \(it’s 201\)/)).toBeTruthy()
 
