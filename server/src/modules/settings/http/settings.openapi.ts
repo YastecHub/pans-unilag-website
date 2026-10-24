@@ -20,10 +20,10 @@ export const settingsSchema = z
     id: 'Settings',
     example: {
       postalAddress:
-        "c/o The Dean's Office, Faculty of Pharmacy, College of Medicine Campus, University of Lagos, P.M.B. 12003, Lagos",
+        'PANS UNILAG Secretariat, Faculty of Pharmacy, Lagos University Teaching Hospital, off Ishaga Road, Idi-Araba, Lagos',
       location:
         'Faculty of Pharmacy, Lagos University Teaching Hospital, off Ishaga Road, Idi-Araba, Lagos',
-      contactEmail: '',
+      contactEmail: 'pansunilag@gmail.com',
       socialLinks: [{ platform: 'Instagram', url: 'https://www.instagram.com/pans_unilag/' }],
       quickLinks: [],
       homeBanner: null,

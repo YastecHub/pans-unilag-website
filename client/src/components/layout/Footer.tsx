@@ -35,6 +35,18 @@ export function Footer() {
                 </span>
               ))}
             </address>
+            <p className="text-small">
+              Email:{' '}
+              <a href={`mailto:${SITE.email}`} className="text-white underline hover:text-accent">
+                {SITE.email}
+              </a>
+            </p>
+            <p className="text-small">
+              For sponsorship and partnership, write to{' '}
+              <a href={`mailto:${SITE.email}`} className="text-white underline hover:text-accent">
+                {SITE.email}
+              </a>.
+            </p>
             <p className="text-small">Correspondence goes to the Secretary General.</p>
           </div>
 

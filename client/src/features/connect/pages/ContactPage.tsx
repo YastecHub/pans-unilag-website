@@ -53,6 +53,15 @@ function ContactDetails() {
               <PlaceholderText>Official email address coming soon</PlaceholderText>
             )}
           </dd>
+          <dt className="font-heading font-medium text-text-muted">Sponsorship & Partnership</dt>
+          <dd>
+            For sponsorship and partnership, write to{' '}
+            {settings.contactEmail ? (
+              <a href={`mailto:${settings.contactEmail}`}>{settings.contactEmail}</a>
+            ) : (
+              <a href={`mailto:pansunilag@gmail.com`}>pansunilag@gmail.com</a>
+            )}
+          </dd>
           <dt className="font-heading font-medium text-text-muted">Messages</dt>
           <dd>
             Use the <Link to="/connect/feedback">feedback form</Link>. You can stay anonymous.
