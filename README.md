@@ -70,7 +70,7 @@ Photo sources (Google Drive folders for Pharmalympics 2026 and PANS Health Week 
 | Motto | **Service to Humanity** |
 | Members | **PANSites**: all duly registered students of the Faculty of Pharmacy |
 | Official language | English |
-| Postal address | c/o The Dean's Office, Faculty of Pharmacy, College of Medicine Campus, University of Lagos, P.M.B. 12003, Lagos |
+| Postal address | PANS UNILAG Secretariat, Faculty of Pharmacy, Lagos University Teaching Hospital, off Ishaga Road, Idi-Araba, Lagos |
 | Location | Faculty of Pharmacy, Lagos University Teaching Hospital, off Ishaga Road, Idi-Araba, Lagos |
 | Correspondence | Directed to the **Secretary General**, through the postal address above |
 | Instagram | [instagram.com/pans_unilag](https://www.instagram.com/pans_unilag/) |

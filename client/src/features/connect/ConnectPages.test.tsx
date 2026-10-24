@@ -210,20 +210,18 @@ describe('Contact', () => {
     })
     renderRoute('/connect/contact')
     expect(await screen.findByRole('heading', { level: 2, name: 'Postal address' })).toBeTruthy()
-    expect(within(main()).getByText(/P\.M\.B\. 12003, Lagos/)).toBeTruthy()
-    expect(within(main()).getByText(/Idi-Araba, Lagos/)).toBeTruthy()
+    expect(within(main()).getByText(/PANS UNILAG Secretariat/)).toBeTruthy()
+    expect(within(main()).getAllByText(/Idi-Araba, Lagos/).length).toBeGreaterThan(0)
     expect(
       within(main())
         .getByRole('link', { name: 'Get directions on Google Maps' })
         .getAttribute('href'),
     ).toMatch(/^https:\/\/www\.google\.com\/maps\/search\/\?api=1&query=Faculty%20of%20Pharmacy/)
-    expect(within(main()).getByText('Official email address coming soon')).toBeTruthy()
+    expect(within(main()).getAllByRole('link', { name: 'pansunilag@gmail.com' }).length).toBeGreaterThan(0)
     expect(
       within(main()).getByRole('link', { name: 'PANS UNILAG on Instagram (opens in a new tab)' }),
     ).toBeTruthy()
 
-    expect(main().querySelector('a[href^="mailto:"], a[href^="tel:"]')).toBeNull()
-    expect(main().textContent).not.toMatch(/[\w.+-]+@[\w-]+\.[\w.]+/)
     expect(main().textContent).not.toMatch(/(\+234|\b0[789][01])\d{8}/)
   })
 })

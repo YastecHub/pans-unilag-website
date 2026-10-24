@@ -22,7 +22,7 @@ export function useContactSettings(): Settings & { loaded: boolean } {
   return {
     postalAddress: SITE.postalAddress.join(', '),
     location: SITE.location,
-    contactEmail: '',
+    contactEmail: SITE.email,
     socialLinks: [...SITE.socialLinks],
     loaded: false,
   }

@@ -256,11 +256,10 @@ Announcements, opportunities and resources have no seed files: they start empty 
 [
   {
     "key": "site",
-    "postalAddress": "c/o The Dean's Office, Faculty of Pharmacy, College of Medicine Campus, University of Lagos, P.M.B. 12003, Lagos",
+    "postalAddress": "PANS UNILAG Secretariat, Faculty of Pharmacy, Lagos University Teaching Hospital, off Ishaga Road, Idi-Araba, Lagos",
     "socialLinks": [{ "platform": "Instagram", "url": "https://www.instagram.com/pans_unilag/" }],
-    "contactEmail": "",
-    "isPlaceholder": true,
-    "placeholderNote": "Official email address needed"
+    "contactEmail": "pansunilag@gmail.com",
+    "isPlaceholder": false
   }
 ]
 ```
