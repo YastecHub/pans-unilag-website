@@ -11,7 +11,7 @@ const executiveSchema = z
     order: z.number().int().meta({ description: 'Constitutional order (Art. 6), 1 = President' }),
     name: z.string().meta({ description: '"Name to be announced" while a placeholder' }),
     level: z.string().meta({ description: 'e.g. "400L"; empty if not given' }),
-    bio: z.string().meta({ description: 'Up to 200 words; empty until supplied' }),
+    bio: z.string().meta({ description: 'Up to 300 words; empty until supplied' }),
     photo: z.string().meta({ description: 'Cloudinary public id; empty until the official photo' }),
     roleEmail: z.string().meta({ description: 'Official role email; empty if none' }),
     ...placeholderShape,

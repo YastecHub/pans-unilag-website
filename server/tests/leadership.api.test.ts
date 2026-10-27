@@ -50,7 +50,7 @@ describe('GET /api/executives', () => {
     ])
   })
 
-  it('returns placeholders with their flag, note and empty optional fields', async () => {
+  it('returns each executive with empty optional fields filled in', async () => {
     const executives = (await get('/api/executives')).body.executives
     const president = executives[0]
     const treasurer = executives.find((e: { office: string }) => e.office === 'Treasurer')
@@ -60,13 +60,12 @@ describe('GET /api/executives', () => {
       session: '2026/2027',
       office: 'Treasurer',
       order: 5,
-      name: 'Name to be announced',
-      level: '',
-      bio: '',
+      name: 'Adeyeri Kehinde Precious',
+      level: '400L',
+      bio: expect.stringContaining('Treasurer of PANS UNILAG'),
       photo: '',
       roleEmail: '',
-      isPlaceholder: true,
-      placeholderNote: expect.stringContaining("President's Exco document"),
+      isPlaceholder: false,
     })
   })
 

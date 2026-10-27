@@ -130,10 +130,10 @@ describe('Executive Council', () => {
     expect(await screen.findByLabelText('Office')).toHaveProperty('value', 'President')
 
     fireEvent.change(screen.getByLabelText(/^Bio/), {
-      target: { value: Array(201).fill('word').join(' ') },
+      target: { value: Array(301).fill('word').join(' ') },
     })
     await save(user)
-    expect(summary().getByText(/Keep the bio to 200 words or fewer \(it’s 201\)/)).toBeTruthy()
+    expect(summary().getByText(/Keep the bio to 300 words or fewer \(it’s 301\)/)).toBeTruthy()
 
     await user.clear(screen.getByLabelText(/^Bio/))
     await user.type(screen.getByLabelText(/^Bio/), 'A 400L student and former Welfare Secretary.')

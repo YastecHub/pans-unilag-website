@@ -23,18 +23,18 @@ describe('leadership seed files', () => {
     expect(executives.map((e) => e.order)).toEqual(EXECUTIVE_OFFICES.map((_, i) => i + 1))
   })
 
-  it('names the 12 provided executives with bios; Treasurer and Financial Secretary remain placeholders', () => {
+  it('names all 14 executives of 2026/2027 with their bios', () => {
     expect(executives[0]).toMatchObject({
       office: 'President',
       name: 'Abigail Moejoh',
       isPlaceholder: false,
     })
-    const placeholders = executives.filter((e) => e.isPlaceholder === true)
-    expect(placeholders.map((e) => e.office)).toEqual(['Treasurer', 'Financial Secretary'])
-    expect(placeholders.every((e) => e.name === 'Name to be announced')).toBe(true)
-    const active = executives.filter((e) => e.isPlaceholder === false)
-    expect(active).toHaveLength(12)
-    expect(active.every((e) => typeof e.bio === 'string' && e.bio.length > 0)).toBe(true)
+    expect(executives.filter((e) => e.isPlaceholder === true)).toEqual([])
+    expect(executives).toHaveLength(14)
+    expect(executives.every((e) => typeof e.bio === 'string' && e.bio.length > 0)).toBe(true)
+    const name = (office: string) => executives.find((e) => e.office === office)?.name
+    expect(name('Treasurer')).toBe('Adeyeri Kehinde Precious')
+    expect(name('Financial Secretary')).toBe('Ogunyemi Oluwatofunmi Quayyum')
   })
 
   it('lists only the four principal officers of the Senate, pending election', () => {
@@ -64,7 +64,7 @@ describe('leadership models', () => {
   it.each([
     ['an office the constitution does not have', { office: 'Chairman' }, /office/],
     ['a malformed session', { session: '2026/2028' }, /session must look like/],
-    ['a bio longer than 200 words', { bio: 'word '.repeat(201) }, /200 words or fewer/],
+    ['a bio longer than 300 words', { bio: 'word '.repeat(301) }, /300 words or fewer/],
     [
       'a photo URL instead of a Cloudinary id',
       { photo: 'https://drive.google.com/x' },

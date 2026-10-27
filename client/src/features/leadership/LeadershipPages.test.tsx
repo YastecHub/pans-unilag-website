@@ -71,7 +71,18 @@ describe('Executive Council', () => {
   })
 
   it('shows a real name as a name, and stand-ins as clearly marked placeholders', async () => {
-    mockApi(API)
+    // Every office is filled in the seed now, so stand in a name for the Treasurer here.
+    mockApi({
+      ...API,
+      '/api/executives': {
+        ...API['/api/executives'],
+        executives: executives.map((e) =>
+          e.office === 'Treasurer'
+            ? { ...e, name: 'Name to be announced', bio: '', isPlaceholder: true }
+            : e,
+        ),
+      },
+    })
     renderRoute('/leadership/executive-council')
     const cards = await within(main()).findAllByRole('article')
     const president = cards[0]
