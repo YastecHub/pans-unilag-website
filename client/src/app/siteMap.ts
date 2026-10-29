@@ -1,3 +1,4 @@
+import { FEATURES } from '../lib/features.ts'
 /**
  * The site map from the README, in one place. The router, the desktop and mobile navigation
  * and the tests all read from here, so a page added here appears everywhere.
@@ -95,11 +96,15 @@ export const MAIN_NAV: NavSection[] = [
         to: '/connect/feedback',
         description: 'Write to the Secretary General',
       },
-      {
-        label: 'Resources',
-        to: '/academics/resources',
-        description: 'Vetted study resources by level',
-      },
+      ...(FEATURES.academicResources
+        ? [
+            {
+              label: 'Resources',
+              to: '/academics/resources',
+              description: 'Vetted study resources by level',
+            },
+          ]
+        : []),
     ],
   },
 ]
@@ -155,11 +160,15 @@ export const ALL_SECTIONS: NavSection[] = [
         to: '/academics/cgpa-calculator',
         description: 'Work out your GPA and CGPA',
       },
-      {
-        label: 'Resources',
-        to: '/academics/resources',
-        description: 'Vetted study resources by level',
-      },
+      ...(FEATURES.academicResources
+        ? [
+            {
+              label: 'Resources',
+              to: '/academics/resources',
+              description: 'Vetted study resources by level',
+            },
+          ]
+        : []),
       {
         label: 'Student support',
         to: '/academics/student-support',

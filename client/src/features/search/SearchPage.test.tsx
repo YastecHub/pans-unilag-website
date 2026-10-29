@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { apiError, jsonResponse, mockApi } from '../../test/mockApi.ts'
 import { renderRoute } from '../../test/renderRoute.tsx'
+import { FEATURES } from '../../lib/features.ts'
 import { groupHits, type SearchHit } from './api.ts'
 
 const HITS: SearchHit[] = [
@@ -120,18 +121,26 @@ describe('results page', () => {
       within(main())
         .getAllByRole('heading', { level: 2 })
         .map((h) => h.textContent),
-    ).toEqual(['Committees (1)', 'Events (2)', 'Academic resources (1)', 'What search covers'])
-    expect(within(main()).getByRole('status').textContent).toBe('4 results for “Pharmathon”')
+    ).toEqual(
+      FEATURES.academicResources
+        ? ['Committees (1)', 'Events (2)', 'Academic resources (1)', 'What search covers']
+        : ['Committees (1)', 'Events (2)', 'What search covers'],
+    )
+    expect(within(main()).getByRole('status').textContent).toBe(
+      `${FEATURES.academicResources ? 4 : 3} results for “Pharmathon”`,
+    )
     expect(
       within(committees.closest('section')!)
         .getByRole('link', { name: 'Research Club' })
         .getAttribute('href'),
     ).toBe('/leadership/committees/research-club')
-    const open = within(main()).getByRole('link', {
+    const open = within(main()).queryByRole('link', {
       name: 'Open Pharmathon judging guide (opens in a new tab)',
     })
-    expect(open.getAttribute('href')).toBe('https://example.org/guide')
-    expect(open.getAttribute('rel')).toBe('noopener noreferrer')
+    if (FEATURES.academicResources) {
+      expect(open?.getAttribute('href')).toBe('https://example.org/guide')
+      expect(open?.getAttribute('rel')).toBe('noopener noreferrer')
+    } else expect(open).toBeNull() // resources are off for launch
     expect(within(main()).getByRole('searchbox')).toHaveProperty('value', 'Pharmathon')
 
     const url = new URL(String(fetchMock.mock.calls[0]![0]), 'http://x')

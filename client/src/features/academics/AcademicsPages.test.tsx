@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { mockApi } from '../../test/mockApi.ts'
 import { renderRoute } from '../../test/renderRoute.tsx'
+import { FEATURES } from '../../lib/features.ts'
 import pagesJson from '../../../../server/seed/pages.json?raw'
 import { isAllowedLink, type Resource } from './resources/api.ts'
 
@@ -61,7 +62,8 @@ describe('links that may be listed', () => {
   })
 })
 
-describe('Academic resources', () => {
+// Off for launch (lib/features.ts): these run again when the page is switched back on.
+describe.skipIf(!FEATURES.academicResources)('Academic resources', () => {
   it('groups checked links by level and semester, and never lists a blocked or placeholder one', async () => {
     mockApi({ '/api/resources': { resources: RESOURCES } })
     renderRoute('/academics/resources')
@@ -124,6 +126,15 @@ describe('Academic resources', () => {
       await within(main()).findByText('500L resources coming soon, from the Academics Committee.'),
     ).toBeTruthy()
     expect(within(main()).getAllByRole('heading', { level: 2 })).toHaveLength(1)
+  })
+})
+
+describe.skipIf(FEATURES.academicResources)('Academic resources, switched off for launch', () => {
+  it('has no page and no menu link', async () => {
+    mockApi({})
+    renderRoute('/academics/resources')
+    expect(await screen.findByRole('heading', { level: 1, name: 'Page not found' })).toBeTruthy()
+    expect(screen.queryByRole('link', { name: /^Resources/ })).toBeNull()
   })
 })
 

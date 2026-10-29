@@ -1,3 +1,4 @@
+import { FEATURES } from '../../../lib/features.ts'
 import { gradingScales, resources } from './academics.ts'
 import { announcements } from './announcements.ts'
 import { committees } from './committees.ts'
@@ -25,7 +26,7 @@ export const EDITORS: ResourceConfig[] = [
   pages,
   documents,
   publications,
-  resources,
+  ...(FEATURES.academicResources ? [resources] : []),
   gradingScales,
   settings,
 ]

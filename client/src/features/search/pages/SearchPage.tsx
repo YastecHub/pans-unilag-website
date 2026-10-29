@@ -1,3 +1,4 @@
+import { FEATURES } from '../../../lib/features.ts'
 import { Link, useSearchParams } from 'react-router'
 import { Skeleton } from '../../../components/ui/Skeleton.tsx'
 import { EmptyState, ErrorState, LoadingState } from '../../../components/ui/States.tsx'
@@ -50,7 +51,10 @@ export function SearchPage() {
           action={<Link to="/">Go to the home page</Link>}
         />
       ) : (
-        <Results q={q} hits={query.data} />
+        <Results
+          q={q}
+          hits={query.data.filter((h) => FEATURES.academicResources || h.type !== 'resource')}
+        />
       )}
     </InnerPageLayout>
   )
@@ -110,8 +114,8 @@ function SearchTips() {
         What search covers
       </h2>
       <p className="text-small">
-        Events, open opportunities, publications, academic resources and committees. Pages still
-        waiting for their content aren’t included yet.
+        Events, open opportunities, publications and committees. Pages still waiting for their
+        content aren’t included yet.
       </p>
       <p className="text-small">
         Tip: press <kbd className="rounded border border-border-strong px-1">/</kbd> on any page to

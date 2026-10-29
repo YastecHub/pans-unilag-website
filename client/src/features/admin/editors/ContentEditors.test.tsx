@@ -2,6 +2,7 @@ import { fireEvent, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { type Call, fakeApi, sent } from '../../../test/fakeAdminApi.ts'
+import { FEATURES } from '../../../lib/features.ts'
 import { renderRoute } from '../../../test/renderRoute.tsx'
 import { EDITORS } from './editors.ts'
 import { currentSession, linesToList } from './types.ts'
@@ -62,7 +63,7 @@ describe('every placeholder can be filled from the dashboard', () => {
       'resources',
       'gradingscales',
       'settings',
-    ]
+    ].filter((c) => FEATURES.academicResources || c !== 'resources') // resources: off for launch
     // Every collection on the API's placeholder list has an editor.
     expect(EDITORS.map((e) => e.name).sort()).toEqual([...collections].sort())
     fakeApi((c) =>
@@ -463,7 +464,7 @@ describe('Gallery', () => {
   })
 })
 
-describe('Academics', () => {
+describe.skipIf(!FEATURES.academicResources)('Academics', () => {
   it('refuses a link to a piracy site and saves the course code in capitals', async () => {
     const user = userEvent.setup()
     const calls = fakeApi((c) =>
