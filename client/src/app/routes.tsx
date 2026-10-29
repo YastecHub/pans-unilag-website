@@ -1,3 +1,4 @@
+import { FEATURES } from '../lib/features.ts'
 import type { RouteObject } from 'react-router'
 import {
   HistoryPage,
@@ -75,7 +76,10 @@ export const routes: RouteObject[] = [
       { path: '/opportunities/:slug', element: <OpportunityPage /> },
       { path: '/publications', element: <PublicationsPage /> },
       { path: '/academics/cgpa-calculator', element: <CgpaCalculatorPage /> },
-      { path: '/academics/resources', element: <ResourcesPage /> },
+      // Off for launch (lib/features.ts): the address shows "Page not found".
+      ...(FEATURES.academicResources
+        ? [{ path: '/academics/resources', element: <ResourcesPage /> }]
+        : []),
       { path: '/academics/student-support', element: <StudentSupportPage /> },
       { path: '/connect/feedback', element: <FeedbackPage /> },
       { path: '/connect/alumni', element: <AlumniPage /> },
