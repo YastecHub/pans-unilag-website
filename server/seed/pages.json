@@ -5,29 +5,39 @@
     "order": 1,
     "sections": [
       {
+        "heading": "About PANS UNILAG",
+        "bodyMarkdown": "The **Pharmaceutical Association of Nigeria Students, University of Lagos (PANS UNILAG)** is the representative association of pharmacy students at the University of Lagos.\n\nGuided by our commitment to service, unity, academic excellence, and professional development, we provide a platform for students to learn, collaborate, build meaningful relationships, and prepare for the responsibilities of the pharmacy profession.\n\nOur activities and administration are guided by our Constitution, which establishes the principles, objectives, and governance structure of the Association.",
+        "articleRefs": []
+      },
+      {
         "heading": "Our name",
-        "bodyMarkdown": "The **Pharmaceutical Association of Nigeria Students, University of Lagos**, abbreviated **PANS UNILAG** and also cited as *the Association*.",
+        "bodyMarkdown": "Our official name is the **Pharmaceutical Association of Nigeria Students, University of Lagos**, abbreviated as **PANS UNILAG** and referred to in our Constitution as *the Association*.",
         "articleRefs": ["Art. 2 S.A"]
       },
       {
         "heading": "Our motto",
-        "bodyMarkdown": "**Service to Humanity**",
+        "bodyMarkdown": "**Service to Humanity**\n\nOur motto reflects the responsibility that comes with studying pharmacy: to develop the knowledge, character, and professional competence needed to serve individuals, communities, and society.",
         "articleRefs": ["Art. 2 S.B"]
       },
       {
-        "heading": "Preamble",
-        "bodyMarkdown": "The members of PANS, University of Lagos branch, resolved to establish an association that promotes unity and harmony among them, and to give themselves a constitution that promotes the good administration, management and conduct of activities and the welfare of all members, based on the principles of equity and justice.",
+        "heading": "Our foundation",
+        "bodyMarkdown": "PANS UNILAG was established on the principles of unity, harmony, equity, justice, and collective welfare. Our Constitution provides a framework for the effective administration of the Association, the conduct of its activities, and the protection of members' interests and rights.\n\nWe believe that a strong student community is built through mutual respect, active participation, responsible leadership, and a shared commitment to the advancement of pharmacy students.",
         "articleRefs": ["Preamble"]
       },
       {
         "heading": "Our objectives",
-        "bodyMarkdown": "- Provide a medium for the academic interaction of members.\n- Cater for the welfare and unity of all members, and defend their rights.\n- Provide a medium for the social interaction of members.\n- Provide a platform for co-operation between students and staff of the Faculty of Pharmacy and elsewhere.\n- Identify the Association and its members constructively and positively with other students' activities of the University of Lagos.\n- Serve as a forum for liaison with the PANS national body and other pharmaceutical associations in Nigeria and elsewhere.\n- Properly project the image of the pharmacy profession.\n- Power belongs to Congress, from which the Executive Council, the Senate and their agencies derive all their powers and authority.",
+        "bodyMarkdown": "PANS UNILAG is committed to the following objectives:\n\n- **Academic Development:** Providing opportunities for academic interaction, collaboration, and knowledge-sharing among members.\n- **Welfare and Unity:** Promoting the welfare of all members, fostering unity, and protecting their rights.\n- **Social Engagement:** Creating opportunities for social interaction, friendship, and a stronger sense of community.\n- **Institutional Collaboration:** Encouraging cooperation between pharmacy students, Faculty of Pharmacy staff, and other relevant individuals and institutions.\n- **University Engagement:** Promoting the constructive participation of the Association and its members in the wider activities of the University of Lagos.\n- **Professional Relations:** Maintaining connections with the national body of the Pharmaceutical Association of Nigeria Students (PANS) and other pharmaceutical associations in Nigeria and beyond.\n- **Professional Advocacy:** Promoting a positive image of the pharmacy profession and its contributions to healthcare and society.\n- **Democratic Governance:** Upholding the authority of Congress as the source from which the Executive Council, Senate, and their respective agencies derive their powers, in accordance with the Constitution.",
         "articleRefs": ["Art. 3"]
       },
       {
-        "heading": "About our constitution",
-        "bodyMarkdown": "- The Constitution is supreme and binds all pharmacy students of the University of Lagos. Any ruling or act inconsistent with it is void, except rules and provisions made by the University of Lagos authorities.\n- It is a written and flexible constitution, and may be amended as the Constitution provides.\n- Members' participation in the administration of the Association is ensured.\n- The Association does not favour or discriminate against any nationality, race, creed, religion, sex or ethnic group. Every member's rights are respected and protected.\n- The current Constitution was reviewed and adopted on 9 July 2026.",
+        "heading": "Our constitution",
+        "bodyMarkdown": "The Constitution of PANS UNILAG is the supreme governing document of the Association and is binding on pharmacy students at the University of Lagos, subject to the applicable rules and provisions of the University's authorities.\n\nIt reflects the values, establishes the framework for the administration of the Association, defines the responsibilities of its governing bodies, and provides for members' participation in its affairs.\n\nOur Constitution is written and amendable in accordance with its established procedures. It also upholds the principles of equity, inclusion, and non-discrimination, ensuring that no member is unfairly treated on the basis of nationality, race, creed, religion, sex, or ethnic group.\n\nWe are committed to respecting and protecting the rights of every member while promoting fairness, accountability, and responsible leadership.\n\nThe current Constitution was reviewed and adopted on 9 July 2026.",
         "articleRefs": ["Art. 1", "Art. 26"]
+      },
+      {
+        "heading": "Our commitment",
+        "bodyMarkdown": "At PANS UNILAG, we recognise that pharmacy education extends beyond the classroom. It involves developing the knowledge, skills, values, and sense of responsibility required to contribute meaningfully to healthcare.\n\nThrough academic engagement, welfare initiatives, professional development, collaboration, and service, we strive to build a united community of pharmacy students prepared to make a positive difference.",
+        "articleRefs": []
       }
     ]
   },
@@ -306,12 +316,12 @@
     "sections": [
       {
         "heading": "Postal address",
-        "bodyMarkdown": "PANS UNILAG Secretariat  \nFaculty of Pharmacy  \nLagos University Teaching Hospital  \noff Ishaga Road, Idi-Araba, Lagos",
+        "bodyMarkdown": "PANS UNILAG Secretariat  \nFaculty of Pharmacy  \nCollege of Medicine Campus, University of Lagos  \nP.M.B. 12003, Lagos",
         "articleRefs": ["Art. 2 S.C"]
       },
       {
         "heading": "Correspondence",
-        "bodyMarkdown": "All correspondence to the Association is directed to the **Secretary General** and channelled through this address.",
+        "bodyMarkdown": "For official enquiries, letters and other correspondence to the Association, please send them to the postal address above. They will be attended to by the **Secretary General**.",
         "articleRefs": ["Art. 2 S.C"]
       }
     ]

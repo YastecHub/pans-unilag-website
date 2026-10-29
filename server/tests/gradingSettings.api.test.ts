@@ -65,7 +65,7 @@ describe('GET /api/settings', () => {
     const res = await request(testApp()).get('/api/settings')
 
     expect(res.status).toBe(200)
-    expect(res.body.postalAddress).toMatch(/Idi-Araba, Lagos$/)
+    expect(res.body.postalAddress).toMatch(/P\.M\.B\. 12003, Lagos$/)
     expect(res.body.socialLinks.map((l: { platform: string }) => l.platform)).toEqual([
       'Instagram',
       'X',

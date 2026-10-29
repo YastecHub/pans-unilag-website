@@ -34,10 +34,16 @@ describe('seed/pages.json', () => {
     expect(text).not.toMatch(/Nigerian Students/)
   })
 
-  it('cites an article for every section', () => {
+  it('cites an article for every section that comes from the constitution', () => {
+    // The Association's own introduction and closing words on the About page aren't from the
+    // constitution, so they carry no article reference.
+    const ownWords = new Set(['who-we-are: About PANS UNILAG', 'who-we-are: Our commitment'])
     for (const page of pages) {
-      for (const section of page.sections)
-        expect(section.articleRefs.length, `${page.slug}: ${section.heading}`).toBeGreaterThan(0)
+      for (const section of page.sections) {
+        const name = `${page.slug}: ${section.heading}`
+        if (ownWords.has(name)) continue
+        expect(section.articleRefs.length, name).toBeGreaterThan(0)
+      }
     }
   })
 
