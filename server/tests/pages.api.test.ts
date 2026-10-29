@@ -36,8 +36,8 @@ describe('GET /api/pages/:slug', () => {
 
     expect(res.status).toBe(200)
     expect(res.body).toMatchObject({ slug: 'who-we-are', order: 1, isPlaceholder: false })
-    expect(res.body.sections).toHaveLength(5)
-    expect(res.body.sections[0]).toEqual({
+    expect(res.body.sections).toHaveLength(7)
+    expect(res.body.sections[1]).toEqual({
       heading: 'Our name',
       bodyMarkdown: expect.stringContaining('PANS UNILAG'),
       articleRefs: ['Art. 2 S.A'],

@@ -217,7 +217,9 @@ describe('Contact', () => {
         .getByRole('link', { name: 'Get directions on Google Maps' })
         .getAttribute('href'),
     ).toMatch(/^https:\/\/www\.google\.com\/maps\/search\/\?api=1&query=Faculty%20of%20Pharmacy/)
-    expect(within(main()).getAllByRole('link', { name: 'pansunilag@gmail.com' }).length).toBeGreaterThan(0)
+    expect(
+      within(main()).getAllByRole('link', { name: 'pansunilag@gmail.com' }).length,
+    ).toBeGreaterThan(0)
     expect(
       within(main()).getByRole('link', { name: 'PANS UNILAG on Instagram (opens in a new tab)' }),
     ).toBeTruthy()
@@ -234,14 +236,22 @@ describe('Privacy notice', () => {
         .getAllByRole('heading', { level: 2 })
         .map((h) => h.textContent),
     ).toEqual([
-      'Browsing the website',
+      'Browsing our website',
       'Feedback and suggestions',
       'Alumni network',
-      'Keeping it safe',
-      'Your rights',
+      'How we protect your information',
+      'Your information, your choice',
+      'Questions?',
     ])
-    expect(within(main()).getByText(/messages are deleted after 12 months/)).toBeTruthy()
-    expect(within(main()).getByText(/until you ask to be removed/)).toBeTruthy()
-    expect(within(main()).getByText(/the Alumni Network Committee and PANS admins/)).toBeTruthy()
+    expect(screen.getByRole('heading', { level: 1, name: 'Your data and privacy' })).toBeTruthy()
+    expect(
+      within(main()).getByText(/feedback submissions are deleted after 12 months/),
+    ).toBeTruthy()
+    expect(
+      within(main()).getByText(/until you request removal from the alumni network/),
+    ).toBeTruthy()
+    expect(
+      within(main()).getByText(/the Alumni Network Committee and authorised PANS/),
+    ).toBeTruthy()
   })
 })
