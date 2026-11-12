@@ -12,6 +12,8 @@ const PUBLIC_FILES = ['/', '/site.webmanifest', '/favicon.ico']
 /** Fonts for English text only; other scripts' subsets are saved when a page first uses them. */
 const LATIN_FONT = /-latin-\d+-normal-[\w-]+\.woff2$/
 const FONT = /\.(woff2?|ttf|otf)$/
+/** Executive Council portraits (features/leadership/executivePhotos.ts), about 370 KB together. */
+const NOT_OFFLINE = /\/exec-[\w-]+\.webp$/
 
 type OutputBundle = Rolldown.OutputBundle
 type Chunk = Rolldown.OutputChunk
@@ -34,7 +36,8 @@ export function precacheUrls(bundle: OutputBundle): string[] {
     const meta = chunk.viteMetadata
     for (const css of meta?.importedCss ?? []) files.add(css)
     for (const asset of meta?.importedAssets ?? [])
-      if (!FONT.test(asset) || LATIN_FONT.test(asset)) files.add(asset)
+      if ((!FONT.test(asset) || LATIN_FONT.test(asset)) && !NOT_OFFLINE.test(asset))
+        files.add(asset)
     for (const name of [...chunk.imports, ...chunk.dynamicImports]) visit(byName.get(name))
   }
   for (const chunk of chunks) if (chunk.isEntry) visit(chunk)

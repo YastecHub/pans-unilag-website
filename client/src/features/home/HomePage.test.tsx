@@ -171,10 +171,9 @@ describe('home page', () => {
     expect(within(box).getByLabelText('1 of 1: President')).toBeTruthy()
     // Offices still to be announced stay off the slider.
     expect(within(box).queryByText('Treasurer')).toBeNull()
-    // No photo yet: a placeholder holds its place until one is added in the dashboard.
-    expect(
-      within(box).getByRole('img', { name: 'Photo of Owolabi Joshua coming soon' }),
-    ).toBeTruthy()
+    // No uploaded photo: the official 2026/2027 portrait that ships with the site is shown.
+    const photo = within(box).getByRole('img', { name: 'Owolabi Joshua, President' })
+    expect(photo.getAttribute('src')).toMatch(/president.*\.webp/)
   })
 
   it('shows one gallery highlight per series, with photos still to come', async () => {
