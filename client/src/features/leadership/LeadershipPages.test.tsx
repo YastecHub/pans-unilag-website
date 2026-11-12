@@ -91,6 +91,10 @@ describe('Executive Council', () => {
     const presidentName = within(president!).getByRole('heading', { level: 3 })
     expect(presidentName.textContent).toBe('Abigail Moejoh')
     expect(presidentName.querySelector('.border-dashed')).toBeNull()
+    // No uploaded photo: the official portrait that ships with the site, plus the group photo.
+    const portrait = within(president!).getByRole('img', { name: 'Abigail Moejoh, President' })
+    expect(portrait.getAttribute('src')).toMatch(/president.*\.webp/)
+    expect(within(main()).getByText('Team Aurea: the 2026/2027 Executive Council.')).toBeTruthy()
 
     const standIn = within(treasurer!).getByText('Name to be announced')
     expect(standIn.className).toMatch(/border-dashed/)

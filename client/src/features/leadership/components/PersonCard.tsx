@@ -11,16 +11,28 @@ type Props = {
   level?: string
   /** Cloudinary id; undefined = this kind of person has no photos, "" = photo still to come. */
   photo?: string
+  /** A photo that ships with the site, used when no Cloudinary photo has been uploaded. */
+  photoSrc?: string
   children?: ReactNode
 }
 
 /** One officer: photo (or silhouette), role, name (or a clearly marked placeholder) and details. */
-export function PersonCard({ role, name, nameIsStandIn, level, photo, children }: Props) {
+export function PersonCard({ role, name, nameIsStandIn, level, photo, photoSrc, children }: Props) {
   return (
     <article className="flex h-full flex-col overflow-hidden rounded-xl border border-border bg-surface">
       {photo !== undefined &&
         (photo ? (
           <Img publicId={photo} alt={`${name}, ${role}`} width={480} height={360} />
+        ) : photoSrc ? (
+          <img
+            src={photoSrc}
+            alt={`${name}, ${role}`}
+            width={480}
+            height={360}
+            loading="lazy"
+            decoding="async"
+            className="aspect-[4/3] h-auto w-full object-cover"
+          />
         ) : (
           <div className="p-3 pb-0">
             <PlaceholderImage kind="person" />

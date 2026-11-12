@@ -8,6 +8,7 @@ import { PlaceholderImage, PlaceholderText } from '../../../components/ui/Placeh
 import { Skeleton } from '../../../components/ui/Skeleton.tsx'
 import { EmptyState, ErrorState, LoadingState } from '../../../components/ui/States.tsx'
 import { type Executive, isStandInName, useExecutives } from '../../leadership/api/leadership.ts'
+import { bundledExecutivePhoto } from '../../leadership/executivePhotos.ts'
 import { HomeSection } from './HomeSection.tsx'
 
 const GAP_PX = 20
@@ -204,6 +205,7 @@ export function LeadershipSection() {
 
 function LeadershipCard({ executive: e, isActive }: { executive: Executive; isActive: boolean }) {
   const isStandIn = isStandInName(e)
+  const bundled = e.isPlaceholder ? undefined : bundledExecutivePhoto(e.session, e.office)
 
   return (
     <Card
@@ -214,9 +216,19 @@ function LeadershipCard({ executive: e, isActive }: { executive: Executive; isAc
     >
       {/* Photo / Avatar Frame */}
       <div className="p-3 pb-0">
-        {/* The official photo once it's added in the dashboard; until then, a placeholder. */}
+        {/* A photo uploaded in the dashboard, else the one shipped with the site, else a placeholder. */}
         {e.photo ? (
           <Img publicId={e.photo} alt={`${e.name}, ${e.office}`} width={480} height={360} />
+        ) : bundled ? (
+          <img
+            src={bundled}
+            alt={`${e.name}, ${e.office}`}
+            width={480}
+            height={360}
+            loading="lazy"
+            decoding="async"
+            className="aspect-[4/3] h-auto w-full rounded-xl object-cover"
+          />
         ) : (
           <PlaceholderImage kind="person" label={`Photo of ${e.name} coming soon`} />
         )}

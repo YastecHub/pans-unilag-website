@@ -9,6 +9,7 @@ import { ArticleRefs } from '../../pages/components/ArticleRefs.tsx'
 import { InnerPageLayout } from '../../pages/components/InnerPageLayout.tsx'
 import { type Executive, isStandInName, useExecutives } from '../api/leadership.ts'
 import { dutiesFor } from '../components/duties.ts'
+import { bundledExecutivePhoto, bundledTeamPhoto } from '../executivePhotos.ts'
 import { PeopleGrid } from '../components/PeopleGrid.tsx'
 import { PersonCard } from '../components/PersonCard.tsx'
 
@@ -18,6 +19,7 @@ export function ExecutiveCouncilPage() {
   const duties = usePage('executive-council')
   const session = query.data?.session
   const title = session ? `Executive Council ${shortSession(session)}` : 'Executive Council'
+  const teamPhoto = session ? bundledTeamPhoto(session) : undefined
 
   return (
     <InnerPageLayout
@@ -41,13 +43,30 @@ export function ExecutiveCouncilPage() {
       ) : query.data.executives.length === 0 ? (
         <EmptyState title="The Executive Council for this session will be listed soon." />
       ) : (
-        <PeopleGrid>
-          {query.data.executives.map((e) => (
-            <li key={e.office}>
-              <ExecutiveCard executive={e} duties={duties.data?.sections ?? []} />
-            </li>
-          ))}
-        </PeopleGrid>
+        <>
+          {teamPhoto && (
+            <figure className="flex flex-col gap-2">
+              <img
+                src={teamPhoto}
+                alt={`The ${session} Executive Council together in a studio group photo`}
+                width={1600}
+                height={1280}
+                decoding="async"
+                className="h-auto w-full rounded-xl"
+              />
+              <figcaption className="text-small text-text-muted">
+                Team Aurea: the {session} Executive Council.
+              </figcaption>
+            </figure>
+          )}
+          <PeopleGrid>
+            {query.data.executives.map((e) => (
+              <li key={e.office}>
+                <ExecutiveCard executive={e} duties={duties.data?.sections ?? []} />
+              </li>
+            ))}
+          </PeopleGrid>
+        </>
       )}
     </InnerPageLayout>
   )
@@ -68,6 +87,8 @@ function ExecutiveCard({
       nameIsStandIn={isStandInName(e)}
       level={e.level}
       photo={e.photo}
+      // A stand-in name never gets the office holder's portrait.
+      photoSrc={e.isPlaceholder ? undefined : bundledExecutivePhoto(e.session, e.office)}
     >
       {e.bio ? (
         <p className="text-small text-text-muted leading-relaxed whitespace-pre-line">{e.bio}</p>
