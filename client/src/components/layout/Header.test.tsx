@@ -106,6 +106,26 @@ describe('mobile menu', () => {
     expect(document.activeElement).toBe(button)
   })
 
+  it('closes when tapping outside it, but not when tapping inside it', async () => {
+    const user = userEvent.setup()
+    renderRoute('/')
+    const button = await screen.findByRole('button', { name: 'Menu' })
+    await user.click(button)
+    const menu = screen.getByRole('navigation', { name: 'Main menu' })
+
+    // Opening a section inside the menu keeps it open.
+    await user.click(within(menu).getByRole('button', { name: 'Student Tools' }))
+    expect(screen.getByRole('navigation', { name: 'Main menu' })).toBeTruthy()
+
+    await user.click(document.getElementById('main')!)
+    expect(screen.queryByRole('navigation', { name: 'Main menu' })).toBeNull()
+    expect(button.getAttribute('aria-expanded')).toBe('false')
+
+    // The Menu button still opens it again.
+    await user.click(button)
+    expect(screen.getByRole('navigation', { name: 'Main menu' })).toBeTruthy()
+  })
+
   it('closes after choosing a page', async () => {
     const user = userEvent.setup()
     renderRoute('/')

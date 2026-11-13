@@ -25,6 +25,7 @@ export function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const menuButtonRef = useRef<HTMLButtonElement>(null)
+  const menuPanelRef = useRef<HTMLDivElement>(null)
   const searchButtonRef = useRef<HTMLButtonElement>(null)
   const searchInputRef = useRef<HTMLInputElement>(null)
   const { pathname } = useLocation()
@@ -60,6 +61,18 @@ export function Header() {
     document.addEventListener('keydown', onKey)
     return () => document.removeEventListener('keydown', onKey)
   })
+
+  // Tapping or clicking anywhere outside the open menu closes it (the Menu button toggles it itself).
+  useEffect(() => {
+    if (!menuOpen) return
+    const closeOnOutsidePointer = (event: PointerEvent) => {
+      const target = event.target as Node
+      if (menuPanelRef.current?.contains(target) || menuButtonRef.current?.contains(target)) return
+      setMenuOpen(false)
+    }
+    document.addEventListener('pointerdown', closeOnOutsidePointer)
+    return () => document.removeEventListener('pointerdown', closeOnOutsidePointer)
+  }, [menuOpen])
 
   const closeOnEscape = (event: KeyboardEvent) => {
     if (event.key !== 'Escape') return
@@ -130,7 +143,7 @@ export function Header() {
       )}
 
       {menuOpen && (
-        <div className="nav:hidden">
+        <div ref={menuPanelRef} className="nav:hidden">
           <MobileNav id={MOBILE_MENU_ID} onNavigate={() => setMenuOpen(false)} />
         </div>
       )}
