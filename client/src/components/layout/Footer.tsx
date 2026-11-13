@@ -6,6 +6,7 @@ import { Container } from './Container.tsx'
 const FOOTER_LINKS = [
   { label: 'Contact', to: '/connect/contact' },
   { label: 'Feedback', to: '/connect/feedback' },
+  { label: 'Alumni network', to: '/connect/alumni' },
   { label: 'Constitution', to: '/governance/constitution' },
   { label: 'Privacy notice', to: '/connect/privacy' },
 ]

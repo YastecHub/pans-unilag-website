@@ -18,6 +18,9 @@ import { firstSentence } from '../components/text.ts'
 const leadership = () => navSection('Leadership')
 const trail = [{ label: 'Committees', to: '/leadership/committees' }]
 
+/** The committee that runs the alumni network (/connect/alumni). */
+const ALUMNI_COMMITTEE = 'alumni-network'
+
 /** /leadership/committees/:slug: write-up, activities, highlights, plans, officers. */
 export function CommitteePage() {
   const { slug = '' } = useParams()
@@ -77,6 +80,17 @@ export function CommitteePage() {
           <ListBlock title="Highlights" items={c.achievements} />
           <ListBlock title="Looking ahead" items={c.plans} />
         </>
+      )}
+      {c.slug === ALUMNI_COMMITTEE && (
+        <Block title="Join the alumni network">
+          <p>
+            Graduated from the Faculty of Pharmacy? Share your details and the committee will get in
+            touch about how you’d like to stay involved.
+          </p>
+          <div>
+            <ButtonLink to="/connect/alumni">Join the alumni network</ButtonLink>
+          </div>
+        </Block>
       )}
       <Block title="Photos">
         <PlaceholderImage kind="badge" aspectRatio="16 / 7" label="Committee photos coming soon" />
