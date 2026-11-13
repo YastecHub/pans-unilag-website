@@ -10,6 +10,7 @@ import {
   type AdminResourceName,
   withPlaceholderRule,
 } from '../application/adminResources.js'
+import { alumniCsv, allAlumni } from '../application/alumniCsv.js'
 import { placeholderGroups, type PlaceholderSource } from '../application/placeholders.js'
 import type { FeedbackStatus, SubmissionAdminStore } from '../application/submissionsAdmin.js'
 
@@ -81,6 +82,14 @@ export function adminRouter({
 
   router.get('/submissions/alumni', validate({ query: pageQuerySchema }), async (req, res) => {
     res.json(await submissions.listAlumni(req.query as unknown as PageQuery))
+  })
+
+  router.get('/submissions/alumni.csv', async (_req, res) => {
+    const today = new Date().toISOString().slice(0, 10)
+    res
+      .type('text/csv; charset=utf-8')
+      .attachment(`pans-alumni-${today}.csv`)
+      .send(alumniCsv(await allAlumni(submissions)))
   })
 
   router.delete(

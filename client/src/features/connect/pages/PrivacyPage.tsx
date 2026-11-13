@@ -55,9 +55,9 @@ export function PrivacyPage() {
           </li>
           <li>
             <strong>Who can access it:</strong> the Secretary General receives submissions through
-            the administrative dashboard and may refer welfare-related concerns to the Welfare
-            Secretary or direct other matters to the relevant officers. Only authorised, signed-in
-            PANS administrators can access these messages.
+            the administrative dashboard and the official PANS UNILAG email inbox, and may refer
+            welfare-related concerns to the Welfare Secretary or direct other matters to the
+            relevant officers. Only authorised PANS administrators can access these messages.
           </li>
           <li>
             <strong>How long we keep it:</strong> feedback submissions are deleted after 12 months.
@@ -77,7 +77,8 @@ export function PrivacyPage() {
           </li>
           <li>
             <strong>Who can access it:</strong> the Alumni Network Committee and authorised PANS
-            administrators can view submissions through the administrative dashboard.
+            administrators can view submissions through the administrative dashboard and the
+            official PANS UNILAG email inbox.
           </li>
           <li>
             <strong>How long we keep it:</strong> we retain your information until you request

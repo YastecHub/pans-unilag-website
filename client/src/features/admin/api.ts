@@ -114,6 +114,19 @@ export type AlumnusRecord = {
   updatedAt: string
 }
 
+/** Every alumni sign-up as a spreadsheet (CSV): a plain link, so the browser downloads it. */
+export const ALUMNI_CSV_URL = '/api/admin/submissions/alumni.csv'
+
+/** Removes an alumni entry, for someone who asks to leave the network (the privacy notice). */
+export function useRemoveAlumnus() {
+  const client = useQueryClient()
+  return useMutation({
+    mutationFn: (id: string) =>
+      api.delete(`/api/admin/submissions/alumni/${encodeURIComponent(id)}`),
+    onSuccess: () => client.invalidateQueries({ queryKey: ['admin', 'alumni'] }),
+  })
+}
+
 export function useAlumni(page: number, enabled = true) {
   return useQuery({
     queryKey: ['admin', 'alumni', page],

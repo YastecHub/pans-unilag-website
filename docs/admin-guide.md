@@ -137,8 +137,15 @@ site shows it as **"Coming soon"** or **"To be announced"** instead of guessing.
   left an email. Filter them by **New**, **Read** or **Resolved**. The list is read-only: reply
   from the official PANS email, never a personal account. Messages are deleted automatically
   after 12 months.
-- **Alumni:** sign-ups for the alumni network, read-only. This is personal information: don't
-  copy or share it outside the executive team. If someone asks to be removed, tell the web lead.
+- **Alumni:** sign-ups for the alumni network. This is personal information: don't copy or share
+  it outside the executive team. **Download the list (spreadsheet)** gives the committee a copy
+  for Excel or Google Sheets; keep it private and delete old copies. If someone asks to leave the
+  network, click **Remove** on their row (it asks first, and can't be undone), and delete any
+  emails about them.
+- **Emails:** when email is set up (web lead, `docs/deployment.md`), the official PANS inbox gets
+  an email for every new feedback message and alumni sign-up. Reply to it to write back to the
+  person (anonymous feedback has no one to reply to). The dashboard stays the full record, and
+  feedback there is deleted after 12 months: delete the emails too once they're dealt with.
 - Accounts with the **editor** role can edit content but can't see Feedback or Alumni. Only the
   web lead's **developer** account sees **Accounts**.
 

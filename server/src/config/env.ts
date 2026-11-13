@@ -42,6 +42,32 @@ const envSchema = z.object({
   CLOUDINARY_CLOUD_NAME: z.string().optional(),
   CLOUDINARY_API_KEY: z.string().optional(),
   CLOUDINARY_API_SECRET: z.string().optional(),
+  /**
+   * Email to the PANS inbox about each new feedback message and alumni sign-up, sent through
+   * Gmail (both, or neither: no emails are sent then). The password is a Google app password.
+   */
+  GMAIL_USER: z.preprocess(
+    (value) => (value === '' ? undefined : value),
+    z.email('GMAIL_USER must be an email address').optional(),
+  ),
+  GMAIL_APP_PASSWORD: z.preprocess(
+    (value) => (typeof value === 'string' ? value.replace(/\s+/g, '') || undefined : value),
+    z
+      .string()
+      .length(16, 'GMAIL_APP_PASSWORD must be the 16-letter Google app password')
+      .optional(),
+  ),
+  /** Who gets the emails, comma-separated. Empty: GMAIL_USER itself. */
+  NOTIFY_EMAIL: z
+    .string()
+    .default('')
+    .transform((value) =>
+      value
+        .split(',')
+        .map((email) => email.trim())
+        .filter(Boolean),
+    )
+    .pipe(z.array(z.email('NOTIFY_EMAIL must be email addresses, comma-separated'))),
 })
 
 export type Env = z.infer<typeof envSchema>
