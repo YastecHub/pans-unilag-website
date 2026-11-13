@@ -181,6 +181,17 @@ describe('Committees', () => {
     renderRoute('/leadership/committees/media')
     expect(await screen.findByRole('heading', { level: 1, name: /Media Committee/ })).toBeTruthy()
     expect(screen.getByText(/showing workings/)).toBeTruthy()
+    // Only the Alumni Network Committee links to the alumni sign-up.
+    expect(screen.queryByRole('link', { name: 'Join the alumni network' })).toBeNull()
+  })
+
+  it('links the Alumni Network Committee to the alumni sign-up', async () => {
+    mockApi(API)
+    renderRoute('/leadership/committees/alumni-network')
+    await screen.findByRole('heading', { level: 1, name: /Alumni Network/ })
+    expect(
+      within(main()).getByRole('link', { name: 'Join the alumni network' }).getAttribute('href'),
+    ).toBe('/connect/alumni')
   })
 
   it('says when a committee does not exist', async () => {

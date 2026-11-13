@@ -120,6 +120,7 @@ describe('home page', () => {
       'PANS Leadership 26/27',
       'From the gallery',
       'Student tools',
+      'PANS alumni network',
     ])
   })
 
@@ -174,6 +175,20 @@ describe('home page', () => {
     // No uploaded photo: the official 2026/2027 portrait that ships with the site is shown.
     const photo = within(box).getByRole('img', { name: 'Owolabi Joshua, President' })
     expect(photo.getAttribute('src')).toMatch(/president.*\.webp/)
+  })
+
+  it('invites graduates to join the alumni network', async () => {
+    mockApi(API)
+    renderRoute('/')
+    const box = await section('PANS alumni network')
+    expect(
+      within(box).getByRole('link', { name: 'Join the alumni network' }).getAttribute('href'),
+    ).toBe('/connect/alumni')
+    expect(
+      within(box)
+        .getByRole('link', { name: 'About the Alumni Network Committee' })
+        .getAttribute('href'),
+    ).toBe('/leadership/committees/alumni-network')
   })
 
   it('shows one gallery highlight per series, with photos still to come', async () => {

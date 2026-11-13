@@ -175,5 +175,8 @@ describe('footer', () => {
     expect(footer.getByRole('link', { name: 'Privacy notice' }).getAttribute('href')).toBe(
       '/connect/privacy',
     )
+    expect(footer.getByRole('link', { name: 'Alumni network' }).getAttribute('href')).toBe(
+      '/connect/alumni',
+    )
   })
 })
