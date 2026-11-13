@@ -1,9 +1,13 @@
+import { useState } from 'react'
 import { Link, useSearchParams } from 'react-router'
 import { Badge } from '../../../components/ui/Badge.tsx'
+import { Button } from '../../../components/ui/Button.tsx'
 import { EmptyState } from '../../../components/ui/States.tsx'
 import { formatDate } from '../../../lib/dates.ts'
 import { usePageTitle } from '../../../lib/usePageTitle.ts'
 import {
+  ALUMNI_CSV_URL,
+  type AlumnusRecord,
   FEEDBACK_STATUSES,
   type FeedbackStatus,
   PAGE_SIZE,
@@ -12,6 +16,7 @@ import {
   useFeedback,
   useMe,
   usePlaceholders,
+  useRemoveAlumnus,
 } from '../api.ts'
 import { AdminQuery, Pager } from '../components/AdminQuery.tsx'
 import { ContentIndex } from '../editors/ContentIndex.tsx'
@@ -292,6 +297,7 @@ function AlumniList() {
   const [params] = useSearchParams()
   const page = pageNumber(params.get('page'))
   const query = useAlumni(page)
+  const [notice, setNotice] = useState('')
 
   return (
     <>
@@ -299,20 +305,33 @@ function AlumniList() {
         <h1 className="text-h2">Alumni network</h1>
         <p className="text-text-muted">
           Sign-ups from the alumni form, for the Alumni Network Committee. Personal details: don’t
-          share them outside the committee.
+          share them outside the committee. If someone asks to leave the network, remove them here.
         </p>
       </div>
+      <p role="status" className="font-medium">
+        {notice}
+      </p>
       <AdminQuery query={query} label="alumni">
         {(data) =>
           data.items.length === 0 ? (
             <EmptyState title="No alumni have signed up yet." />
           ) : (
             <>
-              <p role="status">
-                {data.total} {data.total === 1 ? 'person' : 'people'}
-              </p>
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <p>
+                  {data.total} {data.total === 1 ? 'person' : 'people'}
+                </p>
+                {/* A plain link: the browser downloads the file with the session cookie. */}
+                <a
+                  href={ALUMNI_CSV_URL}
+                  download
+                  className="inline-flex min-h-11 items-center rounded-lg border-2 border-primary px-4 font-heading font-medium text-text-brand no-underline hover:bg-surface-alt"
+                >
+                  Download the list (spreadsheet)
+                </a>
+              </div>
               <div className="overflow-x-auto rounded-xl border border-border">
-                <table className="w-full min-w-[44rem] border-collapse text-left text-small">
+                <table className="w-full min-w-[52rem] border-collapse text-left text-small">
                   <caption className="sr-only">Alumni network sign-ups</caption>
                   <thead className="bg-surface-alt">
                     <tr>
@@ -323,6 +342,7 @@ function AlumniList() {
                         'Phone',
                         'Interested in',
                         'Consent given',
+                        'Actions',
                       ].map((h) => (
                         <th key={h} scope="col" className="p-3 font-heading font-medium">
                           {h}
@@ -347,6 +367,9 @@ function AlumniList() {
                         <td className="p-3">
                           <time dateTime={a.consentAt}>{formatDate(a.consentAt)}</time>
                         </td>
+                        <td className="p-3">
+                          <RemoveAlumnus alumnus={a} onRemoved={setNotice} />
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -363,6 +386,52 @@ function AlumniList() {
         }
       </AdminQuery>
     </>
+  )
+}
+
+/** Remove, after a confirmation: there's no undo. */
+function RemoveAlumnus({
+  alumnus: a,
+  onRemoved,
+}: {
+  alumnus: AlumnusRecord
+  onRemoved: (message: string) => void
+}) {
+  const remove = useRemoveAlumnus()
+  const [asking, setAsking] = useState(false)
+  if (!asking)
+    return (
+      <Button
+        size="sm"
+        variant="ghost"
+        aria-label={`Remove ${a.name}`}
+        onClick={() => setAsking(true)}
+      >
+        Remove
+      </Button>
+    )
+  return (
+    <div role="group" aria-label={`Remove ${a.name}`} className="flex flex-col gap-2">
+      <p>Remove {a.name} from the alumni network? This can’t be undone.</p>
+      {remove.isError && (
+        <p role="alert" className="font-medium text-danger">
+          That didn’t work. Please try again.
+        </p>
+      )}
+      <div className="flex flex-wrap gap-2">
+        <Button
+          size="sm"
+          variant="danger"
+          loading={remove.isPending}
+          onClick={() => remove.mutate(a.id, { onSuccess: () => onRemoved(`Removed ${a.name}.`) })}
+        >
+          Yes, remove
+        </Button>
+        <Button size="sm" variant="ghost" onClick={() => setAsking(false)}>
+          Cancel
+        </Button>
+      </div>
+    </div>
   )
 }
 

@@ -107,6 +107,8 @@ function adminApi({ signedIn = false, role = 'admin' } = {}) {
     '/api/admin/submissions/feedback': () =>
       session ? jsonResponse(200, FEEDBACK) : unauthorized(),
     '/api/admin/submissions/alumni': () => (session ? jsonResponse(200, ALUMNI) : unauthorized()),
+    '/api/admin/submissions/alumni/al1': () =>
+      session ? new Response(null, { status: 204 }) : unauthorized(),
   })
 }
 
@@ -275,7 +277,7 @@ describe('the dashboard', () => {
     const router = renderRoute('/admin/feedback')
     await screen.findByRole('heading', { level: 1, name: 'Feedback' })
     const main = () => document.getElementById('main')!
-    const items = await within(main()).findAllByRole('article')
+    const items = await within(document.getElementById('main')!).findAllByRole('article')
     expect(items).toHaveLength(2)
     expect(within(items[0]!).getByText('Anonymous · For the Welfare Secretary')).toBeTruthy()
     expect(
@@ -301,6 +303,32 @@ describe('the dashboard', () => {
     expect(row.textContent).toContain('2019')
     expect(row.textContent).toContain('Mentoring, Internships & jobs')
     expect(row.textContent).toContain('15 Oct 2026')
+    expect(
+      within(document.getElementById('main')!)
+        .getByRole('link', { name: 'Download the list (spreadsheet)' })
+        .getAttribute('href'),
+    ).toBe('/api/admin/submissions/alumni.csv')
+  })
+
+  it('removes an alumnus only after asking', async () => {
+    const user = userEvent.setup()
+    const fetchMock = adminApi({ signedIn: true })
+    renderRoute('/admin/alumni')
+    await screen.findByRole('table', { name: 'Alumni network sign-ups' })
+    const removed = () =>
+      calls(fetchMock).filter(
+        (c) => c.method === 'DELETE' && c.path === '/api/admin/submissions/alumni/al1',
+      )
+
+    await user.click(screen.getByRole('button', { name: 'Remove Bola Ade' }))
+    expect(screen.getByText(/This can’t be undone/)).toBeTruthy()
+    await user.click(screen.getByRole('button', { name: 'Cancel' }))
+    expect(removed()).toHaveLength(0)
+
+    await user.click(screen.getByRole('button', { name: 'Remove Bola Ade' }))
+    await user.click(screen.getByRole('button', { name: 'Yes, remove' }))
+    expect(await screen.findByText('Removed Bola Ade.')).toBeTruthy()
+    expect(removed()).toHaveLength(1)
   })
 
   it('signs out and forgets the session', async () => {

@@ -65,11 +65,21 @@ Sign in to the PANS Cloudinary account. On the dashboard, note the **cloud name*
    | `CLOUDINARY_API_SECRET` | from step 2 | **yes** |
    | `VITE_CLOUDINARY_CLOUD_NAME` | the same cloud name (the browser builds image links with it) | no |
    | `VITE_SITE_URL` | optional: leave unset until there's a custom domain | no |
+   | `GMAIL_USER` | optional: the Gmail account that emails the PANS inbox about new feedback and alumni sign-ups, e.g. `pansunilag@gmail.com` | no |
+   | `GMAIL_APP_PASSWORD` | a Google **app password** for that account (see below), never its normal password | **yes** |
+   | `NOTIFY_EMAIL` | optional: who gets the emails, comma-separated; empty sends them to `GMAIL_USER` | no |
 
    Don't set `NODE_ENV`: on Vercel the API always runs in production mode, and `NODE_ENV=production`
    during the build makes `npm ci` skip the build tools, so the build fails. `VITE_API_URL` stays
    unset: the site calls `/api` on its own address. Without `VITE_SITE_URL`,
    the build uses Vercel's production address for link previews, `robots.txt` and `sitemap.xml`.
+
+   **Email about new submissions** (optional; both Gmail variables, or neither). Signed in to the
+   PANS Gmail account: Google Account → **Security** → turn on **2-Step Verification**, then
+   **App passwords** → create one named "PANS website" and paste the 16 letters into
+   `GMAIL_APP_PASSWORD`. Changing the account's password cancels app passwords; make a new one
+   then. Redeploy after adding them. If sending fails, the form still saves the entry and the
+   function log says why.
 
 5. **Deploy.** The build runs `npm ci`, compiles the server to `server/dist` and builds the client.
 6. Open `https://<project>.vercel.app/api/health`. It should say `"status":"ok","db":"connected"`.

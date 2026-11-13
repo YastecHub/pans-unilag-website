@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest'
 import { createApp } from '../src/app.js'
 import { buildOpenApiDocument } from '../src/docs/openapi.js'
 import { SESSION_COOKIE } from '../src/middleware/requireAdmin.js'
+import { csvCell } from '../src/modules/admin/application/alumniCsv.js'
 import type { PlaceholderSource } from '../src/modules/admin/application/placeholders.js'
 import type {
   AlumnusRecord,
@@ -162,6 +163,7 @@ describe('every admin route requires sign-in', () => {
       ['get', '/api/admin/submissions/feedback'],
       ['patch', '/api/admin/submissions/feedback/f1'],
       ['get', '/api/admin/submissions/alumni'],
+      ['get', '/api/admin/submissions/alumni.csv'],
       ['delete', '/api/admin/submissions/alumni/a1'],
     ]
     for (const [method, path] of routes) {
@@ -359,6 +361,7 @@ describe('submissions', () => {
       await editor.get('/api/admin/submissions/feedback'),
       await editor.patch('/api/admin/submissions/feedback/f1', { status: 'resolved' }),
       await editor.get('/api/admin/submissions/alumni'),
+      await editor.get('/api/admin/submissions/alumni.csv'),
       await editor.del('/api/admin/submissions/alumni/a1'),
     ]) {
       expect(res.status).toBe(403)
@@ -398,6 +401,45 @@ describe('submissions', () => {
     expect((await as.del('/api/admin/submissions/alumni/a1')).status).toBe(204)
     expect(alumni).toEqual([])
     expect((await as.del('/api/admin/submissions/alumni/a1')).status).toBe(404)
+  })
+
+  it('downloads every alumni entry as a spreadsheet', async () => {
+    const { app, alumni } = setup()
+    alumni[0] = {
+      ...alumni[0]!,
+      name: 'Ada "AJ" Okafor',
+      phone: '+234 801 234 5678',
+      interests: ['mentoring', 'events'],
+      consentAt: '2026-11-13T09:00:00.000Z',
+      createdAt: '2026-11-13T09:00:00.000Z',
+    }
+    const as = await signedIn(app, 'ad1')
+    const res = await as.get('/api/admin/submissions/alumni.csv')
+
+    expect(res.status).toBe(200)
+    expect(res.headers['content-type']).toMatch(/^text\/csv/)
+    expect(res.headers['content-disposition']).toMatch(
+      /attachment; filename="?pans-alumni-\d{4}-\d\d-\d\d\.csv/,
+    )
+    expect(res.headers['cache-control']).toBe('no-store')
+    const [header, row] = res.text
+      .replace(/^\uFEFF/, '')
+      .trim()
+      .split('\r\n')
+    expect(header).toBe('Name,Graduated,Email,Phone,Interested in,Consent given,Signed up')
+    expect(row).toBe(
+      '"Ada ""AJ"" Okafor",2019,ada@example.com,\'+234 801 234 5678,Mentoring students; Coming to events,2026-11-13,2026-11-13',
+    )
+  })
+})
+
+describe('spreadsheet cells', () => {
+  it('can never run as a formula', () => {
+    expect(csvCell('=HYPERLINK("http://evil")')).toBe('"\'=HYPERLINK(""http://evil"")"')
+    expect(csvCell('@SUM(A1)')).toBe("'@SUM(A1)")
+    expect(csvCell('-1+2')).toBe("'-1+2")
+    expect(csvCell('Ada, Lagos')).toBe('"Ada, Lagos"')
+    expect(csvCell(2019)).toBe('2019')
   })
 })
 

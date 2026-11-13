@@ -156,6 +156,17 @@ export const adminPaths: ZodOpenApiPathsObject = {
       responses: { '200': json(page(anyRecord), 'One page'), ...errors.badRequest, ...signedIn },
     },
   },
+  '/api/admin/submissions/alumni.csv': {
+    get: {
+      tags,
+      operationId: 'adminDownloadAlumni',
+      summary: 'Every alumni sign-up as a spreadsheet (CSV), newest first',
+      responses: {
+        '200': { description: 'CSV file', content: { 'text/csv': { schema: { type: 'string' } } } },
+        ...signedIn,
+      },
+    },
+  },
   '/api/admin/submissions/alumni/{id}': {
     delete: {
       tags,

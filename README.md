@@ -823,7 +823,7 @@ The API needs a `MONGODB_URI` in `server/.env` (a free personal Atlas cluster or
 
 ## Environment variables
 
-**`server/.env`:** `NODE_ENV`, `PORT`, `MONGODB_URI` (secret), `CLIENT_ORIGIN`, `API_DOCS_ENABLED` (optional; docs default on outside production), `JWT_SECRET` (secret), `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` (secret).
+**`server/.env`:** `NODE_ENV`, `PORT`, `MONGODB_URI` (secret), `CLIENT_ORIGIN`, `API_DOCS_ENABLED` (optional; docs default on outside production), `JWT_SECRET` (secret), `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` (secret), `GMAIL_USER`, `GMAIL_APP_PASSWORD` (secret) and `NOTIFY_EMAIL` (optional; email the PANS inbox about new feedback and alumni sign-ups).
 
 **`client/.env`** (all public): `VITE_API_URL`, `VITE_CLOUDINARY_CLOUD_NAME`, `VITE_SITE_URL`.
 

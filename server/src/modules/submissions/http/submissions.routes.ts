@@ -1,6 +1,7 @@
 import { type RequestHandler, Router } from 'express'
 import { createRateLimiter, type RateLimitStores } from '../../../middleware/rateLimit.js'
 import { validate } from '../../../middleware/validate.js'
+import { noNotifier, type SubmissionNotifier } from '../application/notifications.js'
 import {
   type AlumniInput,
   alumniInputSchema,
@@ -22,13 +23,15 @@ const RECEIVED = { received: true } as const
 
 /**
  * POST /api/feedback and POST /api/alumni. Documented in submissions.openapi.ts.
- * Nothing submitted is ever returned by a public endpoint; admins read it after sign-in.
+ * Nothing submitted is ever returned by a public endpoint; admins read it after sign-in, and the
+ * PANS inbox gets an email about each new entry when email is set up (`notify`).
  */
 export function submissionsRouter(
   store: SubmissionStore,
   now: () => Date,
   rateLimit: FormRateLimit = DEFAULT_FORM_RATE_LIMIT,
   rateLimitStores?: RateLimitStores,
+  notify: SubmissionNotifier = noNotifier,
 ): Router {
   const router = Router()
   const noStore: RequestHandler = (_req, res, next) => {
@@ -43,7 +46,11 @@ export function submissionsRouter(
     validate({ body: feedbackInputSchema }),
     async (req, res) => {
       const input = req.body as FeedbackInput
-      if (!isBot(input)) await store.saveFeedback(toNewFeedback(input))
+      if (!isBot(input)) {
+        const feedback = toNewFeedback(input)
+        await store.saveFeedback(feedback)
+        await notify.feedback(feedback)
+      }
       res.status(201).json(RECEIVED)
     },
   )
@@ -56,7 +63,11 @@ export function submissionsRouter(
     (req, res, next) => validate({ body: alumniInputSchema(now().getFullYear()) })(req, res, next),
     async (req, res) => {
       const input = req.body as AlumniInput
-      if (!isBot(input)) await store.saveAlumnus(toNewAlumnus(input, now()))
+      if (!isBot(input)) {
+        const alumnus = toNewAlumnus(input, now())
+        await store.saveAlumnus(alumnus)
+        await notify.alumnus(alumnus)
+      }
       res.status(201).json(RECEIVED)
     },
   )
