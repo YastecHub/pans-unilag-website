@@ -5,6 +5,7 @@ import { buildOpenApiDocument } from '../src/docs/openapi.js'
 import { DEVELOPER_ACCOUNTS_MESSAGE } from '../src/modules/auth/application/accounts.js'
 import { ADMIN_ROLES, hasRole } from '../src/modules/auth/application/adminView.js'
 import { hashPassword, verifyPassword } from '../src/modules/auth/application/passwords.js'
+import type { EmailTest } from '../src/modules/submissions/application/notifications.js'
 import { ALLOWED_ORIGIN } from './helpers.js'
 import { type AccountRow, memoryAccounts } from './memoryAccounts.js'
 
@@ -17,7 +18,7 @@ beforeAll(async () => {
   hash = await hashPassword(PASSWORD)
 })
 
-function setup() {
+function setup(emailTest?: EmailTest) {
   const row = (id: string, role: AccountRow['role'], name: string): AccountRow => ({
     id,
     name,
@@ -37,6 +38,7 @@ function setup() {
     clientOrigins: [ALLOWED_ORIGIN],
     isProduction: false,
     now: () => T0,
+    emailTest,
     auth: {
       jwtSecret: SECRET,
       admins: store.admins,
@@ -208,6 +210,44 @@ describe('changing an account', () => {
     expect(
       (await dev.send('patch', '/api/admin/accounts/admin1', { role: 'developer' })).status,
     ).toBe(400)
+  })
+})
+
+describe('test email', () => {
+  const to = ['pans@example.com']
+
+  it('is for developers only', async () => {
+    const { app, as } = setup()
+    expect((await request(app).post('/api/admin/email-test')).status).toBe(401)
+    expect(
+      (await (await as('admin1@example.com')).send('post', '/api/admin/email-test')).status,
+    ).toBe(403)
+  })
+
+  it('says when email is not set up, when it sent, and why it failed', async () => {
+    const off = await (await setup().as('dev1@example.com')).send('post', '/api/admin/email-test')
+    expect(off.body).toEqual({ configured: false })
+
+    const sent: string[] = []
+    const good = setup({ to, send: async (e) => void sent.push(e.subject) })
+    const ok = await (await good.as('dev1@example.com')).send('post', '/api/admin/email-test')
+    expect(ok.body).toEqual({ configured: true, ok: true, to })
+    expect(sent).toEqual(['Test email from the PANS UNILAG website'])
+
+    const bad = setup({
+      to,
+      send: async () => {
+        throw new Error('Invalid login: 535 Username and Password not accepted')
+      },
+    })
+    const failed = await (await bad.as('dev1@example.com')).send('post', '/api/admin/email-test')
+    expect(failed.status).toBe(200)
+    expect(failed.body).toEqual({
+      configured: true,
+      ok: false,
+      to,
+      error: 'Invalid login: 535 Username and Password not accepted',
+    })
   })
 })
 

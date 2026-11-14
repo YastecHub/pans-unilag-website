@@ -9,6 +9,7 @@ import {
   type ManagedRole,
   useAccounts,
   useCreateAccount,
+  useEmailTest,
   useRemoveAccount,
   useResetAccountPassword,
   useSetAccountRole,
@@ -96,6 +97,8 @@ function Accounts() {
           setRevealed({ ...created, action: 'created' })
         }}
       />
+
+      <EmailAlerts />
     </>
   )
 }
@@ -317,6 +320,54 @@ function AccountList({
         </table>
       </div>
     </>
+  )
+}
+
+/** Checks the emails about new feedback and alumni sign-ups, and shows the mail server's answer. */
+function EmailAlerts() {
+  const test = useEmailTest()
+  const result = test.data
+  return (
+    <section aria-labelledby="email-alerts-title" className="flex max-w-3xl flex-col gap-3">
+      <h2 id="email-alerts-title" className="text-[1.25rem]">
+        Email alerts
+      </h2>
+      <p className="text-small text-text-muted">
+        The PANS inbox gets an email for every new feedback message and alumni sign-up. Send a test
+        to check it’s working.
+      </p>
+      <div>
+        <Button variant="secondary" loading={test.isPending} onClick={() => test.mutate()}>
+          Send a test email
+        </Button>
+      </div>
+      <div role="status" className="flex flex-col gap-1">
+        {test.isError && (
+          <p className="font-medium text-danger">The test couldn’t be run. Please try again.</p>
+        )}
+        {result && !result.configured && (
+          <p className="font-medium text-danger">
+            Email isn’t set up on the live site: GMAIL_USER and GMAIL_APP_PASSWORD are missing. Add
+            them in the host’s settings for Production, then redeploy.
+          </p>
+        )}
+        {result?.configured && result.ok && (
+          <p className="font-medium">
+            Sent to {result.to.join(', ')}. Check that inbox, and its Spam folder.
+          </p>
+        )}
+        {result?.configured && !result.ok && (
+          <>
+            <p className="font-medium text-danger">
+              The email to {result.to.join(', ')} wasn’t sent. The mail server said:
+            </p>
+            <code className="rounded-md bg-surface-alt px-3 py-2 text-small break-words">
+              {result.error}
+            </code>
+          </>
+        )}
+      </div>
+    </section>
   )
 }
 
