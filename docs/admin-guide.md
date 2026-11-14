@@ -7,8 +7,11 @@ dashboard, except the few jobs marked **web lead**.
 ## 1. Signing in
 
 - Go to the website's address with **/admin** at the end (for example `…/admin`).
-- Sign in with the email and password the web lead gave you. There is no sign-up page: accounts
-  are only created by the web lead (section 9).
+- **First time?** Click **Request access** on the sign-in page, enter your name and email and
+  choose a password (at least 12 characters, not one you use elsewhere). You can sign in once the
+  web lead approves your request (section 9).
+- After that, sign in with your email and your password. Click the eye in the password box to
+  check what you typed.
 - You stay signed in for **8 hours**. On a shared or faculty computer, always click **Sign out**
   (top right) when you finish.
 - After too many wrong passwords the sign-in form makes you wait about 15 minutes. If you've
@@ -166,12 +169,16 @@ write-ups for past events, and go through the Placeholders list.
 
 ## 9. Jobs for the web lead
 
-- **Creating and removing admins** (there is no sign-up page). Sign in with your **developer**
-  account and open **Accounts**: **Add someone** (name, office email, Admin or Editor), **New
-  password** for someone who's forgotten theirs, the **Role** list, or **Remove**. A new password
-  is shown once on screen: give it to the person privately, not in a group chat, and ask them to
-  keep it in a password manager. A new password or removal signs the person out at once. Keep at
-  least two admins at all times.
+- **Letting people in.** People ask for access themselves on the sign-in page (**Request
+  access**) and choose their own password. Sign in with your **developer** account: the overview
+  says when someone is waiting. Open **Accounts**, and under **Waiting for your approval** choose
+  **Editor** or **Admin** and click **Approve**, or **Decline**. Approve only people you know are
+  on the team: check the name and the email address, and ask them in person if unsure. Nobody is
+  told automatically, so let them know once they're approved.
+- **Other account jobs**, also under **Accounts**: **Add someone** yourself (a password is made
+  and shown once: give it to them privately), **New password** for someone who's forgotten
+  theirs, the **Role** list, or **Remove**. A new password or removal signs the person out at
+  once. Keep at least two admins at all times.
 - **Developer accounts** (yours, and a second for whoever takes over) can't be changed from the
   dashboard. Create, reset or remove them from the project folder, with the live database
   settings in `server/.env` (the same commands also work for admins and editors if the dashboard

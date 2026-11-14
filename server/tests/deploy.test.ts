@@ -172,7 +172,7 @@ describe('shared rate limits (one count across every instance)', () => {
       },
       auth: { jwtSecret: 'x'.repeat(32) },
     })
-    expect(names.sort()).toEqual(['alumni', 'feedback', 'login'])
+    expect(names.sort()).toEqual(['alumni', 'feedback', 'login', 'request-access'])
     expect(mongoRateLimitStores('login')).toBeInstanceOf(MongoRateLimitStore)
   })
 })

@@ -10,6 +10,7 @@ type Doc = {
   email: string
   role: AdminRole
   tokenVersion?: number
+  pending?: boolean
   passwordHash?: string
 }
 
@@ -19,6 +20,7 @@ const toStored = (d: Doc): StoredAdmin => ({
   email: d.email,
   role: d.role,
   tokenVersion: d.tokenVersion ?? 0,
+  pending: d.pending === true,
 })
 
 export const mongoAdminStore: AdminStore = {
@@ -43,6 +45,7 @@ const toAccount = (d: AccountDoc): AccountView => ({
   name: d.name,
   email: d.email,
   role: d.role,
+  pending: d.pending === true,
   lastLoginAt: d.lastLoginAt ? d.lastLoginAt.toISOString() : null,
   createdAt: d.createdAt ? d.createdAt.toISOString() : null,
 })
@@ -74,12 +77,19 @@ export const mongoAccountStore: AccountStore = {
       throw error
     }
   },
-  async update(id, { role, passwordHash }) {
+  async countPending() {
+    return AdminModel.countDocuments({ pending: true })
+  },
+  async update(id, { role, passwordHash, pending }) {
     if (!isValidObjectId(id)) return null
     const doc = await AdminModel.findByIdAndUpdate(
       id,
       {
-        $set: { ...(role && { role }), ...(passwordHash && { passwordHash }) },
+        $set: {
+          ...(role && { role }),
+          ...(passwordHash && { passwordHash }),
+          ...(pending !== undefined && { pending }),
+        },
         ...(passwordHash && { $inc: { tokenVersion: 1 } }),
       },
       { new: true, runValidators: true },

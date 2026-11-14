@@ -24,6 +24,8 @@ export type AdminView = {
 export type StoredAdmin = AdminView & {
   /** Bumped when the password is reset, which signs out every existing session. */
   tokenVersion: number
+  /** Asked for access and not approved yet: can't sign in. */
+  pending?: boolean
 }
 
 export type AdminStore = {

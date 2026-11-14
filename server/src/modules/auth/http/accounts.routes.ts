@@ -39,6 +39,17 @@ export function accountsRouter(accounts: AccountService, logger: Logger): Router
     },
   )
 
+  router.post(
+    '/:id/approve',
+    validate({ params: accountIdSchema, body: roleBodySchema }),
+    async (req, res) => {
+      const { role } = req.body as { role: ManagedRole }
+      const account = await accounts.approve(req.params.id as string, role)
+      log('approved', req.admin?.id, account)
+      res.json({ account })
+    },
+  )
+
   router.post('/:id/reset-password', validate({ params: accountIdSchema }), async (req, res) => {
     const reset = await accounts.resetPassword(req.params.id as string)
     log('password reset', req.admin?.id, reset.account)

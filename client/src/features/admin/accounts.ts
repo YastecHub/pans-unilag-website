@@ -10,6 +10,8 @@ export type Account = {
   name: string
   email: string
   role: AdminRole
+  /** Asked for access and not approved yet: can't sign in. */
+  pending: boolean
   lastLoginAt: string | null
   createdAt: string | null
 }
@@ -53,3 +55,19 @@ export const useResetAccountPassword = () =>
 
 export const useRemoveAccount = () =>
   useAccountMutation((id: string) => api.delete(`${BASE}/${encodeURIComponent(id)}`))
+
+/** Lets someone who asked for access sign in, as an admin or an editor. */
+export const useApproveAccount = () =>
+  useAccountMutation(({ id, role }: { id: string; role: ManagedRole }) =>
+    api.post<{ account: Account }>(`${BASE}/${encodeURIComponent(id)}/approve`, { role }),
+  )
+
+/** Shortest password the request-access page accepts (the API checks it too). */
+export const PASSWORD_MIN = 12
+
+/** POST /api/auth/request-access: the reply is the same whether or not the email has an account. */
+export const useRequestAccess = () =>
+  useMutation({
+    mutationFn: (input: { name: string; email: string; password: string; website?: string }) =>
+      api.post<{ received: true }>('/api/auth/request-access', input),
+  })

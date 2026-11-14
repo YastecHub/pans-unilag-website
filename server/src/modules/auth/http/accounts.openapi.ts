@@ -21,6 +21,7 @@ const accountSchema = z
     name: z.string(),
     email: z.string(),
     role: z.enum(ADMIN_ROLES),
+    pending: z.boolean(),
     lastLoginAt: z.string().nullable(),
     createdAt: z.string().nullable(),
   })
@@ -100,6 +101,25 @@ export const accountsPaths: ZodOpenApiPathsObject = {
         ...errors.unauthorized,
         ...errors.forbidden,
         ...errors.notFound,
+        ...errors.internal,
+      },
+    },
+  },
+  '/api/admin/accounts/{id}/approve': {
+    post: {
+      tags,
+      operationId: 'approveAccount',
+      summary: 'Approve a request for access',
+      description: `${note} The person can sign in from then on, with the role given.`,
+      requestParams: params,
+      requestBody: json(roleBodySchema),
+      responses: {
+        '200': { description: 'Approved', ...json(z.object({ account: accountSchema })) },
+        ...errors.badRequest,
+        ...errors.unauthorized,
+        ...errors.forbidden,
+        ...errors.notFound,
+        ...errors.conflict,
         ...errors.internal,
       },
     },

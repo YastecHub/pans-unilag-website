@@ -11,6 +11,22 @@ export const loginBodySchema = z.strictObject({
   password: z.string().min(1).max(200),
 })
 
+export const PASSWORD_MIN = 12
+
+/** POST /api/auth/request-access. `website` is the hidden spam trap (never filled by people). */
+export const requestAccessBodySchema = z.strictObject({
+  name: z.string().trim().min(2).max(120),
+  email: z.preprocess(
+    (value) => (typeof value === 'string' ? value.trim().toLowerCase() : value),
+    z.email().max(254),
+  ),
+  password: z
+    .string()
+    .min(PASSWORD_MIN, `Use at least ${PASSWORD_MIN} characters`)
+    .max(128, 'Use 128 characters or fewer'),
+  website: z.string().max(500).optional(),
+})
+
 const adminSchema = z
   .object({
     id: z.string(),
@@ -28,6 +44,31 @@ const cookieNote =
   'The session is a JWT in the `pans_admin_session` cookie (httpOnly, SameSite=Lax, Secure in production, path /api), valid for 8 hours.'
 
 export const authPaths: ZodOpenApiPathsObject = {
+  '/api/auth/request-access': {
+    post: {
+      tags: ['Admin auth'],
+      operationId: 'requestAccess',
+      summary: 'Ask for a dashboard account',
+      description:
+        'Creates an account that cannot sign in until a developer approves it on the Accounts page. The reply is the same whether or not the email already has an account. Rate-limited to 5 requests per hour per IP.',
+      requestBody: {
+        content: {
+          'application/json': {
+            schema: requestAccessBodySchema.meta({ id: 'RequestAccessInput' }),
+          },
+        },
+      },
+      responses: {
+        '201': {
+          description: 'Received',
+          content: { 'application/json': { schema: z.object({ received: z.literal(true) }) } },
+        },
+        ...errors.badRequest,
+        ...errors.rateLimited,
+        ...errors.internal,
+      },
+    },
+  },
   '/api/auth/login': {
     post: {
       tags: ['Admin auth'],
