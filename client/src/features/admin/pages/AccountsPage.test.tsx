@@ -127,31 +127,6 @@ describe('Accounts page', () => {
     expect(document.activeElement).toBe(screen.getByLabelText('Email'))
   })
 
-  it('sends a test email and shows the mail server’s answer', async () => {
-    const user = userEvent.setup()
-    fakeApi((c) =>
-      c.path === '/api/auth/me'
-        ? { json: { admin: DEV } }
-        : c.path === '/api/admin/email-test'
-          ? {
-              json: {
-                configured: true,
-                ok: false,
-                to: ['pans@example.com'],
-                error: 'Invalid login: 535 Username and Password not accepted',
-              },
-            }
-          : c.path === '/api/admin/accounts'
-            ? { json: { accounts: ACCOUNTS } }
-            : undefined,
-    )
-    renderRoute('/admin/accounts')
-    await screen.findByRole('table', { name: 'Dashboard accounts' })
-    await user.click(screen.getByRole('button', { name: 'Send a test email' }))
-    expect(await screen.findByText(/Invalid login: 535/)).toBeTruthy()
-    expect(screen.getByText(/pans@example.com wasn’t sent/)).toBeTruthy()
-  })
-
   it('asks before a new password or removal, then does it', async () => {
     const user = userEvent.setup()
     const calls = fakeApi((c) =>

@@ -32,18 +32,6 @@ export function appFromEnv(env: Env, logger: Logger): { app: Express; docsEnable
         'submissions, or leave both empty to send no emails.',
     )
   }
-  const email =
-    env.GMAIL_USER && env.GMAIL_APP_PASSWORD
-      ? (() => {
-          const to = env.NOTIFY_EMAIL.length > 0 ? env.NOTIFY_EMAIL : [env.GMAIL_USER]
-          const send = gmailSender({
-            user: env.GMAIL_USER,
-            appPassword: env.GMAIL_APP_PASSWORD,
-            to,
-          })
-          return { to, send }
-        })()
-      : undefined
   const isProduction = env.NODE_ENV === 'production'
   const docsEnabled = env.API_DOCS_ENABLED ?? !isProduction
   const app = createApp({
@@ -53,9 +41,19 @@ export function appFromEnv(env: Env, logger: Logger): { app: Express; docsEnable
     logger,
     logRequests: env.NODE_ENV !== 'test',
     rateLimitStores: isProduction ? mongoRateLimitStores : undefined,
-    // The dashboard links in each email point at the live site.
-    notifier: email ? emailNotifier(email.send, env.CLIENT_ORIGIN[0] ?? '', logger) : undefined,
-    emailTest: email,
+    notifier:
+      env.GMAIL_USER && env.GMAIL_APP_PASSWORD
+        ? emailNotifier(
+            gmailSender({
+              user: env.GMAIL_USER,
+              appPassword: env.GMAIL_APP_PASSWORD,
+              to: env.NOTIFY_EMAIL.length > 0 ? env.NOTIFY_EMAIL : [env.GMAIL_USER],
+            }),
+            // The dashboard links in each email point at the live site.
+            env.CLIENT_ORIGIN[0] ?? '',
+            logger,
+          )
+        : undefined,
     // Link previews name the site by its first allowed origin and show Cloudinary covers.
     previews: { cloudName: env.CLOUDINARY_CLOUD_NAME },
     auth: {
