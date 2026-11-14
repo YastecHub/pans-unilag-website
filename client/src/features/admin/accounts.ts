@@ -53,3 +53,12 @@ export const useResetAccountPassword = () =>
 
 export const useRemoveAccount = () =>
   useAccountMutation((id: string) => api.delete(`${BASE}/${encodeURIComponent(id)}`))
+
+/** POST /api/admin/email-test: one test email to the PANS inbox, and what the mail server said. */
+export type EmailTestResult =
+  | { configured: false }
+  | { configured: true; ok: true; to: string[] }
+  | { configured: true; ok: false; to: string[]; error: string }
+
+export const useEmailTest = () =>
+  useMutation({ mutationFn: () => api.post<EmailTestResult>('/api/admin/email-test') })

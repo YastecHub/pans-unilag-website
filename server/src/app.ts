@@ -66,7 +66,11 @@ import { mongoPageReader } from './modules/pages/infrastructure/page.repository.
 import type { PatronReader } from './modules/patrons/application/patronView.js'
 import { patronsRouter } from './modules/patrons/http/patrons.routes.js'
 import { mongoPatronReader } from './modules/patrons/infrastructure/patron.repository.js'
-import type { SubmissionNotifier } from './modules/submissions/application/notifications.js'
+import {
+  type EmailTest,
+  runEmailTest,
+  type SubmissionNotifier,
+} from './modules/submissions/application/notifications.js'
 import type { SubmissionStore } from './modules/submissions/application/submissionRules.js'
 import {
   type FormRateLimit,
@@ -101,6 +105,8 @@ export type AppOptions = {
   submissions?: SubmissionStore
   /** Emails the PANS inbox about each new submission. Defaults to sending nothing. */
   notifier?: SubmissionNotifier
+  /** The real email sender, for the developer's "Send a test email" button. None: not set up. */
+  emailTest?: EmailTest
   /** Per-IP limit for each form (default 5 per hour). */
   formRateLimit?: FormRateLimit
   /**
@@ -184,6 +190,7 @@ export function createApp({
   now = () => new Date(),
   submissions = mongoSubmissionStore,
   notifier,
+  emailTest,
   formRateLimit,
   rateLimitStores,
   auth,
@@ -288,6 +295,16 @@ export function createApp({
       guard.requireAdmin,
       guard.requireRole('developer'),
       accountsRouter(accountService(auth.accounts ?? mongoAccountStore), logger),
+    )
+    // Sends one test email and says what the mail server answered. Developer only.
+    app.post(
+      '/api/admin/email-test',
+      guard.requireAdmin,
+      guard.requireRole('developer'),
+      async (_req, res) => {
+        res.set('Cache-Control', 'no-store')
+        res.json(await runEmailTest(emailTest))
+      },
     )
     app.use(
       '/api/admin',
