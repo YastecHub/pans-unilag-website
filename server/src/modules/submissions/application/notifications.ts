@@ -18,40 +18,6 @@ export type SubmissionNotifier = {
   alumnus(alumnus: NewAlumnus): Promise<void>
 }
 
-/** For the dashboard's "Send a test email" button: the real sender and who it sends to. */
-export type EmailTest = { to: string[]; send: (email: SubmissionEmail) => Promise<void> }
-
-export type EmailTestResult =
-  | { configured: false }
-  | { configured: true; ok: true; to: string[] }
-  | { configured: true; ok: false; to: string[]; error: string }
-
-/**
- * Sends one test email and reports what happened, including the mail server's own error (e.g.
- * "Invalid login"), so the web lead can fix the settings without reading server logs.
- */
-export async function runEmailTest(test: EmailTest | undefined): Promise<EmailTestResult> {
-  if (!test) return { configured: false }
-  try {
-    await test.send({
-      subject: 'Test email from the PANS UNILAG website',
-      text: [
-        'This is a test from the website dashboard (Accounts → Email alerts).',
-        'If you can read it, emails about new feedback and alumni sign-ups will arrive here too.',
-        'If it landed in Spam, mark it "Not spam".',
-      ].join('\n'),
-    })
-    return { configured: true, ok: true, to: test.to }
-  } catch (error) {
-    return {
-      configured: true,
-      ok: false,
-      to: test.to,
-      error: error instanceof Error ? error.message : String(error),
-    }
-  }
-}
-
 export const noNotifier: SubmissionNotifier = {
   feedback: async () => undefined,
   alumnus: async () => undefined,
