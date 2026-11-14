@@ -5,10 +5,11 @@ import type { AuthGuard } from '../../../middleware/requireAdmin.js'
 import { SESSION_COOKIE } from '../../../middleware/requireAdmin.js'
 import { createRateLimiter, type RateLimitStores } from '../../../middleware/rateLimit.js'
 import { validate } from '../../../middleware/validate.js'
+import type { AccountService } from '../application/accounts.js'
 import type { AdminStore } from '../application/adminView.js'
-import { signIn } from '../application/authService.js'
+import { PENDING_MESSAGE, signIn } from '../application/authService.js'
 import { signSessionToken } from '../application/sessionTokens.js'
-import { loginBodySchema } from './auth.openapi.js'
+import { loginBodySchema, requestAccessBodySchema } from './auth.openapi.js'
 
 export type AuthRouterOptions = {
   store: AdminStore
@@ -19,12 +20,19 @@ export type AuthRouterOptions = {
   sessionHours?: number
   loginRateLimit?: { windowMs: number; limit: number }
   rateLimitStores?: RateLimitStores
+  /** For the request-access page. Without it that route isn't mounted. */
+  accounts?: AccountService
+  requestRateLimit?: { windowMs: number; limit: number }
 }
 
 export const DEFAULT_SESSION_HOURS = 8
 export const DEFAULT_LOGIN_RATE_LIMIT = { windowMs: 15 * 60_000, limit: 10 }
+export const DEFAULT_REQUEST_RATE_LIMIT = { windowMs: 60 * 60_000, limit: 5 }
 
-/** POST /api/auth/login, POST /api/auth/logout, GET /api/auth/me. Documented in auth.openapi.ts. */
+/**
+ * POST /api/auth/login, /logout and /request-access, GET /api/auth/me. Documented in
+ * auth.openapi.ts.
+ */
 export function authRouter({
   store,
   guard,
@@ -34,6 +42,8 @@ export function authRouter({
   sessionHours = DEFAULT_SESSION_HOURS,
   loginRateLimit = DEFAULT_LOGIN_RATE_LIMIT,
   rateLimitStores,
+  accounts,
+  requestRateLimit = DEFAULT_REQUEST_RATE_LIMIT,
 }: AuthRouterOptions): Router {
   const router = Router()
   // Lax: the cookie is not sent on cross-site POSTs, which (with JSON-only bodies) blocks CSRF.
@@ -57,6 +67,7 @@ export function authRouter({
       const { email, password } = req.body as z.infer<typeof loginBodySchema>
       const admin = await signIn(store, email, password, now())
       if (!admin) throw HttpError.unauthorized('Email or password is incorrect')
+      if (admin === 'pending') throw HttpError.forbidden(PENDING_MESSAGE)
 
       const { tokenVersion, ...view } = admin
       const token = await signSessionToken(
@@ -69,6 +80,21 @@ export function authRouter({
       res.json({ admin: view })
     },
   )
+
+  if (accounts) {
+    router.post(
+      '/request-access',
+      createRateLimiter({ ...requestRateLimit, store: rateLimitStores?.('request-access') }),
+      validate({ body: requestAccessBodySchema }),
+      async (req, res) => {
+        const { website, ...input } = req.body as z.infer<typeof requestAccessBodySchema>
+        // The same reply whatever happened (stored, already an account, or a bot), so it tells
+        // nobody which emails have accounts.
+        if (!website?.trim()) await accounts.requestAccess(input)
+        res.status(201).json({ received: true })
+      },
+    )
+  }
 
   router.post('/logout', (_req, res) => {
     res.clearCookie(SESSION_COOKIE, cookie)

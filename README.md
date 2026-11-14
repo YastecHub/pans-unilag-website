@@ -735,7 +735,7 @@ Search (live): `GET /api/search?q=&type=&limit=` returns `{ query, results: [{ t
 
 Admin auth (live): `POST /api/auth/login` (`{ email, password }`, 10 attempts per 15 minutes per IP) sets the session cookie `pans_admin_session`: a JWT (HS256, signed with `JWT_SECRET`, 8 hours) in an `httpOnly`, `SameSite=Lax` cookie on path `/api`, `Secure` in production. A wrong email and a wrong password give the same 401. `GET /api/auth/me` returns `{ admin: { id, name, email, role } }` or 401; `POST /api/auth/logout` clears the cookie. The admin is looked up on every request, so **removing an admin or resetting their password signs them out everywhere**. The password hash is never selected by default and never leaves the server. Routes use `requireAdmin` and `requireRole('admin')` from `middleware/requireAdmin.ts`. Because the cookie is `SameSite=Lax`, **the site must reach the API on its own domain in production** (on Vercel the site and the API share one address; see [docs/deployment.md](docs/deployment.md)); in development Vite's proxy does this.
 
-Admins are managed from the command line; there is no sign-up page:
+People ask for access at `/admin/request-access` (`POST /api/auth/request-access`: name, email and a password of 12+ characters; 5 per hour per IP; the reply never says whether the email has an account). The account is `pending` and can't sign in until a developer approves it on the Accounts page (`POST /api/admin/accounts/:id/approve` with a role). Admins can also be managed from the command line:
 
 ```bash
 npm run create-admin -w server -- --email secretary@example.com --name "Full Name" --role admin
@@ -847,7 +847,7 @@ pans-unilag/
 
 ## Security, privacy and data protection
 
-- **Admin sign-in:** argon2 hashes; `httpOnly`/`Secure`/`SameSite` cookie; rate-limited login; no public sign-up (`scripts/create-admin.ts`); at least two admins.
+- **Admin sign-in:** argon2 hashes; `httpOnly`/`Secure`/`SameSite` cookie; rate-limited login; self-registered accounts can't sign in until a developer approves them; at least two admins.
 - **API hardening:** `helmet`, CORS allowlist, Zod validation rejecting unknown fields, rate limits on forms and login, request size limits; never pass raw request objects into Mongoose queries.
 - **Personal data:** never publish personal phone numbers or personal emails (including those on letterheads). Use role emails or the Secretary General's official channel.
 - **Forms:** feedback can be anonymous; alumni needs consent; only admins read submissions; the privacy notice states who reads them, retention and deletion requests.

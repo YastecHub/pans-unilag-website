@@ -8,6 +8,7 @@ import {
   type Account,
   type ManagedRole,
   useAccounts,
+  useApproveAccount,
   useCreateAccount,
   useRemoveAccount,
   useResetAccountPassword,
@@ -69,7 +70,9 @@ function Accounts() {
         <p className="max-w-3xl text-text-muted">
           Everyone who can sign in to the dashboard. <strong>Admins</strong> can do everything
           except this page, including reading feedback and alumni sign-ups; <strong>editors</strong>{' '}
-          manage content only. Developer accounts are managed with the <code>create-admin</code>{' '}
+          manage content only. People can ask for access themselves on the{' '}
+          <Link to="/admin/request-access">request access</Link> page; they can’t sign in until you
+          approve them here. Developer accounts are managed with the <code>create-admin</code>{' '}
           command. Keep at least two admins.
         </p>
       </div>
@@ -82,11 +85,14 @@ function Accounts() {
 
       <AdminQuery query={query} label="accounts">
         {(accounts) => (
-          <AccountList
-            accounts={accounts}
-            onNotice={setNotice}
-            onPassword={(reset) => setRevealed({ ...reset, action: 'reset' })}
-          />
+          <>
+            <Requests accounts={accounts.filter((a) => a.pending)} onNotice={setNotice} />
+            <AccountList
+              accounts={accounts.filter((a) => !a.pending)}
+              onNotice={setNotice}
+              onPassword={(reset) => setRevealed({ ...reset, action: 'reset' })}
+            />
+          </>
         )}
       </AdminQuery>
 
@@ -153,6 +159,106 @@ function NewPassword({
           Done, hide it
         </Button>
       </div>
+    </section>
+  )
+}
+
+/** People who asked for access. Approve only someone you know: check the name and email. */
+function Requests({
+  accounts,
+  onNotice,
+}: {
+  accounts: Account[]
+  onNotice: (message: string) => void
+}) {
+  const approve = useApproveAccount()
+  const decline = useRemoveAccount()
+  const [roles, setRoles] = useState<Record<string, ManagedRole>>({})
+  const pending = approve.isPending || decline.isPending
+  const failed = approve.error ?? decline.error
+  if (accounts.length === 0) return null
+
+  return (
+    <section
+      aria-labelledby="requests-title"
+      className="flex max-w-3xl flex-col gap-3 rounded-xl border-2 border-primary-border p-4"
+    >
+      <h2 id="requests-title" className="text-[1.25rem]">
+        Waiting for your approval ({accounts.length})
+      </h2>
+      <p className="text-small text-text-muted">
+        Approve only people you know are on the team: check the name and the email address. They
+        chose their own password.
+      </p>
+      {failed && (
+        <p role="alert" className="font-medium text-danger">
+          {errorMessage(failed, 'That didn’t work. Please try again.')}
+        </p>
+      )}
+      <ul className="flex flex-col gap-3">
+        {accounts.map((a) => {
+          const role = roles[a.id] ?? 'editor'
+          return (
+            <li
+              key={a.id}
+              className="flex flex-wrap items-center justify-between gap-3 border-t border-border pt-3"
+            >
+              <div className="min-w-0">
+                <p className="font-medium">{a.name}</p>
+                <p className="text-small break-all text-text-muted">
+                  {a.email}
+                  {a.createdAt && <> · asked {formatDate(a.createdAt)}</>}
+                </p>
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
+                <select
+                  aria-label={`Role for ${a.name}`}
+                  className={control}
+                  value={role}
+                  disabled={pending}
+                  onChange={(e) =>
+                    setRoles((r) => ({ ...r, [a.id]: e.target.value as ManagedRole }))
+                  }
+                >
+                  <option value="editor">Editor: content only</option>
+                  <option value="admin">Admin: plus feedback and alumni</option>
+                </select>
+                <Button
+                  size="sm"
+                  loading={pending}
+                  aria-label={`Approve ${a.name}`}
+                  onClick={() =>
+                    approve.mutate(
+                      { id: a.id, role },
+                      {
+                        onSuccess: () =>
+                          onNotice(
+                            `Approved ${a.name} as an ${ROLE_LABELS[role].toLowerCase()}. Tell them they can sign in now.`,
+                          ),
+                      },
+                    )
+                  }
+                >
+                  Approve
+                </Button>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  disabled={pending}
+                  aria-label={`Decline ${a.name}`}
+                  onClick={() =>
+                    decline.mutate(a.id, {
+                      onSuccess: () => onNotice(`Declined ${a.name}’s request.`),
+                    })
+                  }
+                >
+                  Decline
+                </Button>
+              </div>
+            </li>
+          )
+        })}
+      </ul>
     </section>
   )
 }

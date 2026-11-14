@@ -19,15 +19,17 @@ export function memoryAccounts(rows: AccountRow[]): {
     name: r.name,
     email: r.email,
     role: r.role,
+    pending: r.pending === true,
     lastLoginAt: r.lastLoginAt?.toISOString() ?? null,
     createdAt: r.createdAt.toISOString(),
   })
-  const stored = ({ id, name, email, role, tokenVersion }: AccountRow): StoredAdmin => ({
+  const stored = ({ id, name, email, role, tokenVersion, pending }: AccountRow): StoredAdmin => ({
     id,
     name,
     email,
     role,
     tokenVersion,
+    pending: pending === true,
   })
   const byId = (id: string) => rows.find((r) => r.id === id)
 
@@ -69,10 +71,12 @@ export function memoryAccounts(rows: AccountRow[]): {
         rows.push(row)
         return view(row)
       },
-      update: async (id, { role, passwordHash }) => {
+      countPending: async () => rows.filter((r) => r.pending).length,
+      update: async (id, { role, passwordHash, pending }) => {
         const row = byId(id)
         if (!row) return null
         if (role) row.role = role
+        if (pending !== undefined) row.pending = pending
         if (passwordHash) {
           row.passwordHash = passwordHash
           row.tokenVersion += 1

@@ -13,11 +13,13 @@ import {
   PAGE_SIZE,
   useAlumni,
   useCanReadSubmissions,
+  useIsDeveloper,
   useFeedback,
   useMe,
   usePlaceholders,
   useRemoveAlumnus,
 } from '../api.ts'
+import { useAccounts } from '../accounts.ts'
 import { AdminQuery, Pager } from '../components/AdminQuery.tsx'
 import { ContentIndex } from '../editors/ContentIndex.tsx'
 import { EDITORS } from '../editors/editors.ts'
@@ -50,10 +52,21 @@ export function OverviewPage() {
   const newFeedback = useFeedback({ status: 'new', page: 1 }, canReadSubmissions)
   const alumni = useAlumni(1, canReadSubmissions)
   const count = (n: number | undefined) => (n === undefined ? '…' : String(n))
+  // Developers see how many people are waiting to be let in.
+  const isDeveloper = useIsDeveloper()
+  const accounts = useAccounts(isDeveloper)
+  const waiting = accounts.data?.filter((a) => a.pending).length ?? 0
 
   return (
     <>
       <h1 className="text-h2">Welcome{me.data ? `, ${me.data.name.split(' ')[0]}` : ''}</h1>
+      {waiting > 0 && (
+        <p className="rounded-xl border-2 border-primary-border p-4 font-medium">
+          <Link to="/admin/accounts">
+            {waiting} {waiting === 1 ? 'person is' : 'people are'} waiting for your approval
+          </Link>
+        </p>
+      )}
       <ul className="grid gap-4 sm:grid-cols-3">
         {[
           {

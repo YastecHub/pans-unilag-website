@@ -2,7 +2,10 @@ import request from 'supertest'
 import { beforeAll, describe, expect, it } from 'vitest'
 import { createApp } from '../src/app.js'
 import { buildOpenApiDocument } from '../src/docs/openapi.js'
-import { DEVELOPER_ACCOUNTS_MESSAGE } from '../src/modules/auth/application/accounts.js'
+import {
+  DEVELOPER_ACCOUNTS_MESSAGE,
+  MAX_PENDING_REQUESTS,
+} from '../src/modules/auth/application/accounts.js'
 import { ADMIN_ROLES, hasRole } from '../src/modules/auth/application/adminView.js'
 import { hashPassword, verifyPassword } from '../src/modules/auth/application/passwords.js'
 import { ALLOWED_ORIGIN } from './helpers.js'
@@ -17,7 +20,7 @@ beforeAll(async () => {
   hash = await hashPassword(PASSWORD)
 })
 
-function setup() {
+function setup(requestLimit = 100) {
   const row = (id: string, role: AccountRow['role'], name: string): AccountRow => ({
     id,
     name,
@@ -42,6 +45,7 @@ function setup() {
       admins: store.admins,
       accounts: store.accounts,
       loginRateLimit: { windowMs: 60_000, limit: 100 },
+      requestRateLimit: { windowMs: 60_000, limit: requestLimit },
       submissionAdmin: {
         listFeedback: async () => ({ items: [], total: 0, page: 1, pageSize: 25 }),
         setFeedbackStatus: async () => null,
@@ -208,6 +212,124 @@ describe('changing an account', () => {
     expect(
       (await dev.send('patch', '/api/admin/accounts/admin1', { role: 'developer' })).status,
     ).toBe(400)
+  })
+})
+
+describe('asking for access', () => {
+  const ask = {
+    name: 'Tolu Secretary',
+    email: ' Tolu@PANS.example ',
+    password: 'a-long-passphrase',
+  }
+
+  it('creates an account that cannot sign in until a developer approves it', async () => {
+    const { app, rows, as } = setup()
+    const res = await request(app).post('/api/auth/request-access').send(ask)
+    expect(res.status).toBe(201)
+    expect(res.body).toEqual({ received: true })
+
+    const row = rows.find((r) => r.email === 'tolu@pans.example')!
+    expect(row).toMatchObject({ name: 'Tolu Secretary', role: 'editor', pending: true })
+    expect(row.passwordHash).not.toContain(ask.password)
+
+    // The right password says "waiting"; a wrong one says nothing about the account.
+    const waiting = await request(app)
+      .post('/api/auth/login')
+      .send({ email: 'tolu@pans.example', password: ask.password })
+    expect(waiting.status).toBe(403)
+    expect(waiting.body.error.message).toMatch(/waiting for approval/)
+    expect(waiting.headers['set-cookie']).toBeUndefined()
+    expect((await as('tolu@pans.example', 'wrong-password-here')).status).toBe(401)
+
+    const dev = await as('dev1@example.com')
+    const list = await dev.send('get', '/api/admin/accounts')
+    expect(list.body.accounts[0]).toMatchObject({ email: 'tolu@pans.example', pending: true })
+
+    const approved = await dev.send('post', `/api/admin/accounts/${row.id}/approve`, {
+      role: 'admin',
+    })
+    expect(approved.status).toBe(200)
+    expect(approved.body.account).toMatchObject({ role: 'admin', pending: false })
+
+    const tolu = await as('tolu@pans.example', ask.password)
+    expect(tolu.status).toBe(200)
+    expect((await tolu.send('get', '/api/admin/submissions/feedback')).status).toBe(200)
+    // Approving twice is refused.
+    expect(
+      (await dev.send('post', `/api/admin/accounts/${row.id}/approve`, { role: 'editor' })).status,
+    ).toBe(409)
+  })
+
+  it('can be declined: removing the request leaves nothing behind', async () => {
+    const { app, rows, as } = setup()
+    await request(app).post('/api/auth/request-access').send(ask)
+    const id = rows.find((r) => r.pending)!.id
+    const dev = await as('dev1@example.com')
+    expect((await dev.send('delete', `/api/admin/accounts/${id}`)).status).toBe(204)
+    expect((await as('tolu@pans.example', ask.password)).status).toBe(401)
+  })
+
+  it('replies the same for an email that already has an account, and changes nothing', async () => {
+    const { app, rows, as } = setup()
+    const before = rows.length
+    const res = await request(app)
+      .post('/api/auth/request-access')
+      .send({ ...ask, email: 'admin1@example.com' })
+    expect(res.status).toBe(201)
+    expect(res.body).toEqual({ received: true })
+    expect(rows).toHaveLength(before)
+    // The existing admin's password still works; the one in the request doesn't.
+    expect((await as('admin1@example.com')).status).toBe(200)
+    expect((await as('admin1@example.com', ask.password)).status).toBe(401)
+  })
+
+  it('refuses weak or malformed requests, ignores bots and never takes a role', async () => {
+    const { app, rows } = setup()
+    const before = rows.length
+    for (const body of [
+      { ...ask, password: 'short' },
+      { ...ask, email: 'not-an-email' },
+      { ...ask, name: '' },
+      { ...ask, role: 'developer' },
+      { ...ask, pending: false },
+    ]) {
+      const res = await request(app).post('/api/auth/request-access').send(body)
+      expect(res.status, JSON.stringify(body)).toBe(400)
+    }
+    const bot = await request(app)
+      .post('/api/auth/request-access')
+      .send({ ...ask, website: 'http://spam.example' })
+    expect(bot.status).toBe(201)
+    expect(rows).toHaveLength(before)
+  })
+
+  it('is rate-limited and stops storing once too many requests are waiting', async () => {
+    const limited = setup(2)
+    const send = (app: typeof limited.app, n: number) =>
+      request(app)
+        .post('/api/auth/request-access')
+        .send({ ...ask, email: `person${n}@example.com` })
+    expect((await send(limited.app, 1)).status).toBe(201)
+    expect((await send(limited.app, 2)).status).toBe(201)
+    expect((await send(limited.app, 3)).status).toBe(429)
+
+    const { app, rows } = setup(1000)
+    for (let n = 0; n < MAX_PENDING_REQUESTS + 2; n++) await send(app, n)
+    expect(rows.filter((r) => r.pending)).toHaveLength(MAX_PENDING_REQUESTS)
+  }, 120_000)
+
+  it('developers cannot be made by approving', async () => {
+    const { app, rows, as } = setup()
+    await request(app).post('/api/auth/request-access').send(ask)
+    const id = rows.find((r) => r.pending)!.id
+    const dev = await as('dev1@example.com')
+    expect(
+      (await dev.send('post', `/api/admin/accounts/${id}/approve`, { role: 'developer' })).status,
+    ).toBe(400)
+    const admin = await as('admin1@example.com')
+    expect(
+      (await admin.send('post', `/api/admin/accounts/${id}/approve`, { role: 'admin' })).status,
+    ).toBe(403)
   })
 })
 

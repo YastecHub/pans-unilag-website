@@ -100,8 +100,8 @@ export function PrivacyPage() {
           </li>
           <li>
             <strong>Restricted access:</strong> only a limited number of authorised PANS
-            administrators can sign in to access submissions. There is no public sign-up for
-            administrative access.
+            administrators can sign in to access submissions. Every administrative account must be
+            approved by the PANS web lead before it can sign in.
           </li>
           <li>
             <strong>Spam and login protection:</strong> to help prevent spam and unauthorised

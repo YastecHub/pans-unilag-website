@@ -1,5 +1,6 @@
 /**
- * Manages dashboard admins. There is no public sign-up: admins are created here by the web lead.
+ * Manages dashboard admins. People can also ask for access on /admin/request-access (approved on the Accounts page); this
+ * script is the only way to create, reset or remove developer accounts.
  *
  *   npm run create-admin -w server -- --email secretary@example.com --name "Ada Okafor" [--role developer|admin|editor]
  *   npm run create-admin -w server -- --email secretary@example.com --reset-password

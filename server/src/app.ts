@@ -124,6 +124,8 @@ export type AuthOptions = {
   admins?: AdminStore
   sessionHours?: number
   loginRateLimit?: { windowMs: number; limit: number }
+  /** Per-IP limit for the request-access page (default 5 per hour). */
+  requestRateLimit?: { windowMs: number; limit: number }
   /** Dashboard data. Each defaults to MongoDB; tests pass in-memory versions. */
   adminCollections?: Partial<Record<AdminResourceName, AdminCollection>>
   placeholderSources?: PlaceholderSource[]
@@ -259,6 +261,7 @@ export function createApp({
   if (auth) {
     const admins = auth.admins ?? mongoAdminStore
     const guard: AuthGuard = createAuthGuard(admins, auth.jwtSecret, now)
+    const accounts = accountService(auth.accounts ?? mongoAccountStore)
     app.use(
       '/api/auth',
       authRouter({
@@ -270,6 +273,8 @@ export function createApp({
         sessionHours: auth.sessionHours,
         loginRateLimit: auth.loginRateLimit,
         rateLimitStores,
+        accounts,
+        requestRateLimit: auth.requestRateLimit,
       }),
     )
     const collections = Object.fromEntries(
@@ -287,7 +292,7 @@ export function createApp({
       '/api/admin/accounts',
       guard.requireAdmin,
       guard.requireRole('developer'),
-      accountsRouter(accountService(auth.accounts ?? mongoAccountStore), logger),
+      accountsRouter(accounts, logger),
     )
     app.use(
       '/api/admin',

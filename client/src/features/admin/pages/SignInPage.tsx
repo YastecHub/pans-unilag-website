@@ -5,10 +5,11 @@ import { ApiError } from '../../../lib/http.ts'
 import { usePageTitle } from '../../../lib/usePageTitle.ts'
 import { ErrorSummary, TextField } from '../../connect/components/FormParts.tsx'
 import { safeNext, useMe, useSignIn } from '../api.ts'
+import { PasswordField } from '../components/PasswordField.tsx'
 
 const LABELS = { email: 'Email', password: 'Password' }
 
-/** /admin/sign-in. There is no public sign-up: admins are created with the create-admin script. */
+/** /admin/sign-in. New people ask for access on /admin/request-access and wait for approval. */
 export function SignInPage() {
   usePageTitle('Sign in · Admin')
   const [params] = useSearchParams()
@@ -74,13 +75,21 @@ export function SignInPage() {
             onChange={setEmail}
             error={errors.email}
           />
-          <PasswordField value={password} onChange={setPassword} error={errors.password} />
+          <PasswordField
+            value={password}
+            onChange={setPassword}
+            error={errors.password}
+            autoComplete="current-password"
+          />
           <Button type="submit" loading={signIn.isPending}>
             Sign in
           </Button>
         </form>
+        <p>
+          New here? <Link to="/admin/request-access">Request access</Link>
+        </p>
         <p className="text-small text-text-muted">
-          For PANS UNILAG executives and editors only. Forgotten your password? Ask another admin to
+          For PANS UNILAG executives and editors only. Forgotten your password? Ask the web lead to
           reset it. <Link to="/">Back to the website</Link>
         </p>
       </main>
@@ -95,52 +104,4 @@ function signInMessage(error: unknown): string {
     return 'Too many attempts. Please wait 15 minutes and try again.'
   if (error instanceof ApiError) return error.message
   return 'Something went wrong. Please try again.'
-}
-
-function PasswordField({
-  value,
-  onChange,
-  error,
-}: {
-  value: string
-  onChange: (v: string) => void
-  error?: string
-}) {
-  const [shown, setShown] = useState(false)
-  return (
-    <div className="flex flex-col gap-1.5">
-      <label htmlFor="password" className="font-medium">
-        Password
-      </label>
-      <div className="flex gap-2">
-        <input
-          id="password"
-          name="password"
-          type={shown ? 'text' : 'password'}
-          autoComplete="current-password"
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          aria-invalid={error ? true : undefined}
-          aria-describedby={error ? 'password-error' : undefined}
-          className="min-h-12 min-w-0 flex-1 rounded-lg border-2 border-border-strong bg-surface px-3 text-base text-text aria-[invalid=true]:border-danger"
-        />
-        <button
-          type="button"
-          onClick={() => setShown(!shown)}
-          aria-pressed={shown}
-          aria-controls="password"
-          aria-label="Show password"
-          className="min-h-12 rounded-lg border-2 border-border px-3 font-heading text-small font-medium"
-        >
-          {shown ? 'Hide' : 'Show'}
-        </button>
-      </div>
-      {error && (
-        <p id="password-error" className="text-small font-medium text-danger">
-          <span aria-hidden>! </span>
-          {error}
-        </p>
-      )}
-    </div>
-  )
 }

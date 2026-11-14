@@ -10,6 +10,7 @@ import {
   PlaceholdersPage,
 } from './pages/AdminPages.tsx'
 import { AccountsPage } from './pages/AccountsPage.tsx'
+import { RequestAccessPage } from './pages/RequestAccessPage.tsx'
 import { SignInPage } from './pages/SignInPage.tsx'
 import { EDITORS } from './editors/editors.ts'
 import { EditPage, ListPage } from './editors/EditorPages.tsx'
@@ -17,7 +18,7 @@ import { ContentPage } from './editors/ContentIndex.tsx'
 
 /**
  * The admin area at /admin. Loaded only when someone visits /admin (routes.tsx imports it
- * lazily), so public visitors never download it. Everything except sign-in needs a session.
+ * lazily), so public visitors never download it. Everything except sign-in and request-access needs a session.
  */
 export function AdminApp() {
   // Keep the dashboard out of search engines.
@@ -32,6 +33,7 @@ export function AdminApp() {
   return (
     <Routes>
       <Route path="sign-in" element={<SignInPage />} />
+      <Route path="request-access" element={<RequestAccessPage />} />
       <Route element={<RequireAdmin />}>
         <Route element={<AdminLayout />}>
           <Route index element={<OverviewPage />} />

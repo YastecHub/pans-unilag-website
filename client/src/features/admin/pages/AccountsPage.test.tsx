@@ -127,6 +127,39 @@ describe('Accounts page', () => {
     expect(document.activeElement).toBe(screen.getByLabelText('Email'))
   })
 
+  it('lists requests for access apart from the accounts, and approves with a role', async () => {
+    const user = userEvent.setup()
+    const waiting = { ...account('p1', 'Tolu Secretary', 'editor'), pending: true }
+    const calls = fakeApi((c) =>
+      c.path === '/api/auth/me'
+        ? { json: { admin: DEV } }
+        : c.path === '/api/admin/accounts/p1/approve'
+          ? { json: { account: { ...waiting, role: 'admin', pending: false } } }
+          : c.method === 'DELETE'
+            ? { status: 204 }
+            : c.path === '/api/admin/accounts'
+              ? { json: { accounts: [waiting, ...ACCOUNTS] } }
+              : undefined,
+    )
+    renderRoute('/admin/accounts')
+    const table = await screen.findByRole('table', { name: 'Dashboard accounts' })
+    // Not in the accounts table until approved.
+    expect(within(table).queryByText('Tolu Secretary')).toBeNull()
+    const requests = screen.getByRole('region', { name: 'Waiting for your approval (1)' })
+    expect(within(requests).getByText('Tolu Secretary')).toBeTruthy()
+
+    await user.selectOptions(within(requests).getByLabelText('Role for Tolu Secretary'), 'admin')
+    await user.click(within(requests).getByRole('button', { name: 'Approve Tolu Secretary' }))
+    expect(await screen.findByText(/Approved Tolu Secretary as an admin/)).toBeTruthy()
+    expect(sent(calls, 'POST', '/api/admin/accounts/p1/approve')[0]!.body).toEqual({
+      role: 'admin',
+    })
+
+    await user.click(within(requests).getByRole('button', { name: 'Decline Tolu Secretary' }))
+    expect(await screen.findByText('Declined Tolu Secretary’s request.')).toBeTruthy()
+    expect(sent(calls, 'DELETE', '/api/admin/accounts/p1')).toHaveLength(1)
+  })
+
   it('asks before a new password or removal, then does it', async () => {
     const user = userEvent.setup()
     const calls = fakeApi((c) =>

@@ -14,6 +14,8 @@ export const MANAGED_ROLES = ['admin', 'editor'] as const
 export type ManagedRole = (typeof MANAGED_ROLES)[number]
 
 export type AccountView = AdminView & {
+  /** Asked for access on the request-access page and not approved yet. */
+  pending: boolean
   lastLoginAt: string | null
   createdAt: string | null
 }
@@ -28,11 +30,13 @@ export type AccountStore = {
     email: string
     role: AdminRole
     passwordHash: string
+    pending?: boolean
   }): Promise<AccountView>
+  countPending(): Promise<number>
   /** A new passwordHash also bumps tokenVersion, which signs the account out everywhere. */
   update(
     id: string,
-    changes: { role?: AdminRole; passwordHash?: string },
+    changes: { role?: AdminRole; passwordHash?: string; pending?: boolean },
   ): Promise<AccountView | null>
   remove(id: string): Promise<boolean>
 }
@@ -42,6 +46,9 @@ export type WithPassword = { account: AccountView; password: string }
 
 export const DEVELOPER_ACCOUNTS_MESSAGE =
   'Developer accounts are managed with the create-admin command, not the dashboard.'
+
+/** More requests than this waiting at once and new ones are quietly dropped (a flood, not people). */
+export const MAX_PENDING_REQUESTS = 30
 
 export function accountService(store: AccountStore) {
   /** The account, if the dashboard may change it. */
@@ -53,11 +60,13 @@ export function accountService(store: AccountStore) {
   }
 
   return {
-    /** Developers first, then admins, then editors; by name within each. */
+    /** Requests waiting for approval first; then developers, admins, editors; by name within each. */
     async list(): Promise<AccountView[]> {
       return (await store.list()).sort(
         (a, b) =>
-          ADMIN_ROLES.indexOf(a.role) - ADMIN_ROLES.indexOf(b.role) || a.name.localeCompare(b.name),
+          Number(b.pending) - Number(a.pending) ||
+          ADMIN_ROLES.indexOf(a.role) - ADMIN_ROLES.indexOf(b.role) ||
+          a.name.localeCompare(b.name),
       )
     },
 
@@ -67,6 +76,39 @@ export function accountService(store: AccountStore) {
       const password = generatePassword()
       const account = await store.create({ ...input, passwordHash: await hashPassword(password) })
       return { account, password }
+    },
+
+    /**
+     * Someone asks for access with a password of their own. The account can't sign in until a
+     * developer approves it. Nothing here tells the caller whether the email already has an
+     * account, so the page can't be used to find out who the admins are.
+     */
+    async requestAccess(input: { name: string; email: string; password: string }): Promise<void> {
+      // Hash first, so the reply takes the same time whether or not anything is stored.
+      const passwordHash = await hashPassword(input.password)
+      if (await store.findByEmail(input.email)) return
+      if ((await store.countPending()) >= MAX_PENDING_REQUESTS) return
+      try {
+        await store.create({
+          name: input.name,
+          email: input.email,
+          role: 'editor',
+          passwordHash,
+          pending: true,
+        })
+      } catch (error) {
+        // Two requests for one email at the same moment: the first one stands.
+        if (!(error instanceof HttpError && error.status === 409)) throw error
+      }
+    },
+
+    /** Lets a waiting account sign in, with the role the developer chose. */
+    async approve(id: string, role: ManagedRole): Promise<AccountView> {
+      const waiting = await managed(id)
+      if (!waiting.pending) throw HttpError.conflict('That account is already approved.')
+      const account = await store.update(id, { role, pending: false })
+      if (!account) throw HttpError.notFound('Account not found')
+      return account
     },
 
     async resetPassword(id: string): Promise<WithPassword> {

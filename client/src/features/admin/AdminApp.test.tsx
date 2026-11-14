@@ -211,6 +211,60 @@ describe('signing in', () => {
     await user.click(toggle)
     expect(field.getAttribute('type')).toBe('text')
     expect(toggle.getAttribute('aria-pressed')).toBe('true')
+    // The toggle is an eye icon, not the words "Show"/"Hide".
+    expect(toggle.querySelector('svg')).toBeTruthy()
+    expect(toggle.textContent).toBe('')
+  })
+
+  it('tells someone whose account isn’t approved yet, and links to request access', async () => {
+    const user = userEvent.setup()
+    mockApi({
+      '/api/auth/me': unauthorized,
+      '/api/auth/login': () =>
+        jsonResponse(403, apiError('FORBIDDEN', 'Your account is waiting for approval.')),
+    })
+    renderRoute('/admin/sign-in')
+    expect((await screen.findByRole('link', { name: 'Request access' })).getAttribute('href')).toBe(
+      '/admin/request-access',
+    )
+    await user.type(screen.getByLabelText('Email'), 'tolu@pans.test')
+    await user.type(screen.getByLabelText('Password'), 'a-long-passphrase')
+    await user.click(screen.getByRole('button', { name: 'Sign in' }))
+    expect(
+      await within(screen.getByRole('alert')).findByText('Your account is waiting for approval.'),
+    ).toBeTruthy()
+  })
+})
+
+describe('request access', () => {
+  it('checks the form, sends the request and says what happens next', async () => {
+    const user = userEvent.setup()
+    const fetchMock = mockApi({
+      '/api/auth/me': unauthorized,
+      '/api/auth/request-access': () => jsonResponse(201, { received: true }),
+    })
+    renderRoute('/admin/request-access')
+    await screen.findByRole('heading', { level: 1, name: 'Request access' })
+
+    await user.type(screen.getByLabelText('Full name'), 'Tolu Secretary')
+    await user.type(screen.getByLabelText('Email'), 'tolu@pans.test')
+    await user.type(screen.getByLabelText('Password'), 'short')
+    await user.click(screen.getByRole('button', { name: 'Send request' }))
+    expect(screen.getByLabelText('Password').getAttribute('aria-invalid')).toBe('true')
+    expect(calls(fetchMock).some((c) => c.path === '/api/auth/request-access')).toBe(false)
+
+    await user.clear(screen.getByLabelText('Password'))
+    await user.type(screen.getByLabelText('Password'), 'a-long-passphrase')
+    await user.click(screen.getByRole('button', { name: 'Send request' }))
+
+    expect(await screen.findByRole('heading', { name: 'Request sent' })).toBeTruthy()
+    expect(calls(fetchMock).find((c) => c.path === '/api/auth/request-access')?.body).toEqual({
+      name: 'Tolu Secretary',
+      email: 'tolu@pans.test',
+      password: 'a-long-passphrase',
+    })
+    // The password is gone from the page once it's sent.
+    expect(screen.queryByLabelText('Password')).toBeNull()
   })
 })
 
