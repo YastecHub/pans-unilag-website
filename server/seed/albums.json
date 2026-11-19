@@ -4,143 +4,774 @@
     "title": "Trade Fair & Cooking Competition",
     "event": "health-week-2026-day-1",
     "series": "PANS Health Week 2026: Redefine+",
-    "isPlaceholder": true,
-    "placeholderNote": "20–40 photos to be curated by the Media Committee (with consent) and uploaded"
+    "cover": "pans-unilag/events/health-week-2026/day-1/photo-01",
+    "photos": [
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-1/photo-01",
+        "alt": "Cooking competition winners hold their certificate with the organisers",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-1/photo-02",
+        "alt": "Two contestants prepare a healthy meal in the cooking competition",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-1/photo-03",
+        "alt": "A judge tastes a contestant's dish",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-1/photo-04",
+        "alt": "Two contestants smile at their cooking station",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-1/photo-05",
+        "alt": "Students browse the trade fair stalls together",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-1/photo-06",
+        "alt": "Students take photos at a cake stall",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-1/photo-07",
+        "alt": "Exhibitors talk at a stall at the trade fair",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-1/photo-08",
+        "alt": "A student flashes a peace sign at the trade fair",
+        "caption": ""
+      }
+    ],
+    "consentConfirmed": true
   },
   {
     "slug": "health-week-2026-day-2",
     "title": "Trade Fair",
     "event": "health-week-2026-day-2",
     "series": "PANS Health Week 2026: Redefine+",
-    "isPlaceholder": true,
-    "placeholderNote": "20–40 photos to be curated by the Media Committee (with consent) and uploaded"
+    "cover": "pans-unilag/events/health-week-2026/day-2/photo-01",
+    "photos": [
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-2/photo-01",
+        "alt": "Students in lab coats walk past the stalls on day two of the trade fair",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-2/photo-02",
+        "alt": "Three exhibitors smile behind their accessories stall",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-2/photo-03",
+        "alt": "A shopper browses jewellery and accessories at a stall",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-2/photo-04",
+        "alt": "A student laughs as he holds up a pair of trousers at a clothing stall",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-2/photo-05",
+        "alt": "A student looks through T-shirts on a clothing rail",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-2/photo-06",
+        "alt": "Two students wave as they arrive at the trade fair",
+        "caption": ""
+      }
+    ],
+    "consentConfirmed": true
   },
   {
     "slug": "health-week-2026-day-3",
     "title": "Medical Outreach 2026",
     "event": "health-week-2026-day-3",
     "series": "PANS Health Week 2026: Redefine+",
-    "isPlaceholder": true,
-    "placeholderNote": "20–40 photos to be curated by the Media Committee (with consent) and uploaded"
+    "cover": "pans-unilag/events/health-week-2026/day-3/photo-01",
+    "photos": [
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-3/photo-01",
+        "alt": "Volunteers in Redefine+ shirts update the outreach registration chart",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-3/photo-02",
+        "alt": "Volunteers in pink hepatitis B awareness shirts at the medical outreach",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-3/photo-03",
+        "alt": "Two volunteers share a laugh at the medical outreach",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-3/photo-04",
+        "alt": "A volunteer gives a thumbs-up at the medical outreach",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-3/photo-05",
+        "alt": "Two volunteers pose together at the outreach",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-3/photo-06",
+        "alt": "A volunteer smiles beside the outreach bus",
+        "caption": ""
+      }
+    ],
+    "consentConfirmed": true
   },
   {
     "slug": "health-week-2026-day-4",
     "title": "FOP Preshow",
     "event": "health-week-2026-day-4",
     "series": "PANS Health Week 2026: Redefine+",
-    "isPlaceholder": true,
-    "placeholderNote": "20–40 photos to be curated by the Media Committee (with consent) and uploaded"
+    "cover": "pans-unilag/events/health-week-2026/day-4/photo-01",
+    "photos": [
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-4/photo-01",
+        "alt": "A pair walk the red carpet together at the FOP Preshow",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-4/photo-02",
+        "alt": "A contestant walks the red carpet in a jersey and sunglasses",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-4/photo-03",
+        "alt": "A contestant adjusts her sunglasses for the camera",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-4/photo-04",
+        "alt": "A contestant in a headscarf and sunglasses walks the runway",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-4/photo-05",
+        "alt": "A contestant covers her face in delight in front of the PANS backdrop",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-4/photo-06",
+        "alt": "A sash-wearing contestant checks his phone at the preshow",
+        "caption": ""
+      }
+    ],
+    "consentConfirmed": true
   },
   {
     "slug": "health-week-2026-day-5",
     "title": "Pharmathon",
     "event": "health-week-2026-day-5",
     "series": "PANS Health Week 2026: Redefine+",
-    "isPlaceholder": true,
-    "placeholderNote": "20–40 photos to be curated by the Media Committee (with consent) and uploaded"
+    "cover": "pans-unilag/events/health-week-2026/day-5/photo-01",
+    "photos": [
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-5/photo-01",
+        "alt": "The winning Pharma-thon 3.0 team holds up their prize cheque on stage with the organisers",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-5/photo-02",
+        "alt": "A speaker in a green outfit addresses the audience at Pharma-thon 3.0",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-5/photo-03",
+        "alt": "A team of five presents their pitch on stage, one student speaking into the microphone",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-5/photo-04",
+        "alt": "A team in matching green T-shirts holds up their prize cheque on stage",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-5/photo-05",
+        "alt": "Team VigilantAfrica holds up their prize cheque with the organisers",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-5/photo-06",
+        "alt": "All the Pharma-thon 3.0 participants and organisers line up on stage in the Old Great Hall",
+        "caption": ""
+      }
+    ],
+    "consentConfirmed": true
   },
   {
     "slug": "health-week-2026-day-6",
     "title": "Quiz & Debate",
     "event": "health-week-2026-day-6",
     "series": "PANS Health Week 2026: Redefine+",
-    "isPlaceholder": true,
-    "placeholderNote": "20–40 photos to be curated by the Media Committee (with consent) and uploaded"
+    "cover": "pans-unilag/events/health-week-2026/day-6/photo-01",
+    "photos": [
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-6/photo-01",
+        "alt": "The compere introduces The Battle at the Synapse quiz and debate",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-6/photo-02",
+        "alt": "A host opens the quiz competition",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-6/photo-03",
+        "alt": "Two debaters present their case study at the lectern",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-6/photo-04",
+        "alt": "A debater makes his argument at the lectern",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-6/photo-05",
+        "alt": "A debater gives a thumbs-up as he speaks",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-6/photo-06",
+        "alt": "A debater reads her opening statement",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-6/photo-07",
+        "alt": "A judge reviews his notes as students watch the quiz",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-6/photo-08",
+        "alt": "A participant listens closely to the debate",
+        "caption": ""
+      }
+    ],
+    "consentConfirmed": true
   },
   {
     "slug": "health-week-2026-day-7",
     "title": "IPSF Counselling Competition",
     "event": "health-week-2026-day-7",
     "series": "PANS Health Week 2026: Redefine+",
-    "isPlaceholder": true,
-    "placeholderNote": "20–40 photos to be curated by the Media Committee (with consent) and uploaded"
+    "cover": "pans-unilag/events/health-week-2026/day-7/photo-01",
+    "photos": [
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-7/photo-01",
+        "alt": "A judge listens as students fill the hall for the IPSF counselling competition",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-7/photo-02",
+        "alt": "A participant waits for her turn in the counselling competition",
+        "caption": ""
+      }
+    ],
+    "consentConfirmed": true
   },
   {
     "slug": "health-week-2026-day-8",
     "title": "Symposium",
     "event": "health-week-2026-day-8",
     "series": "PANS Health Week 2026: Redefine+",
-    "isPlaceholder": true,
-    "placeholderNote": "20–40 photos to be curated by the Media Committee (with consent) and uploaded"
+    "cover": "pans-unilag/events/health-week-2026/day-8/photo-01",
+    "photos": [
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-8/photo-01",
+        "alt": "A guest holds up a \"The Drug Expert Has Entered The Chat\" sign at the symposium",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-8/photo-02",
+        "alt": "A guest in RX'24 sunglasses at the symposium",
+        "caption": ""
+      }
+    ],
+    "consentConfirmed": true
   },
   {
     "slug": "health-week-2026-day-9",
     "title": "ADMAP Rally",
     "event": "health-week-2026-day-9",
     "series": "PANS Health Week 2026: Redefine+",
-    "isPlaceholder": true,
-    "placeholderNote": "20–40 photos to be curated by the Media Committee (with consent) and uploaded"
+    "cover": "pans-unilag/events/health-week-2026/day-9/photo-01",
+    "photos": [
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-9/photo-01",
+        "alt": "Students march with anti-drug placards during the ADMAP rally",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-9/photo-02",
+        "alt": "Rally volunteers hold up their anti-drug placards outside LUTH",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-9/photo-03",
+        "alt": "Volunteers carry \"Say NO to Drugs\" signs through the streets",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-9/photo-04",
+        "alt": "A volunteer holds a placard high as the rally gathers",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-9/photo-05",
+        "alt": "Volunteers talk with a resident about drug abuse",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-9/photo-06",
+        "alt": "Volunteers speak with a trader at his stall during the rally",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-9/photo-07",
+        "alt": "Volunteers talk with mechanics at a roadside workshop",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/health-week-2026/day-9/photo-08",
+        "alt": "Volunteers stop at a tailor's shop to share the anti-drug message",
+        "caption": ""
+      }
+    ],
+    "consentConfirmed": true
   },
   {
     "slug": "pharmalympics-2026-day-1",
     "title": "Opening Ceremony & Court Games",
     "event": "pharmalympics-2026-day-1",
     "series": "Pharmalympics 2026",
-    "isPlaceholder": true,
-    "placeholderNote": "20–40 photos to be curated by the Media Committee (with consent) and uploaded"
+    "cover": "pans-unilag/events/pharmalympics-2026/day-1/photo-01",
+    "photos": [
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-1/photo-01",
+        "alt": "Volleyball players in matching jerseys warm up on the court",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-1/photo-02",
+        "alt": "A volleyball player in jersey 22 waits for a serve as students watch from the stands",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-1/photo-03",
+        "alt": "A smiling student in a team jersey watches the games from the stands",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-1/photo-04",
+        "alt": "Cheerleaders with white pom-poms perform at the opening ceremony",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-1/photo-05",
+        "alt": "A student in a Nova jersey cheers with her arm raised on the court",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-1/photo-06",
+        "alt": "Players battle for the ball in a women's basketball match",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-1/photo-07",
+        "alt": "A basketball player lines up a free throw",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-1/photo-08",
+        "alt": "Team Nova players walk off the court as the crowd watches",
+        "caption": ""
+      }
+    ],
+    "consentConfirmed": true
   },
   {
     "slug": "pharmalympics-2026-day-2",
     "title": "Athletics & Swimming",
     "event": "pharmalympics-2026-day-2",
     "series": "Pharmalympics 2026",
-    "isPlaceholder": true,
-    "placeholderNote": "20–40 photos to be curated by the Media Committee (with consent) and uploaded"
+    "cover": "pans-unilag/events/pharmalympics-2026/day-2/photo-01",
+    "photos": [
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-2/photo-01",
+        "alt": "A Nova athlete sprints down the long jump runway as students line the track",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-2/photo-02",
+        "alt": "A smiling relay runner holds the baton on the stadium track",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-2/photo-03",
+        "alt": "Two students smile for the camera at the athletics events",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-2/photo-04",
+        "alt": "Two Invicta supporters smile together outside the stadium",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-2/photo-05",
+        "alt": "Invicta athletes rest by the track, one making a peace sign",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-2/photo-06",
+        "alt": "Imperials team members chat on the sidelines",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-2/photo-07",
+        "alt": "A student poses for the camera in the stands",
+        "caption": ""
+      }
+    ],
+    "consentConfirmed": true
   },
   {
     "slug": "pharmalympics-2026-day-3",
     "title": "Football (1)",
     "event": "pharmalympics-2026-day-3",
     "series": "Pharmalympics 2026",
-    "isPlaceholder": true,
-    "placeholderNote": "20–40 photos to be curated by the Media Committee (with consent) and uploaded"
+    "cover": "pans-unilag/events/pharmalympics-2026/day-3/photo-01",
+    "photos": [
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-3/photo-01",
+        "alt": "The Ingenium women's football team poses together before their match",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-3/photo-02",
+        "alt": "A footballer in a yellow jersey controls the ball on the sand pitch",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-3/photo-03",
+        "alt": "A smiling footballer in a blue-and-white jersey on the sideline",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-3/photo-04",
+        "alt": "Supporters watch the football from the edge of the pitch",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-3/photo-05",
+        "alt": "A smiling Invicta supporter at the football match",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-3/photo-06",
+        "alt": "A student in an orange T-shirt strikes a pose at the football",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-3/photo-07",
+        "alt": "Students lean on the railing to watch the match",
+        "caption": ""
+      }
+    ],
+    "consentConfirmed": true
   },
   {
     "slug": "pharmalympics-2026-day-4",
     "title": "Football (2)",
     "event": "pharmalympics-2026-day-4",
     "series": "Pharmalympics 2026",
-    "isPlaceholder": true,
-    "placeholderNote": "20–40 photos to be curated by the Media Committee (with consent) and uploaded"
+    "cover": "pans-unilag/events/pharmalympics-2026/day-4/photo-01",
+    "photos": [
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-4/photo-01",
+        "alt": "The Nova women's football team poses together on the pitch",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-4/photo-02",
+        "alt": "An Ingenium player shapes to pass the ball",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-4/photo-03",
+        "alt": "Teammates in light-blue kits hug to celebrate",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-4/photo-04",
+        "alt": "Two players tussle for position in a cloud of sand",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-4/photo-05",
+        "alt": "An Invicta player jogs back into position",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-4/photo-06",
+        "alt": "Supporters gather to watch the football",
+        "caption": ""
+      }
+    ],
+    "consentConfirmed": true
   },
   {
     "slug": "pharmalympics-2026-day-5",
     "title": "Court Games (Lawn Tennis & Volleyball)",
     "event": "pharmalympics-2026-day-5",
     "series": "Pharmalympics 2026",
-    "isPlaceholder": true,
-    "placeholderNote": "20–40 photos to be curated by the Media Committee (with consent) and uploaded"
+    "cover": "pans-unilag/events/pharmalympics-2026/day-5/photo-01",
+    "photos": [
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-5/photo-01",
+        "alt": "An Ingenium player leaps to play the volleyball over the net",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-5/photo-02",
+        "alt": "A tennis player smiles as she picks up the ball",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-5/photo-03",
+        "alt": "A tennis player in a yellow cap waits for the return",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-5/photo-04",
+        "alt": "A mixed-doubles tennis pair on court",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-5/photo-05",
+        "alt": "The Nova volleyball team talks tactics",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-5/photo-06",
+        "alt": "An Ingenium player walks onto the court with the ball",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-5/photo-07",
+        "alt": "Three students watch the court games from the stands",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-5/photo-08",
+        "alt": "A spectator shelters from the sun under a purple umbrella",
+        "caption": ""
+      }
+    ],
+    "consentConfirmed": true
   },
   {
     "slug": "pharmalympics-2026-day-6",
     "title": "Football (3)",
     "event": "pharmalympics-2026-day-6",
     "series": "Pharmalympics 2026",
-    "isPlaceholder": true,
-    "placeholderNote": "20–40 photos to be curated by the Media Committee (with consent) and uploaded"
+    "cover": "pans-unilag/events/pharmalympics-2026/day-6/photo-01",
+    "photos": [
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-6/photo-01",
+        "alt": "Ingenium players celebrate a goal together",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-6/photo-02",
+        "alt": "Two Nova players drive forward with the ball past Ingenium defenders",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-6/photo-03",
+        "alt": "An Ingenium player directs his teammates",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-6/photo-04",
+        "alt": "Ingenium players regroup as students watch from the balconies",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-6/photo-05",
+        "alt": "A Nova player waits for play to restart",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-6/photo-06",
+        "alt": "The goalkeeper watches the game from his line",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-6/photo-07",
+        "alt": "Ingenium players share a laugh after the match",
+        "caption": ""
+      }
+    ],
+    "consentConfirmed": true
   },
   {
     "slug": "pharmalympics-2026-day-7",
     "title": "Indoor Games",
     "event": "pharmalympics-2026-day-7",
     "series": "Pharmalympics 2026",
-    "isPlaceholder": true,
-    "placeholderNote": "20–40 photos to be curated by the Media Committee (with consent) and uploaded"
+    "cover": "pans-unilag/events/pharmalympics-2026/day-7/photo-01",
+    "photos": [
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-7/photo-01",
+        "alt": "Students crowd around two chess games",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-7/photo-02",
+        "alt": "A student plays a forehand in table tennis",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-7/photo-03",
+        "alt": "A table tennis player prepares to return the ball",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-7/photo-04",
+        "alt": "Two players study a game of draughts",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-7/photo-05",
+        "alt": "Students play draughts at a table in the garden",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-7/photo-06",
+        "alt": "Two students play Ludo",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-7/photo-07",
+        "alt": "Friends chat and laugh between indoor games",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-7/photo-08",
+        "alt": "Two students watch the indoor games",
+        "caption": ""
+      }
+    ],
+    "consentConfirmed": true
   },
   {
     "slug": "pharmalympics-2026-day-8",
     "title": "Court Games Finals",
     "event": "pharmalympics-2026-day-8",
     "series": "Pharmalympics 2026",
-    "isPlaceholder": true,
-    "placeholderNote": "20–40 photos to be curated by the Media Committee (with consent) and uploaded"
+    "cover": "pans-unilag/events/pharmalympics-2026/day-8/photo-01",
+    "photos": [
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-8/photo-01",
+        "alt": "The Invicta men's volleyball team poses on court before the final",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-8/photo-02",
+        "alt": "Four Invicta players smile together on the court",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-8/photo-03",
+        "alt": "An Invicta player watches the ball as he moves to play it",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-8/photo-04",
+        "alt": "Teammates high-five on the court",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-8/photo-05",
+        "alt": "A player in a white-and-blue kit waits for the serve",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-8/photo-06",
+        "alt": "An Imperials player smiles as she walks across the court",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-8/photo-07",
+        "alt": "A player jogs back into position as the crowd watches",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-8/photo-08",
+        "alt": "A Nova player stretches before the match",
+        "caption": ""
+      }
+    ],
+    "consentConfirmed": true
   },
   {
     "slug": "pharmalympics-2026-day-9",
     "title": "Football Finale",
     "event": "pharmalympics-2026-day-9",
     "series": "Pharmalympics 2026",
-    "isPlaceholder": true,
-    "placeholderNote": "20–40 photos to be curated by the Media Committee (with consent) and uploaded"
+    "cover": "pans-unilag/events/pharmalympics-2026/day-9/photo-01",
+    "photos": [
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-9/photo-01",
+        "alt": "Ingenium players celebrate in the women's football final",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-9/photo-02",
+        "alt": "An Imperials player strikes the ball under pressure from Invicta",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-9/photo-03",
+        "alt": "A Nova player takes on two Ingenium defenders",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-9/photo-04",
+        "alt": "An Ingenium player takes a throw-in",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-9/photo-05",
+        "alt": "Imperials players cheer from the sideline",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-9/photo-06",
+        "alt": "Imperials players smile together after the match",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-9/photo-07",
+        "alt": "Two players rest by the goal between matches",
+        "caption": ""
+      },
+      {
+        "publicId": "pans-unilag/events/pharmalympics-2026/day-9/photo-08",
+        "alt": "The goalkeeper walks off the pitch after the finale",
+        "caption": ""
+      }
+    ],
+    "consentConfirmed": true
   }
 ]

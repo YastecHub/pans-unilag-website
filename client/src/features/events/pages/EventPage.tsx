@@ -15,6 +15,7 @@ import { InnerPageLayout } from '../../pages/components/InnerPageLayout.tsx'
 import { type EventItem, eventDateLabel, useEvent, useEvents } from '../api/events.ts'
 import { AddToCalendar, RegisterButton } from '../components/AddToCalendar.tsx'
 import { eventTiming } from '../lib/ics.ts'
+import { FEATURES } from '../../../lib/features.ts'
 
 const events = () => navSection('Events')
 
@@ -77,16 +78,20 @@ export function EventPage() {
       )}
 
       <dl className="grid gap-x-6 gap-y-3 sm:grid-cols-[max-content_1fr]">
-        <Fact label="Date">
-          {eventDateLabel(e) ?? <PlaceholderText>Date to be announced</PlaceholderText>}
-          {e.datePrecision === 'month' && (
-            <PlaceholderText className="ml-2">Exact dates to be confirmed</PlaceholderText>
-          )}
-        </Fact>
+        {(eventDateLabel(e) || FEATURES.comingSoon) && (
+          <Fact label="Date">
+            {eventDateLabel(e) ?? <PlaceholderText>Date to be announced</PlaceholderText>}
+            {e.datePrecision === 'month' && (
+              <PlaceholderText className="ml-2">Exact dates to be confirmed</PlaceholderText>
+            )}
+          </Fact>
+        )}
         {timeLabel(e) && <Fact label="Time">{timeLabel(e)} (Lagos time)</Fact>}
-        <Fact label="Venue">
-          {e.venue || <PlaceholderText>Venue to be announced</PlaceholderText>}
-        </Fact>
+        {(e.venue || FEATURES.comingSoon) && (
+          <Fact label="Venue">
+            {e.venue || <PlaceholderText>Venue to be announced</PlaceholderText>}
+          </Fact>
+        )}
         {e.committee && (
           <Fact label="Organised by">
             <CommitteeLink slug={e.committee} />

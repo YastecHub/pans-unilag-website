@@ -61,6 +61,17 @@ describe('album upload helpers', () => {
     )
   })
 
+  it('takes alt text from the folder’s alt.json, falling back to the default', () => {
+    const album = updateAlbums(albums, day3, ['f/photo-01', 'f/photo-02'], 0, [
+      'Pharmacists checking blood pressure',
+      ' ',
+    ]).find((a) => a.slug === day3.slug)!
+    expect(album.photos?.map((p) => p.alt)).toEqual([
+      'Pharmacists checking blood pressure',
+      'Photo 2 from PANS Health Week 2026: Redefine+, Day 3: Medical Outreach 2026',
+    ])
+  })
+
   it('rejects a cover outside the album', () => {
     expect(() => updateAlbums(albums, day3, ['a'], 3)).toThrow(/--cover/)
   })

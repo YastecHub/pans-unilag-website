@@ -6,10 +6,13 @@ import { InnerPageLayout } from '../../pages/components/InnerPageLayout.tsx'
 import { isStandInName, usePatrons } from '../api/leadership.ts'
 import { PeopleGrid } from '../components/PeopleGrid.tsx'
 import { PersonCard } from '../components/PersonCard.tsx'
+import { FEATURES } from '../../../lib/features.ts'
 
 /** /leadership/patrons: the Dean of the Faculty of Pharmacy and four others (Art. 4 S.C). */
 export function PatronsPage() {
   const query = usePatrons()
+  // At launch, patrons not yet named are left out (lib/features.ts).
+  const patrons = (query.data ?? []).filter((p) => FEATURES.comingSoon || !p.isPlaceholder)
   return (
     <InnerPageLayout
       title="Patrons"
@@ -23,11 +26,11 @@ export function PatronsPage() {
         </LoadingState>
       ) : query.isError ? (
         <ErrorState error={query.error} onRetry={() => query.refetch()} />
-      ) : query.data.length === 0 ? (
-        <EmptyState title="The patrons will be listed soon." />
+      ) : patrons.length === 0 ? (
+        FEATURES.comingSoon && <EmptyState title="The patrons will be listed soon." />
       ) : (
         <PeopleGrid>
-          {query.data.map((p) => (
+          {patrons.map((p) => (
             <li key={p.order}>
               <PersonCard role={p.title} name={p.name} nameIsStandIn={isStandInName(p)} />
             </li>

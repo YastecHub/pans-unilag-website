@@ -36,6 +36,8 @@ export function updateAlbums(
   event: SeedEvent,
   publicIds: string[],
   coverIndex = 0,
+  /** Alt text per photo, in file order (the folder's optional alt.json). */
+  alts: string[] = [],
 ): SeedAlbum[] {
   if (publicIds.length === 0) throw new Error('No photos to add')
   if (coverIndex < 0 || coverIndex >= publicIds.length)
@@ -45,7 +47,7 @@ export function updateAlbums(
   const photos = publicIds.map((publicId, i) => ({
     publicId,
     // Keep alt text and captions an editor already improved.
-    alt: previous.get(publicId)?.alt ?? defaultAlt(event, i),
+    alt: previous.get(publicId)?.alt ?? (alts[i]?.trim() || defaultAlt(event, i)),
     caption: previous.get(publicId)?.caption ?? '',
   }))
   const album: SeedAlbum = {
