@@ -14,6 +14,7 @@ import {
 } from '../../committees/api/committees.ts'
 import { InnerPageLayout } from '../../pages/components/InnerPageLayout.tsx'
 import { firstSentence } from '../components/text.ts'
+import { FEATURES } from '../../../lib/features.ts'
 
 const leadership = () => navSection('Leadership')
 const trail = [{ label: 'Committees', to: '/leadership/committees' }]
@@ -92,9 +93,15 @@ export function CommitteePage() {
           </div>
         </Block>
       )}
-      <Block title="Photos">
-        <PlaceholderImage kind="badge" aspectRatio="16 / 7" label="Committee photos coming soon" />
-      </Block>
+      {FEATURES.comingSoon && (
+        <Block title="Photos">
+          <PlaceholderImage
+            kind="badge"
+            aspectRatio="16 / 7"
+            label="Committee photos coming soon"
+          />
+        </Block>
+      )}
       {c.motto && (
         <blockquote className="rounded-xl border-l-4 border-accent bg-surface-alt p-5 font-heading text-[1.25rem] font-medium">
           “{c.motto}”
@@ -132,32 +139,34 @@ function CommitteeAside({ committee: c }: { committee: Committee }) {
   const others = all.data?.committees.filter((o) => o.slug !== c.slug) ?? []
   return (
     <>
-      <section aria-labelledby="officers-title" className="flex flex-col gap-3">
-        <h2 id="officers-title" className="text-[1.25rem]">
-          Officers {shortSession(c.session)}
-        </h2>
-        {c.officers.length === 0 ? (
-          <Placeholder note="Officers to be announced." />
-        ) : (
-          <ul className="flex flex-col gap-3">
-            {c.officers.map((o) => (
-              <li key={`${o.title}-${o.name}`} className="flex items-center gap-3">
-                <PlaceholderImage
-                  kind="person"
-                  aspectRatio="1 / 1"
-                  label="Photo coming soon"
-                  className="w-16 shrink-0 [&_span]:hidden [&_svg]:size-8"
-                />
-                <div className="flex flex-col">
-                  <span className="text-small text-text-muted">{o.title}</span>
-                  <span className="font-medium">{o.name}</span>
-                  {o.level && <span className="text-small text-text-muted">{o.level}</span>}
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
+      {(c.officers.length > 0 || FEATURES.comingSoon) && (
+        <section aria-labelledby="officers-title" className="flex flex-col gap-3">
+          <h2 id="officers-title" className="text-[1.25rem]">
+            Officers {shortSession(c.session)}
+          </h2>
+          {c.officers.length === 0 ? (
+            <Placeholder note="Officers to be announced." />
+          ) : (
+            <ul className="flex flex-col gap-3">
+              {c.officers.map((o) => (
+                <li key={`${o.title}-${o.name}`} className="flex items-center gap-3">
+                  <PlaceholderImage
+                    kind="person"
+                    aspectRatio="1 / 1"
+                    label="Photo coming soon"
+                    className="w-16 shrink-0 [&_span]:hidden [&_svg]:size-8"
+                  />
+                  <div className="flex flex-col">
+                    <span className="text-small text-text-muted">{o.title}</span>
+                    <span className="font-medium">{o.name}</span>
+                    {o.level && <span className="text-small text-text-muted">{o.level}</span>}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+      )}
       {others.length > 0 && (
         <nav aria-label="Other committees" className="flex flex-col gap-2">
           <h2 className="text-[1.25rem]">Other committees</h2>

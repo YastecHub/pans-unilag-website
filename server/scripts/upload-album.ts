@@ -8,6 +8,8 @@
  *
  * Needs CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY and CLOUDINARY_API_SECRET in server/.env.
  * Re-running for the same event replaces its photos (same public ids) and keeps edited alt text.
+ * An optional alt.json in the folder (a list of strings, in file-name order) gives each new photo
+ * its alt text.
  */
 import { existsSync } from 'node:fs'
 import { readdir, readFile, writeFile } from 'node:fs/promises'
@@ -80,6 +82,13 @@ async function main() {
       `Note: ${files.length} photos (the guideline is ${RECOMMENDED_MIN_PHOTOS}–${MAX_PHOTOS}).`,
     )
 
+  const altFile = path.join(dir, 'alt.json')
+  const alts = existsSync(altFile) ? (JSON.parse(await readFile(altFile, 'utf8')) as unknown) : []
+  if (!Array.isArray(alts) || alts.some((a) => typeof a !== 'string'))
+    fail('alt.json must be a list of strings, one per photo in file-name order')
+  if (alts.length > 0 && alts.length !== files.length)
+    fail(`alt.json has ${alts.length} entries for ${files.length} photos`)
+
   if (!dryRun) {
     if (existsSync('.env')) process.loadEnvFile('.env')
     const {
@@ -127,7 +136,7 @@ async function main() {
   const albums = JSON.parse(await readFile(albumsFile, 'utf8')) as SeedAlbum[]
   await writeFile(
     albumsFile,
-    `${JSON.stringify(updateAlbums(albums, event, publicIds, coverIndex), null, 2)}\n`,
+    `${JSON.stringify(updateAlbums(albums, event, publicIds, coverIndex, alts as string[]), null, 2)}\n`,
   )
   console.log(
     `Updated seed/albums.json. Next: improve the alt text for each photo, then run npm run seed:check -w server.`,

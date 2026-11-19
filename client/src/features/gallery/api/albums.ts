@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { api } from '../../../lib/http.ts'
+import { FEATURES } from '../../../lib/features.ts'
 
 /** GET /api/albums: one card per event day, without the photo list. */
 export type AlbumSummary = {
@@ -18,7 +19,11 @@ export function useAlbums() {
   return useQuery({
     queryKey: ['albums'],
     queryFn: ({ signal }) => api.get<{ albums: AlbumSummary[] }>('/api/albums', signal),
-    select: (data) => data.albums,
+    // At launch, albums still waiting for photos are left out (lib/features.ts).
+    select: (data) =>
+      FEATURES.comingSoon
+        ? data.albums
+        : data.albums.filter((a) => a.photoCount > 0 && !a.isPlaceholder),
   })
 }
 

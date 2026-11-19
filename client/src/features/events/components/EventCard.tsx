@@ -3,6 +3,7 @@ import { cardLink } from '../../../components/ui/Card.tsx'
 import { CalendarIcon, PinIcon } from '../../../components/ui/icons.tsx'
 import { PlaceholderText } from '../../../components/ui/Placeholder.tsx'
 import { type EventItem, eventDateLabel } from '../api/events.ts'
+import { FEATURES } from '../../../lib/features.ts'
 
 type Props = {
   event: EventItem
@@ -17,10 +18,12 @@ export function EventCard({ event, headingLevel: Heading = 'h3', hideSeries = fa
   const date = eventDateLabel(event)
   return (
     <Link to={`/events/${event.slug}`} className={cardLink}>
-      <span className="inline-flex items-center gap-2 text-small font-medium text-text-brand">
-        <CalendarIcon />
-        {date ?? <PlaceholderText>Date to be announced</PlaceholderText>}
-      </span>
+      {(date || FEATURES.comingSoon) && (
+        <span className="inline-flex items-center gap-2 text-small font-medium text-text-brand">
+          <CalendarIcon />
+          {date ?? <PlaceholderText>Date to be announced</PlaceholderText>}
+        </span>
+      )}
       {event.dayNumber !== null && event.series && (
         <span className="text-small font-medium text-text-muted">Day {event.dayNumber}</span>
       )}
@@ -29,10 +32,14 @@ export function EventCard({ event, headingLevel: Heading = 'h3', hideSeries = fa
         <span className="text-small text-text-muted">{event.series}</span>
       )}
       <div className="mt-auto flex items-center justify-between gap-2 pt-2 text-small text-text-muted">
-        <span className="inline-flex items-center gap-2">
-          <PinIcon />
-          {event.venue || <PlaceholderText>Venue to be announced</PlaceholderText>}
-        </span>
+        {event.venue || FEATURES.comingSoon ? (
+          <span className="inline-flex items-center gap-2">
+            <PinIcon />
+            {event.venue || <PlaceholderText>Venue to be announced</PlaceholderText>}
+          </span>
+        ) : (
+          <span />
+        )}
         {event.registrationUrl ? (
           <span className="shrink-0 rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
             Register

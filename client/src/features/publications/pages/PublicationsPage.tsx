@@ -14,6 +14,7 @@ import {
   type PublicationSeries,
   usePublications,
 } from '../api/publications.ts'
+import { FEATURES } from '../../../lib/features.ts'
 
 const grid = 'grid grid-cols-[repeat(auto-fill,minmax(14rem,1fr))] gap-4'
 
@@ -72,7 +73,7 @@ export function PublicationsPage() {
                 ))}
                 {/* Editions we know are coming, e.g. "Recipharm 2026 edition coming soon". */}
                 {group.pending
-                  .filter((p) => p.edition)
+                  .filter((p) => p.edition && FEATURES.comingSoon)
                   .map((p) => (
                     <li key={p.slug}>
                       <ComingSoonCard series={group.series} edition={p.edition} />

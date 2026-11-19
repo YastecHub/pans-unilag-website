@@ -1,9 +1,13 @@
 import badgeUrl from '../../assets/pans-badge.png'
+import { FEATURES } from '../../lib/features.ts'
 
 /*
  * Placeholders mark content we are WAITING FOR (README → Placeholder rules). They all share one look:
  * a dashed border in text-muted, a surface-alt background, an icon and "Coming soon".
  * Never use them for empty lists: that is EmptyState.
+ *
+ * While FEATURES.comingSoon is off (launch), every placeholder renders nothing: missing details are
+ * left out rather than announced.
  */
 
 const frame = 'border-2 border-dashed border-text-muted bg-surface-alt text-text-muted'
@@ -18,6 +22,7 @@ type PlaceholderProps = {
 
 /** A block standing in for missing content (a write-up, a list of names, a document). */
 export function Placeholder({ note, title = 'Coming soon', className = '' }: PlaceholderProps) {
+  if (!FEATURES.comingSoon) return null
   return (
     <div
       className={`flex flex-col items-center gap-2 rounded-xl px-6 py-8 text-center ${frame} ${className}`}
@@ -57,6 +62,7 @@ export function PlaceholderImage({
   label = 'Photo coming soon',
   className = '',
 }: PlaceholderImageProps) {
+  if (!FEATURES.comingSoon) return null
   return (
     <div
       role="img"
@@ -96,6 +102,7 @@ export function PlaceholderText({
   children: string
   className?: string
 }) {
+  if (!FEATURES.comingSoon) return null
   return (
     <span
       className={`inline-flex items-center self-start rounded-full border border-dashed border-text-muted px-2.5 py-0.5 text-small text-text-muted ${className}`}

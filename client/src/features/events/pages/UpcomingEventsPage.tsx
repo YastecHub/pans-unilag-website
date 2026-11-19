@@ -12,6 +12,7 @@ import { AddToCalendar, RegisterButton } from '../components/AddToCalendar.tsx'
 import { MonthCalendar } from '../components/MonthCalendar.tsx'
 import { plainText } from '../lib/ics.ts'
 import { isMonthKey } from '../lib/month.ts'
+import { FEATURES } from '../../../lib/features.ts'
 
 /** /events: what's on this session, as a list or (?view=month&month=2026-11) a month calendar. */
 export function UpcomingEventsPage() {
@@ -142,17 +143,21 @@ function UpcomingEvent({ event }: { event: EventItem }) {
         <h2 className="text-h3">
           <Link to={`/events/${event.slug}`}>{event.title}</Link>
         </h2>
-        <p className="inline-flex flex-wrap items-center gap-2 text-small">
-          <CalendarIcon />
-          {date ?? <PlaceholderText>Date to be announced</PlaceholderText>}
-          {event.datePrecision === 'month' && (
-            <PlaceholderText>Exact dates to be confirmed</PlaceholderText>
-          )}
-        </p>
-        <p className="inline-flex items-center gap-2 text-small text-text-muted">
-          <PinIcon />
-          {event.venue || <PlaceholderText>Venue to be announced</PlaceholderText>}
-        </p>
+        {(date || FEATURES.comingSoon) && (
+          <p className="inline-flex flex-wrap items-center gap-2 text-small">
+            <CalendarIcon />
+            {date ?? <PlaceholderText>Date to be announced</PlaceholderText>}
+            {event.datePrecision === 'month' && (
+              <PlaceholderText>Exact dates to be confirmed</PlaceholderText>
+            )}
+          </p>
+        )}
+        {(event.venue || FEATURES.comingSoon) && (
+          <p className="inline-flex items-center gap-2 text-small text-text-muted">
+            <PinIcon />
+            {event.venue || <PlaceholderText>Venue to be announced</PlaceholderText>}
+          </p>
+        )}
         {summary && <p>{summary}</p>}
         <div className="flex flex-wrap gap-2 pt-1">
           <RegisterButton event={event} size="sm" />
