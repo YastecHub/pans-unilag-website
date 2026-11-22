@@ -117,7 +117,8 @@ async function main() {
       await new Promise<void>((resolve, reject) => {
         cloudinary.uploader
           .upload_stream(
-            { public_id: publicId, overwrite: true, resource_type: 'image' },
+            // invalidate: replacing a photo clears the CDN's copy of the old one.
+            { public_id: publicId, overwrite: true, invalidate: true, resource_type: 'image' },
             (error) => (error ? reject(error) : resolve()),
           )
           .end(data)

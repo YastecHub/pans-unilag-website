@@ -78,7 +78,7 @@ describe('link previews for crawlers', () => {
     expect(meta(res.text, 'og:url')).toBe(`${SITE}/events/pharmalympics-2027`)
     expect(res.text).toContain(`<link rel="canonical" href="${SITE}/events/pharmalympics-2027">`)
     expect(meta(res.text, 'og:image')).toBe(
-      'https://res.cloudinary.com/pans/image/upload/c_fill,g_auto,h_630,w_1200/f_jpg/q_auto/pans-unilag/events/pharmalympics-2027/cover',
+      'https://res.cloudinary.com/pans/image/upload/c_fill,g_auto,h_630,w_1200/f_jpg/q_auto/v1/pans-unilag/events/pharmalympics-2027/cover',
     )
     expect(meta(res.text, 'og:image:alt')).toBe('Students racing on the faculty field')
     expect(meta(res.text, 'twitter:card')).toBe('summary_large_image')

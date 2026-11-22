@@ -109,10 +109,13 @@ const join = (...parts: string[]) => parts.filter(Boolean).join(' · ')
 const sentence = (head: string, body: string) =>
   shorten(head && body ? `${head}. ${body}` : head || body)
 
-/** A 1200 × 630 JPEG of a Cloudinary image: the size every network shows as a large card. */
+/**
+ * A 1200 × 630 JPEG of a Cloudinary image: the size every network shows as a large card. The "v1/"
+ * avoids "not found" answers the CDN cached before an upload (client/src/lib/cloudinary.ts).
+ */
 function coverUrl(publicId: string, cloudName: string) {
   const id = publicId.split('/').map(encodeURIComponent).join('/')
-  return `https://res.cloudinary.com/${encodeURIComponent(cloudName)}/image/upload/c_fill,g_auto,h_630,w_1200/f_jpg/q_auto/${id}`
+  return `https://res.cloudinary.com/${encodeURIComponent(cloudName)}/image/upload/c_fill,g_auto,h_630,w_1200/f_jpg/q_auto/v1/${id}`
 }
 
 /** The site-wide card (the same as index.html), for any other address or a missing item. */

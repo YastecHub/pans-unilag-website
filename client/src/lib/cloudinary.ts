@@ -2,7 +2,7 @@
  * Cloudinary delivery URLs, built by hand: the format is simple and stable, and leaving out the
  * Cloudinary SDK saves about 18 KB (gzipped) of JavaScript on every page.
  *
- *   https://res.cloudinary.com/<cloud>/image/upload/c_fill,h_400,w_600/f_auto/q_auto/<public id>
+ *   https://res.cloudinary.com/<cloud>/image/upload/c_fill,h_400,w_600/f_auto/q_auto/v1/<public id>
  *
  * Every URL asks for automatic format (WebP/AVIF) and quality, so phones download as little as
  * possible. Functions return null when no cloud is configured (a fresh clone): show a placeholder.
@@ -13,8 +13,16 @@ export type CloudinaryCrop =
   /** Scaled down to fit the width, never cropped or enlarged (the full photo). */
   | { crop: 'limit' }
 
-/** Public ids are paths ("pans-unilag/events/…"); each segment is encoded, the slashes kept. */
-const encodePublicId = (publicId: string) => publicId.split('/').map(encodeURIComponent).join('/')
+/**
+ * Public ids are paths ("pans-unilag/events/…"); each segment is encoded, the slashes kept.
+ *
+ * The "v1/" version segment matters: Cloudinary's CDN remembers a "not found" for a URL that was
+ * asked for before the photo was uploaded (the site links an album as soon as it's seeded), and
+ * kept serving it after the upload. A version in the path is a different URL, so it never hits
+ * those stale answers. Cloudinary serves the current file whatever the version number.
+ */
+const encodePublicId = (publicId: string) =>
+  `v1/${publicId.split('/').map(encodeURIComponent).join('/')}`
 
 /** "auto": Cloudinary's default quality. "auto:eco": smaller files, for thumbnails. */
 export type CloudinaryQuality = 'auto' | 'auto:eco'

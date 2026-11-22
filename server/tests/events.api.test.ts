@@ -139,10 +139,9 @@ describe('albums', () => {
       title: 'Trade Fair & Cooking Competition',
       event: 'health-week-2026-day-1',
       series: HEALTH_WEEK,
-      cover: '',
-      photoCount: 0,
-      isPlaceholder: true,
-      placeholderNote: expect.stringContaining('Media Committee'),
+      cover: 'pans-unilag/events/health-week-2026/day-1/photo-01',
+      photoCount: 8,
+      isPlaceholder: false,
     })
     expect(albums.slice(0, 9).map((a) => a.slug.at(-1))).toEqual([
       '1',
@@ -166,8 +165,12 @@ describe('albums', () => {
     const res = await get('/api/albums/pharmalympics-2026-day-9')
     expect(res.body).toMatchObject({
       slug: 'pharmalympics-2026-day-9',
-      photos: [],
       sourceFolderUrl: '',
+    })
+    expect(res.body.photos).toHaveLength(8)
+    expect(res.body.photos[0]).toMatchObject({
+      publicId: 'pans-unilag/events/pharmalympics-2026/day-9/photo-01',
+      alt: expect.any(String),
     })
     expect(res.body).not.toHaveProperty('consentConfirmed')
 
