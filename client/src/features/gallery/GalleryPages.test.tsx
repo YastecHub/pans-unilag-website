@@ -129,7 +129,7 @@ describe('Album page', () => {
       [240, 360]
         .map(
           (w) =>
-            `https://res.cloudinary.com/pans-demo/image/upload/c_fill,h_${w},w_${w}/f_auto/q_auto:eco/pans-unilag/events/health-week-2026/day-3/photo-1 ${w}w`,
+            `https://res.cloudinary.com/pans-demo/image/upload/c_fill,h_${w},w_${w}/f_auto/q_auto:eco/v1/pans-unilag/events/health-week-2026/day-3/photo-1 ${w}w`,
         )
         .join(', '),
     )
@@ -153,7 +153,7 @@ describe('Album page', () => {
     const dialog = screen.getByRole('dialog', { name: 'Photo 1 of 3' })
     expect(within(dialog).getByRole('img').getAttribute('alt')).toBe(photos[0]!.alt)
     expect(within(dialog).getByRole('img').getAttribute('srcset')).toContain(
-      'c_limit,w_1600/f_auto/q_auto/pans-unilag',
+      'c_limit,w_1600/f_auto/q_auto/v1/pans-unilag',
     )
     expect(document.activeElement).toBe(within(dialog).getByRole('button', { name: 'Close' }))
 

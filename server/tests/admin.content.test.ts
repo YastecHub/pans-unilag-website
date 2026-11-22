@@ -209,7 +209,7 @@ describe('every page’s placeholders can be cleared from the dashboard', () => 
   it('Gallery: an album needs photos with alt text, a cover and consent before it’s real', async () => {
     const api = await client()
     const id = idOf(api.collections.albums.rows, { slug: 'health-week-2026-day-1' })
-    const noPhotos = await api.patch(`/api/admin/albums/${id}`, {})
+    const noPhotos = await api.patch(`/api/admin/albums/${id}`, { photos: [] })
     expect(noPhotos.status).toBe(400)
     expect(paths(noPhotos)).toContain('photos')
 
@@ -220,6 +220,7 @@ describe('every page’s placeholders can be cleared from the dashboard', () => 
     const noConsent = await api.patch(`/api/admin/albums/${id}`, {
       photos: [photo],
       cover: photo.publicId,
+      consentConfirmed: false,
     })
     expect(noConsent.status).toBe(400)
     expect(paths(noConsent)).toContain('consentConfirmed')
